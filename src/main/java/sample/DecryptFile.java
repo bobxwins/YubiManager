@@ -11,7 +11,6 @@ import javax.crypto.SecretKey;
 import java.security.Security;
 import java.util.Base64;
 
-import java.io.File;
 public class DecryptFile {
     static {
         Security.removeProvider("BC");

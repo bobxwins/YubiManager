@@ -58,7 +58,7 @@ public class EntryHandler implements Serializable  {
         loadEntries = readEntryFile();
       entry.removeAll(entry);
         entry.addAll( loadEntries);
-        System.out.println( "size"+ entry.size());
+
         return entry.size();
     }
 

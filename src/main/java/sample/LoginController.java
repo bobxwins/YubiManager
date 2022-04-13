@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.stage.*;
 
 import java.io.File;
@@ -29,10 +29,12 @@ public class LoginController {
     @FXML
     private  PasswordField ybkSecret;
 
-
-
     @FXML
     private TableView<Entry> entryTable ;
+
+    private ObservableList<Entry> entryData = FXCollections.observableArrayList();
+    EntryHandler entryHandler = new EntryHandler();
+
 
     public static char [] combinedPasswords;
     @FXML
@@ -47,12 +49,18 @@ public class LoginController {
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
         Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
 
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("Login failed!");
-        alert.showAndWait();
-
+        if (entryHandler.loadEntries (entryData,entryData)==0) {
+            // if 0 entries are returned when attempting to load the encrypted entries
+            // after inputting password, return error
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Login failed! Wrong Password!");
+            alert.showAndWait();
+            return;
+        }
+        System.out.println("the size is:"+entryHandler.loadEntries (entryData,entryData));
         entryWindow.setScene(new Scene(root));
         EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
     }

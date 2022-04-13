@@ -26,8 +26,6 @@ public class EncryptFile {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-
-
     public    String IVdir = "GenIV.txt";
 
     public    String Saltdir = "Salt.txt";
