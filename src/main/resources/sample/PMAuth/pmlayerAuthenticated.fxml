@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -17,18 +18,17 @@
 
 <AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
    <children>
-      <Label layoutX="39.0" layoutY="45.0" prefHeight="16.0" prefWidth="63.0" text="Titel" />
-      <Label layoutX="39.0" layoutY="91.0" text="UserName" />
-      <VBox layoutX="115.0" layoutY="45.0" prefHeight="200.0" prefWidth="272.0" spacing="7.0">
+      <VBox fx:id="vBoxLabel" layoutX="320.0" layoutY="51.0" prefHeight="239.0" prefWidth="362.0" spacing="19.0" visible="false">
          <children>
-            <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
-            <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
-            <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
-            <TextField fx:id="tfPassword" layoutX="10.0" layoutY="72.0" prefHeight="31.0" prefWidth="206.0" />
+            <Label fx:id="lblTitel" prefHeight="16.0" prefWidth="63.0" text=" Titel" />
+            <Label fx:id="lblUsername" text="Username" />
+            <Label fx:id="lblURL" prefHeight="0.0" prefWidth="63.0" text="URL" />
+            <Label fx:id="lblPwd" text="Password" />
+            <Label fx:id="lblNotes" text="Notes" />
          </children>
       </VBox>
-      <Button fx:id="btnCreate" layoutX="203.0" layoutY="270.0" mnemonicParsing="false" onAction="#createEntry" text="Create New Entry" />
-      <Button fx:id="btnDelete" layoutX="227.0" layoutY="303.0" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry" />
+      <Button fx:id="btnCreate" disable="true" layoutX="356.0" layoutY="542.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="150.0" text="OK" visible="false" />
+      <Button fx:id="btnDelete" layoutX="1112.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry" />
       <Button fx:id="btnOpenEntry" contentDisplay="GRAPHIC_ONLY" layoutX="33.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="74.0" style="-fx-background-color: transparent;" text="OpenEntry">
          <graphic>
             <ImageView fx:id="imgFolder" fitHeight="49.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
@@ -38,9 +38,8 @@
             </ImageView>
          </graphic></Button>
       <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" />
-      <TextField fx:id="tfSearch" layoutX="306.0" layoutY="6.0" opacity="0.59" prefHeight="31.0" prefWidth="575.0" promptText="Search..." />
+      <TextField fx:id="tfSearch" layoutX="415.0" layoutY="6.0" opacity="0.59" prefHeight="31.0" prefWidth="637.0" promptText="Search..." />
       <ScrollBar layoutX="1518.0" layoutY="-9.0" orientation="VERTICAL" prefHeight="806.0" prefWidth="18.0" />
-      <ScrollBar layoutX="388.0" layoutY="45.0" orientation="VERTICAL" prefHeight="729.0" prefWidth="18.0" />
       <Button fx:id="btnSave" layoutX="237.0" layoutY="348.0" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
       <Button fx:id="btnLoad" disable="true" layoutX="245.0" layoutY="399.0" mnemonicParsing="false" onAction="#loadEntry" text="Load" />
       <TableView fx:id="entryTable" layoutX="413.0" layoutY="45.0" prefHeight="421.0" prefWidth="635.0">
@@ -54,16 +53,25 @@
       </TableView>
       <ImageView fitHeight="31.0" fitWidth="38.0" layoutX="841.0" layoutY="6.0">
       </ImageView>
-      <ImageView fitHeight="24.0" fitWidth="38.0" layoutX="829.0" layoutY="10.0">
+      <ImageView fitHeight="24.0" fitWidth="38.0" layoutX="986.0" layoutY="10.0">
          <image>
             <Image url="@magnifying-glass.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnSignOut" layoutX="1112.0" layoutY="494.0" mnemonicParsing="false" onAction="#signOut" text="Sign Out" />
-      <Label layoutX="39.0" layoutY="206.0" text="Notes" />
-      <Label layoutX="39.0" layoutY="168.0" prefHeight="0.0" prefWidth="63.0" text="Password" />
-      <Label layoutX="39.0" layoutY="128.0" text="URL" />
-      <PasswordField fx:id="tfUpdateMP" layoutX="595.0" layoutY="607.0" />
-      <Button fx:id="btnUpMP" layoutX="797.0" layoutY="607.0" mnemonicParsing="false" text="Update MasterPassword" />
+      <Button fx:id="btnSignOut" layoutX="1143.0" layoutY="678.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
+      <PasswordField fx:id="tfUpdateMP" layoutX="16.0" layoutY="678.0" />
+      <Button fx:id="btnUpMP" layoutX="208.0" layoutY="678.0" mnemonicParsing="false" text="Update MasterPassword" />
+      <VBox fx:id="vBoxTf" layoutX="400.0" layoutY="49.0" prefHeight="421.0" prefWidth="650.0" spacing="7.0" visible="false">
+         <children>
+            <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
+            <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
+            <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
+            <TextField fx:id="tfPassword" layoutX="10.0" layoutY="72.0" prefHeight="31.0" prefWidth="206.0" />
+            <TextField fx:id="tfNotes" layoutX="10.0" layoutY="124.0" prefHeight="269.0" prefWidth="650.0" />
+         </children>
+      </VBox>
+      <Button fx:id="btnCancel" disable="true" layoutX="970.0" layoutY="542.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="127.0" text="Cancel" visible="false" />
+      <Button fx:id="btnEnterMenu" layoutX="96.0" layoutY="7.0" mnemonicParsing="false" onAction="#enterEntryMenu" text="Edit Entry" />
+      <Button fx:id="deleteDB" layoutX="424.0" layoutY="678.0" mnemonicParsing="false" onAction="#deleteAll" prefHeight="31.0" prefWidth="164.0" text="Delete Database" />
    </children>
 </AnchorPane>

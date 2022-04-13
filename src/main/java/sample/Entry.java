@@ -22,7 +22,7 @@ public class Entry implements Serializable {
    // PasswordField password;
 
     public TextField getTitel() {
-
+     titel.setDisable(true);
         return titel;
     }
 

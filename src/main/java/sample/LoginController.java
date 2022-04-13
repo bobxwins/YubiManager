@@ -15,7 +15,7 @@ import java.io.File;
 
 public class LoginController {
 
-    DirectoryChooser directoryChooser = new DirectoryChooser();
+
     Label label = new Label("no files selected");
     @FXML
     private Button btnSignIn;
@@ -39,20 +39,20 @@ public class LoginController {
     public static char [] combinedPasswords;
     @FXML
     void loadEntry(ActionEvent event) throws Exception {
-        char [] password = mpField.getText().toCharArray();
+        char [] masterPassword = mpField.getText().toCharArray();
         char []  ybkPassword = ybkSecret.getText().toCharArray();
 
         StringBuilder sb = new StringBuilder(128);
-        sb.append(password);
+        sb.append(masterPassword);
         sb.append(ybkPassword);
         combinedPasswords = sb.toString().toCharArray();
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
         Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
 
         if (entryHandler.loadEntries (entryData,entryData)==0) {
-            // if 0 entries are returned when attempting to load the encrypted entries
-            // after inputting password, return error
-            
+            // if 0 entries are returned when attempting to load and decrypt the stored encrypted entries...
+            // ... after inputting password, returns error
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information Dialog");
             alert.setHeaderText(null);
@@ -67,22 +67,45 @@ public class LoginController {
 
     @FXML
     void newDB(ActionEvent event) throws Exception {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage anotherStage = new Stage();
         directoryChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        File file = directoryChooser.showDialog(anotherStage);
-        if (file != null) {
-            System.out.println(file.getAbsolutePath());
-            label.setText(file.getAbsolutePath()
-                    + "  selected");
-        }
+        File selectedDirectory = directoryChooser.showDialog(anotherStage);
+
+            if (selectedDirectory != null) {
+                System.out.println(selectedDirectory.getAbsolutePath());
+                label.setText(selectedDirectory.getAbsolutePath()
+                        + "  selected");
+            }
+            else {
+                return;
+            }
+
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
         entryWindow.setScene(new Scene(root));
         EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
+        //resets the value of the Entries Y position
     }
-    @FXML
-    void chooseDB(ActionEvent event) throws Exception {
 
+    @FXML
+    void openDB(ActionEvent event) throws Exception {
+        FileChooser fileChooser = new FileChooser();
+        Stage anotherStage = new Stage();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        File file = fileChooser.showOpenDialog(anotherStage);
+        if (file != null) {
+            System.out.println("selected"+file.getAbsolutePath());
+
+        }
+        else {
+            return;
+        }
+
+        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
+        Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
+        entryWindow.setScene(new Scene(root));
+        EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
     }
 
 }

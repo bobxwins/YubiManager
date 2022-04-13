@@ -1,5 +1,7 @@
 package sample;
+import java.io.File;
 import java.io.Serializable;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,13 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class EntryController implements Serializable {
@@ -36,22 +36,110 @@ public class EntryController implements Serializable {
     @FXML
     private TextField tfSearch;
     @FXML
+    private TextField tfTitel;
+    @FXML
+    private TextField tfUsername;
+    @FXML
+    private TextField tfURL;
+    @FXML
+    private TextField tfPassword;
+    @FXML
+    private TextField tfNotes;
+
+    @FXML
     private Button btnSignOut;
     @FXML
     private AnchorPane anchorPane;
 
+    @FXML private VBox vBoxLabel;
+
+    @FXML private VBox vBoxTf;
+
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
     EntryHandler entryHandler = new EntryHandler();
 
-
+    @FXML
+    private Button btnEnterMenu;
 
     @FXML
+    private Button btnCancel;
+    @FXML
+    private Button btnCreate;
+
+    @FXML
+    private Button btnDelete;
+    @FXML
     void createEntry(ActionEvent event) throws Exception {
-        entryData.add(new Entry("", "","","",""));
+        entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(),tfURL.getText(),tfPassword.getText(),tfNotes.getText()));
         entryHandler.createEntryObject(anchorPane);
+        System.out.println("rinting..."+tfTitel.getText());
+        tfTitel.setText("");
+        tfUsername.setText("");
+        tfURL.setText("");
+        tfPassword.setText("");
+        tfNotes.setText("");
+        showTableView();
+
+    }
+    @FXML
+    void deleteAll(ActionEvent event) throws Exception
+    {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Warning, this will permanently delete all your passwords");
+        alert.setContentText("Are you sure you want to proceed?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+          entryData.removeAll(entryData);
+            File deleteFile = new File(EntryHandler.passwordFileName);
+            deleteFile.delete();
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
 
     }
 
+    void showTableView()
+    {
+        vBoxLabel.setVisible(false);
+        vBoxTf.setDisable(true);
+        vBoxTf.setVisible(false);
+        tfSearch.setDisable(false);
+        btnCancel.setDisable(true);
+        btnCreate.setDisable(true);
+        btnCreate.setVisible(false);
+        btnCancel.setVisible(false);
+        entryTable.setVisible(true);
+        entryTable.setDisable(false);
+        btnDelete.setDisable(false);
+
+    }
+    @FXML
+    void enterEntryMenu(ActionEvent event) throws Exception {
+
+            vBoxLabel.setVisible(true);
+            vBoxTf.setDisable(false);
+            vBoxTf.setVisible(true);
+            tfSearch.setDisable(true);
+            btnCancel.setDisable(false);
+            btnCreate.setDisable(false);
+            btnCreate.setVisible(true);
+            btnCancel.setVisible(true);
+            entryTable.setVisible(false);
+            entryTable.setDisable(true);
+            btnDelete.setDisable(true);
+
+    }
+
+
+    @FXML
+    void returnTableView(ActionEvent event) throws Exception
+    {
+        showTableView();
+
+    }
     @FXML
     void loadEntry(ActionEvent event) throws Exception {
       //   entryHandler.loadEntries (entryData,entryData);

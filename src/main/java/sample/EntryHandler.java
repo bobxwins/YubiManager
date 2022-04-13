@@ -99,7 +99,7 @@ public class EntryHandler implements Serializable  {
         while ((line = reader.readLine()) != null) {
             String[] entries = line.split(",");
            Entry entryObj = (new Entry(entries[0], entries[1],entries[2],entries[3],entries[4]));
-           entryObj.getNotes();
+
            entry.add (entryObj);
         }
 
