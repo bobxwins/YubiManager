@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -15,20 +16,20 @@
    <children>
       <ScrollBar layoutX="1518.0" layoutY="-9.0" orientation="VERTICAL" prefHeight="806.0" prefWidth="18.0" />
       <Button fx:id="btnSignIn" layoutX="503.0" layoutY="339.0" mnemonicParsing="false" onAction="#loadEntry" prefWidth="97.0" text="Sign in" />
-      <PasswordField fx:id="mpField" layoutX="185.0" layoutY="204.0" prefHeight="24.0" prefWidth="389.0" />
-      <PasswordField fx:id="ybkSecret" layoutX="185.0" layoutY="247.0" prefHeight="24.0" prefWidth="389.0" />
-      <Label layoutX="200.0" layoutY="122.0" text="Login">
+      <PasswordField fx:id="mpField" layoutX="185.0" layoutY="225.0" prefHeight="24.0" prefWidth="389.0" />
+      <PasswordField fx:id="ybkSecret" layoutX="185.0" layoutY="288.0" prefHeight="24.0" prefWidth="389.0" />
+      <Label layoutX="623.0" layoutY="134.0" text="Login">
          <font>
             <Font size="51.0" />
          </font>
       </Label>
       <Button fx:id="btnCreateDB" layoutX="105.0" layoutY="334.0" mnemonicParsing="false" onAction="#newDB" text="Create New Database" />
-      <Label layoutX="55.0" layoutY="208.0" text="Master Passwod" textFill="#000000f2">
+      <Label layoutX="55.0" layoutY="230.0" text="Master Passwod" textFill="#000000f2">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="59.0" layoutY="251.0" text="Yubikey Secret">
+      <Label layoutX="60.0" layoutY="294.0" text="Yubikey Secret">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font>
@@ -37,18 +38,18 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#newDB" text="New Database" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDB" text="Open Database" />
-                  <Menu mnemonicParsing="false" text="Open Recent" />
+                  <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
+                  <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
+                  <Menu fx:id="menuRecent" mnemonicParsing="false" text="Open Recent" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save As…" />
+                  <MenuItem fx:id="menuSave" mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
                   <MenuItem mnemonicParsing="false" text="Revert" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Preferences…" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Quit" />
+                  <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
@@ -72,5 +73,10 @@
             </Menu>
          </menus>
       </MenuBar>
+      <Label fx:id="recentFileLabel" layoutX="185.0" layoutY="58.0" prefHeight="38.0" prefWidth="1333.0" text="Recent File:" textFill="#079bb5">
+         <font>
+            <Font name="Bell MT" size="27.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

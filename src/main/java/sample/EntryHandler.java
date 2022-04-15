@@ -19,8 +19,8 @@ public class EntryHandler implements Serializable  {
 
 
     public static int   Y =  (int) (Screen.getPrimary().getBounds().getHeight()/2)-150;
-    static String passwordFileName = System.getProperty("user.dir")+"/java/sample/passwords.txt";
-    static String dir = System.getProperty("user.dir")+"/java/sample/";
+
+   // static String dir = System.getProperty("user.dir")+"/java/sample/";
     String imgPath = EntryHandler.class.getResource("PMAuth/folder.png").toString();
     public void createEntryObject  (AnchorPane anchorPane) throws Exception {
 
@@ -69,33 +69,38 @@ public class EntryHandler implements Serializable  {
         for (int i = 0; i < tableView.getItems().size(); i++) {
             entry = (Entry) tableView.getItems().get(i);
 
-            if (entry.getNotes().getText().length() == 0) {
-                 writer.write(entry.getTitel().getText() + "," + entry.getUsername().getText() + "," +
-                        entry.getUrl().getText() + ","
-                        + entry.getPassword().getText() + ", " + entry.getNotes().getText() + "\n");
+            if (entry.getNotes().length() == 0) {
+                 writer.write(entry.getTitel() + "," + entry.getUsername() + "," +
+                        entry.getUrl() + ","
+                        + entry.getPassword() + ", " + entry.getNotes() + "\n");
             }
              else {
                 writer.write(
-                        entry.getTitel().getText() + "," + entry.getUsername().getText() + "," +
-                                entry.getUrl().getText() + ","
-                                + entry.getPassword().getText() + "," + entry.getNotes().getText() + "\n");
+                        entry.getTitel() + "," + entry.getUsername() + "," +
+                                entry.getUrl() + ","
+                                + entry.getPassword() + "," + entry.getNotes() + "\n");
                   }
 
         }
         writer.close();
         EncryptFile encryptFile = new EncryptFile();
-         encryptFile.encryption(dir,passwordFileName);
+        encryptFile.encryption();
 
     }
 
     private  List<Entry> readEntryFile()
             throws IOException {
+
+
+
         DecryptFile decryptFile = new DecryptFile();
 
         List<Entry> entry = new ArrayList<>();
-      Reader decryptedReader = new StringReader(decryptFile.Decryption(dir,passwordFileName));
-      BufferedReader reader = new BufferedReader(decryptedReader);
+
+     // BufferedReader reader = new BufferedReader(decryptedReader);
+         BufferedReader reader = new BufferedReader(new StringReader(decryptFile.Decryption()));
       String line;
+
         while ((line = reader.readLine()) != null) {
             String[] entries = line.split(",");
            Entry entryObj = (new Entry(entries[0], entries[1],entries[2],entries[3],entries[4]));

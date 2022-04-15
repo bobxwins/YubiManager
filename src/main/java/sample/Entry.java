@@ -4,39 +4,40 @@ import java.io.Serializable;
 
 
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class Entry implements Serializable {
-     String passwordString = new String();
+
 
     Entry(String titelString, String usernameString, String urlString, String passwordString,String noteString) {
-        this.titel=new TextField(titelString);
-        this.username=new TextField(usernameString);
-        this.url=new TextField(urlString);
-          this.password=new TextField(passwordString);
-     //   this.password=new PasswordField();
-        this.notes=new TextField(noteString);
+        this.titel=titelString;
+        this.username=usernameString;
+        this.url=urlString;
+          this.password=passwordString;
+
+        this.notes=noteString;
 
     }
-    TextField titel, username, url,password, notes;
-   // PasswordField password;
+    String titel, username, url,password,notes;
 
-    public TextField getTitel() {
-     titel.setDisable(true);
+
+    public String getTitel() {
+
         return titel;
     }
 
-    public TextField getUsername() {
+    public String getUsername() {
 
         return username;
     }
 
-    public TextField getUrl() {
+    public String getUrl() {
 
         return url;
     }
 
-     public TextField getPassword() {
+     public String getPassword() {
 
         return password;
     }
@@ -48,7 +49,7 @@ public class Entry implements Serializable {
     }
     */
 
-    public TextField getNotes() {
+    public String getNotes() {
 
         return notes;
     }

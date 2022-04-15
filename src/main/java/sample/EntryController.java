@@ -1,6 +1,7 @@
 package sample;
 import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -14,7 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -42,9 +42,9 @@ public class EntryController implements Serializable {
     @FXML
     private TextField tfURL;
     @FXML
-    private TextField tfPassword;
+    private PasswordField pfPwdField;
     @FXML
-    private TextField tfNotes;
+    private TextArea tANotes;
 
     @FXML
     private Button btnSignOut;
@@ -70,14 +70,14 @@ public class EntryController implements Serializable {
     private Button btnDelete;
     @FXML
     void createEntry(ActionEvent event) throws Exception {
-        entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(),tfURL.getText(),tfPassword.getText(),tfNotes.getText()));
+        entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(),tfURL.getText(),pfPwdField.getText(),tANotes.getText()));
         entryHandler.createEntryObject(anchorPane);
-        System.out.println("rinting..."+tfTitel.getText());
+
         tfTitel.setText("");
         tfUsername.setText("");
         tfURL.setText("");
-        tfPassword.setText("");
-        tfNotes.setText("");
+        pfPwdField.setText("");
+        tANotes.setText("");
         showTableView();
 
     }
@@ -93,7 +93,7 @@ public class EntryController implements Serializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
           entryData.removeAll(entryData);
-            File deleteFile = new File(EntryHandler.passwordFileName);
+            File deleteFile = new File(LoginController.passwordFilePath);
             deleteFile.delete();
         } else {
             // ... user chose CANCEL or closed the dialog
@@ -161,22 +161,27 @@ public class EntryController implements Serializable {
         }
     }
 
-
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
-        EntryHandler.writeEntrytoFile(EntryHandler.passwordFileName,entryTable);
+
+        String pwdDir = LoginController.passwordFilePath;
+
+        EntryHandler.writeEntrytoFile(/*LoginController.passwordFilePath*/pwdDir,entryTable);
+        FileUtils.write(LoginController.recentFiles,LoginController.passwordFilePath.getBytes(StandardCharsets.UTF_8));
     }
 
     @FXML
    private void initialize() throws Exception {
+
         colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
         colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
         colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
         colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
         colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
-       entryTable.setItems(entryData);
-         entryHandler.loadEntries (entryData,entryData);
+        entryTable.setItems(entryData);
+        entryHandler.loadEntries (entryData,entryData);
+
         filter();
     }
 
@@ -195,23 +200,23 @@ public class EntryController implements Serializable {
                 // Compare all columns  of every entry with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (entry.getTitel().getText().toLowerCase().contains(lowerCaseFilter)) {
+                if (entry.getTitel().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches titel column.
                 } else
 
-                if (entry.getUsername().getText().toLowerCase().contains(lowerCaseFilter)) {
+                if (entry.getUsername().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches Username
                 } else
 
-                if (entry.getUrl().getText().toLowerCase().contains(lowerCaseFilter)) {
+                if (entry.getUrl().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches URL.
                 } else
 
-                if (entry.getPassword().getText().toLowerCase().contains(lowerCaseFilter)) {
+                if (entry.getPassword().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches pwd.
                 } else
 
-                if (entry.getNotes().getText().toLowerCase().contains(lowerCaseFilter)) {
+                if (entry.getNotes().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches notes
                 }
                 return false; // Does not match any of the above.

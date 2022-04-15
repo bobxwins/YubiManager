@@ -66,8 +66,8 @@
             <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
             <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
             <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
-            <TextField fx:id="tfPassword" layoutX="10.0" layoutY="72.0" prefHeight="31.0" prefWidth="206.0" />
-            <TextField fx:id="tfNotes" layoutX="10.0" layoutY="124.0" prefHeight="269.0" prefWidth="650.0" />
+            <PasswordField fx:id="pfPwdField" />
+            <TextArea fx:id="tANotes" prefHeight="275.0" prefWidth="650.0" />
          </children>
       </VBox>
       <Button fx:id="btnCancel" disable="true" layoutX="970.0" layoutY="542.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="127.0" text="Cancel" visible="false" />
