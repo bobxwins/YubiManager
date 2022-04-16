@@ -21,6 +21,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class LoginController {
 
@@ -38,6 +39,8 @@ public class LoginController {
 
     @FXML
     private Label recentFileLabel ;
+    @FXML
+    private Label labelEnterPwd;
 
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
 
@@ -52,66 +55,38 @@ public class LoginController {
     void loadEntry(ActionEvent event) throws Exception {
         passwordFilePath = new String(FileUtils.readAllBytes(recentFiles));
         selectedDirectoryPath = new File(passwordFilePath).getAbsoluteFile().getParent()+"/";
-
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-       if( databaseHandler.pwdInput(mpField,ybkSecret)  == false)
-       {
-           System.out.println("is it false?");
-           return ;
-       }
-
-        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
-
-        Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
-             if (entryHandler.loadEntries(entryData, entryData) == 0) {
-                // if 0 entries are returned when attempting to load and decrypt the stored encrypted entries...
-                // ... after inputting password, returns error
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText("Login failed! Wrong Password!");
-                alert.showAndWait();
-                return;
-            }
-
-
-
-            entryWindow.setScene(new Scene(root));
+         if (loginAuthentication() == false)
+              {
+              return;
+                  }
             EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
-      //  }
+
     }
 
     @FXML
     void newDB(ActionEvent event)  {
-
+        labelEnterPwd.setVisible(false);
        dialog();
 
     }
 
     @FXML
     void openDB(ActionEvent event) throws Exception {
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-       if( databaseHandler.pwdInput(mpField,ybkSecret) ==false)
-       {
-           return;
-       }
+
         FileChooser fileChooser = new FileChooser();
         Stage anotherStage = new Stage();
         fileChooser.setInitialDirectory(new File(defaultPath));
         File file = fileChooser.showOpenDialog(anotherStage);
         if (file != null) {
-
+         labelEnterPwd.setVisible(true);
             passwordFilePath = file.getAbsolutePath();
-            selectedDirectoryPath=file.getAbsoluteFile().getParent()+"/";
+            FileUtils.write( recentFiles,passwordFilePath.getBytes(StandardCharsets.UTF_8));
+            selectedDirectoryPath = file.getAbsoluteFile().getParent() + "/";
+            System.out.println("the recent file is :"+  passwordFilePath);
 
-        } else {
-            return;
-        }
-        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
-        Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
-        entryWindow.setScene(new Scene(root));
         EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
+
+        }
     }
 
     @FXML
@@ -176,6 +151,7 @@ public class LoginController {
         gridPane.addRow(2, confirMPLabel,confirmMPField);
         gridPane.addRow(3, ybkLabel,newYbkField);
 
+
         dialog.getDialogPane().setContent(gridPane);
 
         Platform.runLater(() -> fileNameField.requestFocus());
@@ -219,5 +195,34 @@ public class LoginController {
 
          dialog.showAndWait();
 
+    }
+
+    boolean loginAuthentication () throws  Exception {
+
+        char[] masterPassword = mpField.getText().toCharArray();
+        char[] ybkPassword = ybkSecret.getText().toCharArray();
+
+        StringBuilder sb = new StringBuilder(128);
+        sb.append(masterPassword);
+        sb.append(ybkPassword);
+        LoginController.combinedPasswords = sb.toString().toCharArray();
+
+        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
+
+        Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
+        if (entryHandler.loadEntries(entryData, entryData) == 0) {
+            // if 0 entries are returned when attempting to load and decrypt the stored encrypted entries...
+            // ... after inputting password, returns error
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Login failed! Wrong Password!");
+            alert.showAndWait();
+            return false;
+        }
+
+        entryWindow.setScene(new Scene(root));
+        return true;
     }
 }
