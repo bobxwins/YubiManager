@@ -8,6 +8,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKey;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.util.Base64;
 
@@ -16,7 +17,7 @@ public class DecryptFile {
         Security.removeProvider("BC");
         Security.addProvider(new BouncyCastleProvider());
     }
-    public String Decryption() {
+    public byte[] Decryption() {
 
         try {
             String folderDir = LoginController.selectedDirectoryPath;
@@ -47,11 +48,12 @@ public class DecryptFile {
 
             String decodedOutput = new String(output);
             System.out.println("thsi is the decoded output "+ decodedOutput);
-        return decodedOutput;
+            return output;
+     //   return decodedOutput;
         } catch (Exception e) {
 
         }
-        return "";
+        return "".getBytes(StandardCharsets.UTF_8);
     }
 
     public  byte[] getIV (String folderDir) {

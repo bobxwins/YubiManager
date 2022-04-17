@@ -4,6 +4,7 @@ package sample;
     import javafx.collections.ObservableList;
 
     import java.io.*;
+    import java.nio.charset.StandardCharsets;
     import java.nio.file.Files;
     import java.nio.file.Path;
     import java.nio.file.Paths;
@@ -21,7 +22,8 @@ public class ObjectIOExample {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(new ArrayList<Entry>(entry));
             oos.close();
-
+            EncryptFile encryptFile = new EncryptFile();
+            encryptFile.encryption();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -33,7 +35,11 @@ public class ObjectIOExample {
 
     public static ObservableList<Entry> read(Path file) {
         try {
-            InputStream in = Files.newInputStream(file);
+            DecryptFile decryptFile = new DecryptFile();
+
+            InputStream in = new ByteArrayInputStream(decryptFile.Decryption());
+          
+            System.out.println("the decrypted data is:"+in);
             ObjectInputStream ois = new ObjectInputStream(in);
             List<Entry> list = (List<Entry>) ois.readObject() ;
             System.out.println(list);
