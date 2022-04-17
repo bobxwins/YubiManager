@@ -2,6 +2,7 @@ package sample;
 import java.io.File;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -18,7 +19,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 public class EntryController implements Serializable {
 
     @FXML
@@ -161,13 +163,14 @@ public class EntryController implements Serializable {
         }
     }
 
+
+
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
-
-        String pwdDir = LoginController.passwordFilePath;
-
-        EntryHandler.writeEntrytoFile(/*LoginController.passwordFilePath*/pwdDir,entryTable);
+        ObjectIOExample obj = new ObjectIOExample();
+        obj.write(entryData, Paths.get(LoginController.passwordFilePath));
         FileUtils.write(LoginController.recentFiles,LoginController.passwordFilePath.getBytes(StandardCharsets.UTF_8));
+
     }
 
     @FXML
@@ -178,9 +181,9 @@ public class EntryController implements Serializable {
         colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
         colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
         colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
-
+        entryData.addAll(ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)));
         entryTable.setItems(entryData);
-        entryHandler.loadEntries (entryData,entryData);
+
 
         filter();
     }

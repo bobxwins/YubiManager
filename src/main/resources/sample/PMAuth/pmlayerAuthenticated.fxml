@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -73,5 +74,6 @@
       <Button fx:id="btnCancel" disable="true" layoutX="970.0" layoutY="542.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="127.0" text="Cancel" visible="false" />
       <Button fx:id="btnEnterMenu" layoutX="96.0" layoutY="7.0" mnemonicParsing="false" onAction="#enterEntryMenu" text="Edit Entry" />
       <Button fx:id="deleteDB" layoutX="424.0" layoutY="678.0" mnemonicParsing="false" onAction="#deleteAll" prefHeight="31.0" prefWidth="164.0" text="Delete Database" />
+      <Text layoutX="274.0" layoutY="487.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="74.0" />
    </children>
 </AnchorPane>

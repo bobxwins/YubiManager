@@ -18,10 +18,10 @@ import javafx.stage.*;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
+
 
 public class LoginController {
 
@@ -67,7 +67,8 @@ public class LoginController {
     void newDB(ActionEvent event)  {
         labelEnterPwd.setVisible(false);
        dialog();
-
+      String storedPath = FileUtils.readAllBytes(recentFiles).toString();
+        FileUtils.write(recentFiles,passwordFilePath.getBytes(StandardCharsets.UTF_8));
     }
 
     @FXML
@@ -210,7 +211,10 @@ public class LoginController {
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
         Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
-        if (entryHandler.loadEntries(entryData, entryData) == 0) {
+
+        if (  ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)) != null &&
+                ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)).isEmpty()) {
+     //   if (entryHandler.loadEntries(entryData, entryData) == 0) {
             // if 0 entries are returned when attempting to load and decrypt the stored encrypted entries...
             // ... after inputting password, returns error
 
@@ -224,5 +228,12 @@ public class LoginController {
 
         entryWindow.setScene(new Scene(root));
         return true;
+    }
+
+    void recentFilesWrite() throws  Exception{
+        String filename= recentFiles;
+        FileWriter fw = new FileWriter(filename,true); //the true will append the new data
+        fw.write("add a line\n");//appends the string to the file
+        fw.close();
     }
 }

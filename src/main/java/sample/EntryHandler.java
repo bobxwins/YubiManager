@@ -20,7 +20,7 @@ public class EntryHandler implements Serializable  {
 
     public static int   Y =  (int) (Screen.getPrimary().getBounds().getHeight()/2)-150;
 
-   // static String dir = System.getProperty("user.dir")+"/java/sample/";
+    // static String dir = System.getProperty("user.dir")+"/java/sample/";
     String imgPath = EntryHandler.class.getResource("PMAuth/folder.png").toString();
     public void createEntryObject  (AnchorPane anchorPane) throws Exception {
 
@@ -29,10 +29,10 @@ public class EntryHandler implements Serializable  {
         ImageView imgView=new ImageView(image);
         newEntryButton.setLayoutY(Y+=30);
         newEntryButton.setLayoutX(37);
-         newEntryButton.setStyle("-fx-background-color: transparent;");
-         newEntryButton.setGraphic(imgView);
-         newEntryButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-         newEntryButton.setOnAction(e -> {
+        newEntryButton.setStyle("-fx-background-color: transparent;");
+        newEntryButton.setGraphic(imgView);
+        newEntryButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        newEntryButton.setOnAction(e -> {
             try{
 
             } catch (Exception E) {
@@ -52,11 +52,12 @@ public class EntryHandler implements Serializable  {
 
     }
 
+/*
 
     int loadEntries  (ObservableList<Entry> entry, List<Entry> loadEntries) throws Exception {
-
-        loadEntries = readEntryFile();
-      entry.removeAll(entry);
+    loadEntries= ObjectIOExample.read(Paths.get(LoginController.passwordFilePath));
+     //   loadEntries = readEntryFile();
+        entry.removeAll(entry);
         entry.addAll( loadEntries);
 
         return entry.size();
@@ -70,16 +71,16 @@ public class EntryHandler implements Serializable  {
             entry = (Entry) tableView.getItems().get(i);
 
             if (entry.getNotes().length() == 0) {
-                 writer.write(entry.getTitel() + "," + entry.getUsername() + "," +
+                writer.write(entry.getTitel() + "," + entry.getUsername() + "," +
                         entry.getUrl() + ","
                         + entry.getPassword() + ", " + entry.getNotes() + "\n");
             }
-             else {
+            else {
                 writer.write(
                         entry.getTitel() + "," + entry.getUsername() + "," +
                                 entry.getUrl() + ","
                                 + entry.getPassword() + "," + entry.getNotes() + "\n");
-                  }
+            }
 
         }
         writer.close();
@@ -97,19 +98,20 @@ public class EntryHandler implements Serializable  {
 
         List<Entry> entry = new ArrayList<>();
 
-     // BufferedReader reader = new BufferedReader(decryptedReader);
-         BufferedReader reader = new BufferedReader(new StringReader(decryptFile.Decryption()));
-      String line;
+        // BufferedReader reader = new BufferedReader(decryptedReader);
+        BufferedReader reader = new BufferedReader(new StringReader(decryptFile.Decryption()));
+        String line;
 
         while ((line = reader.readLine()) != null) {
             String[] entries = line.split(",");
-           Entry entryObj = (new Entry(entries[0], entries[1],entries[2],entries[3],entries[4]));
+            Entry entryObj = (new Entry(entries[0], entries[1],entries[2],entries[3],entries[4]));
 
-           entry.add (entryObj);
+            entry.add (entryObj);
         }
 
-     return entry;
+        return entry;
 
     }
+*/
 
 }

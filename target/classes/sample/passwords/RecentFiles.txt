@@ -1,1 +1,1 @@
-C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\folder3\folder3.txt
+C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords/folderz/folderz.txt

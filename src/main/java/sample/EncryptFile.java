@@ -47,6 +47,8 @@ public class EncryptFile {
     public void encryption() {
 
         try {
+
+
             String folderDir = LoginController.selectedDirectoryPath;
             String pwdDir = LoginController.passwordFilePath;
 

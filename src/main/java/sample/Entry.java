@@ -3,12 +3,9 @@ package sample;
 import java.io.Serializable;
 
 
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-
 public class Entry implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     Entry(String titelString, String usernameString, String urlString, String passwordString,String noteString) {
         this.titel=titelString;
