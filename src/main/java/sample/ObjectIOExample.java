@@ -38,11 +38,10 @@ public class ObjectIOExample {
             DecryptFile decryptFile = new DecryptFile();
 
             InputStream in = new ByteArrayInputStream(decryptFile.Decryption());
-          
-            System.out.println("the decrypted data is:"+in);
+
             ObjectInputStream ois = new ObjectInputStream(in);
             List<Entry> list = (List<Entry>) ois.readObject() ;
-            System.out.println(list);
+
             return FXCollections.observableList(list);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

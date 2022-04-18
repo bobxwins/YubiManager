@@ -15,6 +15,8 @@ import javafx.util.Pair;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -22,7 +24,7 @@ import static sample.LoginController.defaultPath;
 
 public class DatabaseHandler {
 
-    boolean pwdInput(PasswordField mpField, PasswordField ybkSecret)
+   /* boolean pwdInput(PasswordField mpField, PasswordField ybkSecret)
     {
         char[] masterPassword = mpField.getText().toCharArray();
         char[] ybkPassword = ybkSecret.getText().toCharArray();
@@ -54,34 +56,38 @@ public class DatabaseHandler {
         System.out.println(" comparison is_"+ comparePWDS);
         return comparePWDS; }
 
+    */
 
+    boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn) throws  Exception {
 
-   /* boolean newScene ( ) throws Exception
-    {
+        char[] masterPassword = mpField.getText().toCharArray();
+        char[] ybkPassword = ybkSecret.getText().toCharArray();
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        Stage anotherStage = new Stage();
-        directoryChooser.setInitialDirectory(new File(defaultPath));
-        File selectedDirectory = directoryChooser.showDialog(anotherStage);
+        StringBuilder sb = new StringBuilder(128);
+        sb.append(masterPassword);
+        sb.append(ybkPassword);
+        LoginController.combinedPasswords = sb.toString().toCharArray();
 
-        if (selectedDirectory != null) {
-            System.out.println(selectedDirectory.getAbsolutePath());
-            String path=  selectedDirectory.getAbsolutePath();
-           LoginController.passwordFileName = path+"\\"+LoginController.passwordFileName+".txt";
-            FileUtils.write(  LoginController.passwordFileName,"".getBytes(StandardCharsets.UTF_8))
-            ;
-            System.out.println("the file name is " +   LoginController.passwordFileName);
+        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
-        }
-        else {
+        Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
+
+        if (  ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)) != null &&
+                ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)).isEmpty()) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Login failed! Wrong Password!");
+            alert.showAndWait();
             return false;
         }
 
+        entryWindow.setScene(new Scene(root));
         return true;
     }
-    void dialog() {
 
-
+    void dialog(Button btn) {
 
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("TestName");
@@ -103,13 +109,14 @@ public class DatabaseHandler {
         newYbkField.setPromptText("Yubikey static Password...");
 
         Label fileLabel = new Label("Enter new File name:");
-        Label mpLabel = new Label("Enter Master Password:");
-        Label confirMPLabel = new Label("Confirm Master Password:");
-        Label ybkLabel = new Label("Enter Yubikey Password:");
+        Label mpLabel = new Label("Enter new Master Password:");
+        Label confirMPLabel = new Label("Confirm new Master Password:");
+        Label ybkLabel = new Label("Enter new  Yubikey Password:");
         gridPane.addRow(0, fileLabel,fileNameField);
         gridPane.addRow(1, mpLabel,newMpField);
         gridPane.addRow(2, confirMPLabel,confirmMPField);
         gridPane.addRow(3, ybkLabel,newYbkField);
+
 
         dialog.getDialogPane().setContent(gridPane);
 
@@ -127,9 +134,10 @@ public class DatabaseHandler {
                         return null;
                     }
                     if (fileNameField.getText().length() == 0 || newMpField.getText().length() == 0 || confirmMPField.getText().length() == 0) {
-                        System.out.println("zero!!");
+
                         return null;
                     }
+
                     char[] masterPassword = newMpField.getText().toCharArray();
                     char[] ybkPassword = newYbkField.getText().toCharArray();
 
@@ -137,28 +145,79 @@ public class DatabaseHandler {
                     sb.append(masterPassword);
                     sb.append(ybkPassword);
 
-                    combinedPasswords = sb.toString().toCharArray();
+                   LoginController.combinedPasswords = sb.toString().toCharArray();
 
-                     LoginController.passwordFileName = fileNameField.getText();
-                    System.out.println("confrims?" + confirmMPField.getText());
+                   LoginController.passwordFilePath = fileNameField.getText();
 
-                    newScene();
+                    newScene(btn);
                 }
             }
             catch (Exception E) {
 
             }
 
-            return null; // return null;
+            return null;
         });
 
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(pair -> {
-            //  System.out.println("From=" + pair.getKey() + ", To=" + pair.getValue());
-        });
+        dialog.showAndWait();
 
     }
-    */
 
+    boolean newScene (Button btnCreateDB ) throws Exception
+    {
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        Stage anotherStage = new Stage();
+        directoryChooser.setInitialDirectory(new File(defaultPath));
+        File selectedDirectory = directoryChooser.showDialog(anotherStage);
+
+        if (selectedDirectory != null) {
+          LoginController.  selectedDirectoryPath=selectedDirectory.getAbsolutePath()+"/"+LoginController.passwordFilePath+"\\";
+
+            new File(LoginController.selectedDirectoryPath).mkdir();
+            LoginController.passwordFilePath =  LoginController. selectedDirectoryPath+LoginController.passwordFilePath+".xlsx";
+            FileUtils.write(  LoginController.passwordFilePath,"".getBytes(StandardCharsets.UTF_8));
+
+        }
+        else {
+            return false;
+        }
+        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
+
+        Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
+
+        entryWindow.setScene(new Scene(root));
+        EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
+        return true;
+    }
+    public  void createMenuItems(Menu menuRecent, Label labelEnterPwd) {
+        String recentFilesString = new String(FileUtils.readAllBytes(LoginController.recentFiles));
+
+        String[] rFSArray = recentFilesString.split(",");
+
+        for (int i = 0; i < rFSArray.length; i++) {
+
+            MenuItem menuItems = new MenuItem(rFSArray[i]);
+        //    if (menuItems.getText() !=menuItems.getText()) {
+
+                menuRecent.getItems().addAll(menuItems);
+
+                menuItems.setOnAction(e ->
+                {
+                    labelEnterPwd.setVisible(true);
+                    LoginController.passwordFilePath = menuItems.getText();
+                    Path path = Paths.get(LoginController.passwordFilePath).getParent();
+
+                    LoginController.selectedDirectoryPath = path.toString();
+
+
+
+                    EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
+
+                });
+            }
+
+        }
+
+ //  }
 }

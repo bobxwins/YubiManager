@@ -15,7 +15,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
    <children>
       <ScrollBar layoutX="1518.0" layoutY="-9.0" orientation="VERTICAL" prefHeight="806.0" prefWidth="18.0" />
-      <Button fx:id="btnSignIn" layoutX="503.0" layoutY="339.0" mnemonicParsing="false" onAction="#loadEntry" prefWidth="97.0" text="Sign in" />
+      <Button fx:id="btnSignIn" layoutX="503.0" layoutY="339.0" mnemonicParsing="false" onAction="#login" prefWidth="97.0" text="Sign in" />
       <PasswordField fx:id="mpField" layoutX="185.0" layoutY="225.0" prefHeight="24.0" prefWidth="389.0" />
       <PasswordField fx:id="ybkSecret" layoutX="185.0" layoutY="288.0" prefHeight="24.0" prefWidth="389.0" />
       <Label layoutX="205.0" layoutY="77.0" text="Login">
@@ -36,15 +36,15 @@
       </Label>
       <MenuBar prefHeight="32.0" prefWidth="1520.0">
          <menus>
-            <Menu mnemonicParsing="false" text="File">
+            <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                <items>
                   <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
                   <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
                   <Menu fx:id="menuRecent" mnemonicParsing="false" text="Open Recent" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem fx:id="menuSave" mnemonicParsing="false" text="Save" />
-                  <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
+                  <MenuItem fx:id="menuSave" disable="true" mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="menuSaveAs" disable="true" mnemonicParsing="false" text="Save As…" />
                   <MenuItem mnemonicParsing="false" text="Revert" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Preferences…" />
@@ -73,14 +73,19 @@
             </Menu>
          </menus>
       </MenuBar>
-      <Label fx:id="recentFileLabel" layoutX="185.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Recent File:" textFill="#079bb5">
+      <Label fx:id="recentFileLabel" layoutX="281.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Recent File:" textFill="#079bb5">
          <font>
             <Font name="Bell MT" size="27.0" />
          </font>
       </Label>
-      <Label fx:id="labelEnterPwd" layoutX="149.0" layoutY="134.0" text="Please enter passwords!" visible="false">
+      <Label fx:id="labelEnterPwd" layoutX="149.0" layoutY="134.0" text="Please enter passwords!" textFill="#dd3e3e" visible="false">
          <font>
-            <Font size="33.0" />
+            <Font name="System Bold" size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="recentFileLabel1" layoutX="77.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Newest file added:" textFill="#079bb5">
+         <font>
+            <Font name="Bell MT" size="27.0" />
          </font>
       </Label>
    </children>

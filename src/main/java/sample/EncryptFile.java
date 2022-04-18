@@ -52,8 +52,7 @@ public class EncryptFile {
             String folderDir = LoginController.selectedDirectoryPath;
             String pwdDir = LoginController.passwordFilePath;
 
-            System.out.println("the folder DIR IS"+ folderDir);
-            System.out.println("the pwdDir is"+pwdDir);
+
             SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", "BC");
 
             secureRandom.nextBytes(generatedIV);
@@ -62,8 +61,6 @@ public class EncryptFile {
 
             PBEKeySpec keySpec = new PBEKeySpec(LoginController.combinedPasswords, salt, iterationCount, keylength);
 
-
-            System.out.println("the password is..."+ new String(LoginController.combinedPasswords));
             SecretKeyFactory factory =
                     SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");
 

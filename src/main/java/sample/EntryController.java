@@ -169,7 +169,8 @@ public class EntryController implements Serializable {
     void saveEntry(ActionEvent event) throws Exception {
         ObjectIOExample obj = new ObjectIOExample();
         obj.write(entryData, Paths.get(LoginController.passwordFilePath));
-        FileUtils.write(LoginController.recentFiles,LoginController.passwordFilePath.getBytes(StandardCharsets.UTF_8));
+
+       // FileUtils.write(LoginController.recentFiles,LoginController.passwordFilePath.getBytes(StandardCharsets.UTF_8));
 
     }
 

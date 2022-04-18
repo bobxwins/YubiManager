@@ -35,10 +35,9 @@ public class DecryptFile {
                     SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");
 
             PBEKeySpec keySpec = new PBEKeySpec(LoginController.combinedPasswords, getSalt(folderDir), iterationCountInt, keylengthInt);
-            System.out.println("key spec is:+++" + keySpec);
-            System.out.println("my key spec is:+" + LoginController.combinedPasswords+getSalt(folderDir)+iterationCountInt+keylengthInt);
+
             SecretKey key = factory.generateSecret(keySpec);
-            System.out.println("thsi is the decoded outpuerberbt ");
+
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING", "BC");
 
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(getIV(folderDir)));
@@ -47,7 +46,7 @@ public class DecryptFile {
             byte[] output = cipher.doFinal(input);
 
             String decodedOutput = new String(output);
-            System.out.println("thsi is the decoded output "+ decodedOutput);
+
             return output;
      //   return decodedOutput;
         } catch (Exception e) {

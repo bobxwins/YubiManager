@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class PasswordUtils {
 
     public static char[] getUserPassword() throws Exception {
-        char[] password =  Main.PassText.toCharArray();
+        char[] password =  LoginController.combinedPasswords();
         // initiliases an array of character of unspecified length and value
         if (new String(password).length() < 12)
         {

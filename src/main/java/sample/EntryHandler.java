@@ -20,7 +20,6 @@ public class EntryHandler implements Serializable  {
 
     public static int   Y =  (int) (Screen.getPrimary().getBounds().getHeight()/2)-150;
 
-    // static String dir = System.getProperty("user.dir")+"/java/sample/";
     String imgPath = EntryHandler.class.getResource("PMAuth/folder.png").toString();
     public void createEntryObject  (AnchorPane anchorPane) throws Exception {
 
@@ -47,6 +46,8 @@ public class EntryHandler implements Serializable  {
         Label entryLabel = new Label("EntryName");
         entryLabel.setLayoutX(105);
         entryLabel.setLayoutY(Y+=5);
+        TableView tableView = new TableView();
+
         anchorPane.getChildren().addAll(imgView,entryLabel);
         anchorPane.getChildren().add(newEntryButton);
 
