@@ -83,7 +83,7 @@
             <Font name="System Bold" size="33.0" />
          </font>
       </Label>
-      <Label fx:id="recentFileLabel1" layoutX="77.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Newest file added:" textFill="#079bb5">
+      <Label fx:id="recentFileLabel1" layoutX="77.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Newest file added:" textFill="#153136">
          <font>
             <Font name="Bell MT" size="27.0" />
          </font>

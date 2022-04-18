@@ -73,7 +73,7 @@
             </Menu>
          </menus>
       </MenuBar>
-      <Label fx:id="recentFileLabel" layoutX="281.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Recent File:" textFill="#079bb5">
+      <Label fx:id="recentFileLabel" layoutX="281.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" textFill="#079bb5">
          <font>
             <Font name="Bell MT" size="27.0" />
          </font>
