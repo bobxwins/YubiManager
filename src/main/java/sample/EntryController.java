@@ -18,13 +18,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-
- // import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 public class EntryController implements Serializable {
@@ -93,8 +89,8 @@ public class EntryController implements Serializable {
         showTableView();
 
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
-       // String pwd = RandomStringUtils.random( 15, characters );
-     //   System.out.println( pwd );
+       //  String pwd = RandomStringUtils.random( 15, characters );
+   //   System.out.println( pwd );
 
     }
     @FXML

@@ -11,6 +11,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bcprov-jdk15on-168" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.12.0-javadoc" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.12.0-sources" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.12.0-test-sources" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.12.0-tests" level="project" />
+    <orderEntry type="library" name="commons-lang3-3.12.0" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:15.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:15.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:15.0.1" level="project" />
@@ -36,5 +41,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
   </component>
 </module>

@@ -10,7 +10,7 @@ module sample  {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires org.bouncycastle.provider;
-
+    requires org.apache.commons.lang3;
     opens sample to javafx.fxml;
     exports sample;
 }
