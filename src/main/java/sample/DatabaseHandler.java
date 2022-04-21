@@ -198,7 +198,7 @@ public class DatabaseHandler {
         for (int i = 0; i < rFSArray.length; i++) {
 
             MenuItem menuItems = new MenuItem(rFSArray[i]);
-        //    if (menuItems.getText() !=menuItems.getText()) {
+
 
                 menuRecent.getItems().addAll(menuItems);
 
@@ -209,8 +209,6 @@ public class DatabaseHandler {
                     Path path = Paths.get(LoginController.passwordFilePath).getParent();
 
                     LoginController.selectedDirectoryPath = path.toString();
-
-
 
                     EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
 

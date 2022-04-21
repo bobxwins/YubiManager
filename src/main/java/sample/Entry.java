@@ -50,6 +50,23 @@ public class Entry implements Serializable {
 
         return notes;
     }
+    public void setTitel(String titel) {
+        this.titel = titel;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    public void setURL(String url) {
+        this.url = url;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
 }

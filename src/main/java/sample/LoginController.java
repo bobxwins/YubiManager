@@ -12,6 +12,7 @@ import javafx.stage.*;
 
 import java.io.File;
 
+import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 
 import java.util.stream.Stream;
@@ -102,8 +103,8 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
+        new FileOutputStream(recentFiles, true).close();
         String recentFilesString = new String(FileUtils.readAllBytes(recentFiles));
-
          String[] rFSArray = recentFilesString.split(",");
      //   passwordFilePath = rFSArray[0];
         passwordFilePath = rFSArray[rFSArray.length-1];
