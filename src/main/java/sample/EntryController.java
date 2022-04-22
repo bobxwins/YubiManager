@@ -1,9 +1,4 @@
 package sample;
-import java.io.File;
-import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,10 +12,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.*;
 import org.apache.commons.lang3.RandomStringUtils;
+
+import java.io.File;
+import java.io.Serializable;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 
 public class EntryController implements Serializable {
@@ -54,6 +54,10 @@ public class EntryController implements Serializable {
     private Button btnSignOut;
     @FXML
     private Button btnEditEntry;
+
+    @FXML
+    private Button btnPwdGenerator;
+
     @FXML
     private AnchorPane anchorPane;
 
@@ -72,6 +76,14 @@ public class EntryController implements Serializable {
     private Button btnCancel;
     @FXML
     private Button btnCreate;
+    @FXML
+    private TextField generatedPWDfield;
+
+    @FXML private BorderPane bpEntryMenu;
+
+    @FXML private AnchorPane apPwdGenerate;
+
+    @FXML private AnchorPane entryPane;
 
     @FXML
     private MenuItem menuDeleteRow;
@@ -88,10 +100,30 @@ public class EntryController implements Serializable {
         tANotes.setText("");
         showTableView();
 
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
-       //  String pwd = RandomStringUtils.random( 15, characters );
-   //   System.out.println( pwd );
 
+    }
+    @FXML
+    void generatePwd(ActionEvent event) throws Exception
+    {
+
+        apPwdGenerate.setVisible(true);
+        apPwdGenerate.setDisable(false);
+        entryPane.setDisable(true);
+        entryPane.setVisible(false);
+        btnEditOK.setDisable(true);
+        btnEditOK.setVisible(false);
+
+
+        btnPwdGenerator.setOnAction(e -> {
+            try{
+                String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+                String pwd = RandomStringUtils.random( 30, characters );
+                System.out.println( pwd );
+                generatedPWDfield.setText(pwd);
+            } catch (Exception E) {
+
+            }
+        });
     }
     @FXML
     void deleteAll(ActionEvent event) throws Exception
@@ -115,24 +147,28 @@ public class EntryController implements Serializable {
 
     void showTableView()
     {
-        vBoxLabel.setVisible(false);
-        vBoxTf.setDisable(true);
-        vBoxTf.setVisible(false);
+        entryPane.setVisible(true);
+        entryPane.setDisable(false);
+
+        bpEntryMenu.setDisable(true);
+        bpEntryMenu.setVisible(false);
+
         tfSearch.setDisable(false);
+
         entryTable.setVisible(true);
         entryTable.setDisable(false);
+
         btnEditOK.setDisable(true);
         btnEditOK.setVisible(false);
     }
 
     void entrySpecs() throws Exception {
-
-            vBoxLabel.setVisible(true);
-            vBoxTf.setDisable(false);
-            vBoxTf.setVisible(true);
+            bpEntryMenu.setVisible(true);
+            bpEntryMenu.setDisable(false);
+            tfSearch.setDisable(true);
             btnCreate.setVisible(true);
             btnCreate.setDisable(false);
-            tfSearch.setDisable(true);
+
             entryTable.setVisible(false);
             entryTable.setDisable(true);
     }
@@ -142,6 +178,14 @@ public class EntryController implements Serializable {
     void returnTableView(ActionEvent event) throws Exception
     {
         showTableView();
+        apPwdGenerate.setDisable(true);
+        apPwdGenerate.setVisible(false);
+    }
+
+    @FXML
+    void copyPWD(ActionEvent event) throws Exception
+    {
+
     }
 
     @FXML
@@ -253,7 +297,7 @@ public class EntryController implements Serializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
-        alert.setContentText("Database succesfully saved");
+        alert.setContentText("Database succesfully saved!");
         alert.showAndWait();
         
     }
