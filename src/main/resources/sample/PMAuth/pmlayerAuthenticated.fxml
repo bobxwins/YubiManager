@@ -122,9 +122,10 @@
       </ToolBar>
       <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="220.0" prefHeight="200.0" prefWidth="200.0" visible="false">
          <children>
-            <HBox prefHeight="58.0" prefWidth="659.0">
+            <Text fx:id="textEntropy" strokeType="OUTSIDE" strokeWidth="0.0" text="lolk" wrappingWidth="265.0" x="350.0" y="50.0" />
+            <TextField fx:id="tfPwdLength" layoutX="580.0" layoutY="100.0" prefHeight="31.0" prefWidth="66.0" promptText="Length" text="13" />
+            <HBox prefHeight="24.0" prefWidth="659.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
                   <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
                   <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
                      <graphic>
@@ -149,7 +150,7 @@
             <Button fx:id="btnReturn" layoutX="560.0" layoutY="133.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="Close" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="entryPane" layoutX="217.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
+      <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
          <children>
             <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="40.0" prefHeight="421.0" prefWidth="635.0">
               <columns>

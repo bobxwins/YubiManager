@@ -1,7 +1,10 @@
 
 package sample;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.lang.Math;
@@ -11,11 +14,20 @@ public class PasswordUtils2 {
     static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyz".toCharArray();
     static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     static char[] NUMBERS = "0123456789".toCharArray();
+    static char[] ALL_CHARS ;
+   static char [] shiz =   ArrayUtils.addAll(SYMBOLS, LOWERCASE);
 
-    static char[] ALL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
     static Random rand = new SecureRandom();
 
     public static String getPassword(int length) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(SYMBOLS);
+        sb.append(LOWERCASE);
+        sb.append(UPPERCASE);
+        sb.append(NUMBERS);
+       ALL_CHARS = sb.toString().toCharArray();
+
+
 
         assert length >= 12;
         char[] password = new char[length];
@@ -37,9 +49,14 @@ public class PasswordUtils2 {
             char temp = password[i];
             password[i] = password[randomPosition];
             password[randomPosition] = temp;
+
+
         }
+
+
         double entropy =  Math.log10(Math.pow(ALL_CHARS.length, password.length))/Math.log10(2);
-        System.out.println("entropy"+entropy);
+        System.out.println("entropy IS "+entropy);
+
         return new String(password);
     }
 }

@@ -5,15 +5,19 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -25,6 +29,7 @@ import java.util.Optional;
 
 public class EntryController implements Serializable {
 
+    public static int i = 0;
     @FXML
     private   TableView <Entry> entryTable ;
     @FXML
@@ -78,13 +83,16 @@ public class EntryController implements Serializable {
     private Button btnCreate;
     @FXML
     private TextField generatedPWDfield;
+    @FXML
+    private Text textEntropy;
 
     @FXML private BorderPane bpEntryMenu;
 
     @FXML private AnchorPane apPwdGenerate;
 
     @FXML private AnchorPane entryPane;
-
+    @FXML private TextField tfPwdLength;
+   static  int length;
     @FXML
     private MenuItem menuDeleteRow;
     @FXML
@@ -103,9 +111,11 @@ public class EntryController implements Serializable {
 
     }
     @FXML
-    void generatePwd(ActionEvent event) throws Exception
-    {
+    void generatePwd(ActionEvent event) throws Exception {
 
+
+        //   double entropy =  Math.log10(Math.pow(PasswordUtils2.ALL_CHARS.length, length))/Math.log10(2);
+        //   textEntropy.setText("Entropy bits is: "+(entropy));
         apPwdGenerate.setVisible(true);
         apPwdGenerate.setDisable(false);
         entryPane.setDisable(true);
@@ -113,13 +123,44 @@ public class EntryController implements Serializable {
         btnEditOK.setDisable(true);
         btnEditOK.setVisible(false);
 
+        tfPwdLength.setOnKeyReleased( e -> {
+
+            tfPwdLength.textProperty().addListener((observable, oldValue, newValue) -> {
+
+
+
+                        boolean isNumeric = newValue.chars().allMatch(Character::isDigit);
+
+                        if (!newValue.matches("\\d*")) {
+                            tfPwdLength.setText(newValue.replaceAll("[^\\d]", ""));
+                            return;
+                        }
+                        if (isNumeric == true && tfPwdLength.getLength() >= 1)
+                        length = Integer.parseInt(tfPwdLength.getText());
+                        tfPwdLength.setText(String.valueOf(PasswordUtils2.getPassword(length).
+
+                                length()));
+                        PasswordUtils2.getPassword(Integer.parseInt(tfPwdLength.getText()));
+
+                        generatedPWDfield.setText(PasswordUtils2.getPassword(length));
+                        double entropy = Math.log10(Math.pow(PasswordUtils2.ALL_CHARS.length, length)) / Math.log10(2);
+                        textEntropy.setText("Entropy bits is: " + (entropy));
+
+
+            });
+
+
+        });
 
         btnPwdGenerator.setOnAction(e -> {
             try{
-                String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
-                String pwd = RandomStringUtils.random( 30, characters );
-                System.out.println( pwd );
-                generatedPWDfield.setText(pwd);
+                length= Integer.parseInt(tfPwdLength.getText());
+                tfPwdLength.setText(String.valueOf(PasswordUtils2.getPassword(length).length()));
+                PasswordUtils2.getPassword(Integer.parseInt(tfPwdLength.getText()));
+
+                generatedPWDfield.setText(PasswordUtils2.getPassword(length));
+                double entropy =  Math.log10(Math.pow(PasswordUtils2.ALL_CHARS.length,length))/Math.log10(2);
+                textEntropy.setText("Entropy bits is: "+(entropy));
             } catch (Exception E) {
 
             }
@@ -207,6 +248,8 @@ public class EntryController implements Serializable {
      //   updateRecentFileString();
 
     }
+
+
 
     @FXML
     void openDB(ActionEvent event) throws Exception {
@@ -305,6 +348,7 @@ public class EntryController implements Serializable {
 
     @FXML
    private void initialize() throws Exception {
+
 
         colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
         colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));

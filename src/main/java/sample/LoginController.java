@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import javafx.stage.*;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 
@@ -53,9 +54,7 @@ public class LoginController {
     @FXML
     void login(ActionEvent event) throws Exception {
         String recentFilesString = new String(FileUtils.readAllBytes(recentFiles));
-        for (int i = 0; i < 20; i++) {
-            System.out.println(PasswordUtils2.getPassword(20));
-        }
+
         String[] rFSArray = recentFilesString.split(",");
         passwordFilePath = rFSArray[0];
         selectedDirectoryPath = new File(passwordFilePath).getAbsoluteFile().getParent()+"\\";
