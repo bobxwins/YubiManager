@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="764.0" prefWidth="1519.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
+<AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1370.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
    <children>
       <Button fx:id="btnOpenEntry" contentDisplay="GRAPHIC_ONLY" layoutX="33.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="74.0" style="-fx-background-color: transparent;" text="OpenEntry">
          <graphic>
@@ -31,7 +31,7 @@
       <Button fx:id="btnSignOut" layoutX="1143.0" layoutY="678.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
       <PasswordField fx:id="tfUpdateMP" layoutX="16.0" layoutY="678.0" />
       <Button fx:id="btnUpMP" layoutX="208.0" layoutY="678.0" mnemonicParsing="false" text="Update MasterPassword" />
-      <MenuBar prefHeight="39.0" prefWidth="1520.0">
+      <MenuBar prefHeight="39.0" prefWidth="1557.0">
          <menus>
             <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                <items>
@@ -82,7 +82,7 @@
             </Menu>
          </menus>
       </MenuBar>
-      <ToolBar layoutY="30.0" prefHeight="62.0" prefWidth="1520.0">
+      <ToolBar layoutY="30.0" prefHeight="63.0" prefWidth="1557.0">
          <items>
             <Button fx:id="btnEnterMenu" mnemonicParsing="false" onAction="#entryMenu" prefHeight="0.0" prefWidth="40.0" text="+">
                <font>
