@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,18 +13,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.Optional;
 
 
@@ -57,6 +55,8 @@ public class EntryController implements Serializable {
     @FXML
     private TextArea tANotes;
 
+    @FXML
+    private Text textPwdQuality;
     @FXML
     private Button btnSignOut;
     @FXML
@@ -92,6 +92,10 @@ public class EntryController implements Serializable {
     private TextField generatedPWDfield;
     @FXML
     private Text textCalcEntropy;
+    @FXML
+    private Text textCalcGPU;
+    @FXML
+    private Text textCalcGPUClusters;
 
     @FXML private BorderPane bpEntryMenu;
 
@@ -122,7 +126,7 @@ public class EntryController implements Serializable {
     void generatePwd(ActionEvent event) throws Exception {
 
 
-        //   double entropy =  Math.log10(Math.pow(PasswordUtils2.ALL_CHARS.length, length))/Math.log10(2);
+        //   double entropy =  Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length, length))/Math.log10(2);
         //   textEntropy.setText("Entropy bits is: "+(entropy));
         apPwdGenerate.setVisible(true);
         apPwdGenerate.setDisable(false);
@@ -145,13 +149,13 @@ public class EntryController implements Serializable {
                         }
                         if (isNumeric == true && tfPwdLength.getLength() >= 1)
                         length = Integer.parseInt(tfPwdLength.getText());
-                        tfPwdLength.setText(String.valueOf(PasswordUtils2.getPassword(length).
+                        tfPwdLength.setText(String.valueOf(PasswordUtils.getPassword(length).
 
                                 length()));
-                        PasswordUtils2.getPassword(Integer.parseInt(tfPwdLength.getText()));
+                        PasswordUtils.getPassword(Integer.parseInt(tfPwdLength.getText()));
 
-                        generatedPWDfield.setText(PasswordUtils2.getPassword(length));
-                        double entropy = Math.log10(Math.pow(PasswordUtils2.ALL_CHARS.length, length)) / Math.log10(2);
+                        generatedPWDfield.setText(PasswordUtils.getPassword(length));
+                        double entropy = Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length, length)) / Math.log10(2);
                         textEntropy.setText("Entropy bits is: " + (entropy));
 
 
@@ -163,11 +167,11 @@ public class EntryController implements Serializable {
         btnPwdGenerator.setOnAction(e -> {
             try{
                 length= Integer.parseInt(tfPwdLength.getText());
-                tfPwdLength.setText(String.valueOf(PasswordUtils2.getPassword(length).length()));
-                PasswordUtils2.getPassword(Integer.parseInt(tfPwdLength.getText()));
+                tfPwdLength.setText(String.valueOf(PasswordUtils.getPassword(length).length()));
+                PasswordUtils.getPassword(Integer.parseInt(tfPwdLength.getText()));
 
-                generatedPWDfield.setText(PasswordUtils2.getPassword(length));
-                double entropy =  Math.log10(Math.pow(PasswordUtils2.ALL_CHARS.length,length))/Math.log10(2);
+                generatedPWDfield.setText(PasswordUtils.getPassword(length));
+                double entropy =  Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length,length))/Math.log10(2);
                 textEntropy.setText("Entropy bits is: "+(entropy));
             } catch (Exception E) {
 
@@ -373,7 +377,7 @@ Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
          apCalc.setVisible(false);
         btnClose.setOnAction((e -> {
         showTableView();
-            System.out.println("scooby snacks");
+
 
         }));
 
@@ -451,11 +455,75 @@ Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
 
             entryData.set(entryData.indexOf(selectedItem), selectedItem);
             selectedItem.getPassword();
-            System.out.println(selectedItem.getPassword());
-            double entropy =  Math.log10(Math.pow(PasswordUtils2.cardinality(  selectedItem.getPassword()),selectedItem.getPassword().length()))/Math.log10(2);
-             textCalcEntropy.setText("The calculated entropy is: "+(entropy)+"\nYour password is:\nEstimated time for brute forcing is:  ");
-            System.out.println("the entropy is: "+entropy);
-            System.out.println("the length is "+ selectedItem.getPassword().length());
+
+            double entropy =  Math.log10(Math.pow(PasswordUtils.cardinality(  selectedItem.getPassword()),selectedItem.getPassword().length()))/Math.log10(2);
+
+            String quality ="";
+            textPwdQuality.setStyle("-fx-font-size: 21px;");
+            textPwdQuality.setUnderline(false);
+                if(entropy <28)
+                {
+           quality= "Very weak";
+                    textPwdQuality.setFill(Color.DARKRED);
+
+                }
+                if(entropy > 28 && entropy < 35 )
+                {
+                    quality= "Weak";
+
+                    textPwdQuality.setFill(Color.RED);
+                }
+                 if(entropy > 35 && entropy < 59 )
+                 {
+                     quality= "Moderate";
+                     textPwdQuality.setFill(Color.DARKBLUE);
+                 }
+                 if(entropy > 60 && entropy < 127 )
+                 {
+                     quality= "Strong";
+                     textPwdQuality.setFill(Color.GREEN);
+
+                 }
+                 if(entropy >= 127 )
+                 {
+                     textPwdQuality.setFill(Color.DARKGREEN);
+                     textPwdQuality.setUnderline(true);
+                     textPwdQuality.setStyle("-fx-font-size: 30px;");
+                     quality= "Overkill";
+
+                 }
+
+
+          //  DecimalFormat numberFormat = new DecimalFormat("#.000000000000000000000");
+            System.out.println(Math.round(1000/2.7));
+            textPwdQuality.setText(quality);
+
+            PasswordUtils.BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ PasswordUtils.BRUTEFORCEGPU.doubleValue()/2;
+            if (entropy>174)
+            {
+                PasswordUtils.BRUTEFORCETIMEGPU=Double.POSITIVE_INFINITY;
+
+            }
+            textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\nYour password quality is: ");
+            textCalcGPU.setText( "Estimated time for brute forcing the passwords with a GPU is: "
+                    +"\n"+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU)+" seconds"
+            +"\nEstimated hours is: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU/3600)+" hours"+
+                    "\nEstimated days is: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24)+" days"+
+                    "\nEstimated years is: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24/365)+" years");
+
+            PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ PasswordUtils.BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
+
+            if (entropy>174)
+            {
+                PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Double.POSITIVE_INFINITY;
+            }
+
+            textCalcGPUClusters.setText("Estimated time for brute forcing the passwords with GPU Clusters is: "
+                    +"\n"+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
+                    +"\nEstimated hours is: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
+                    "\nEstimated days is: "+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+
+                    "\nEstimated years is: "+String.format("%.3f" , PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24/365)+" years");
+
         }
     }
 
