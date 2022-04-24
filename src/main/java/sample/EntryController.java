@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -70,9 +72,12 @@ public class EntryController implements Serializable {
 
     @FXML private VBox vBoxTf;
 
+    @FXML private AnchorPane apCalc;
+
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
     EntryHandler entryHandler = new EntryHandler();
-
+ @ FXML
+ private Text textEntropy;
     @FXML
     private Button btnEnterMenu;
     @FXML
@@ -82,9 +87,11 @@ public class EntryController implements Serializable {
     @FXML
     private Button btnCreate;
     @FXML
+    private Button btnClose;
+    @FXML
     private TextField generatedPWDfield;
     @FXML
-    private Text textEntropy;
+    private Text textCalcEntropy;
 
     @FXML private BorderPane bpEntryMenu;
 
@@ -95,12 +102,13 @@ public class EntryController implements Serializable {
    static  int length;
     @FXML
     private MenuItem menuDeleteRow;
+    @FXML private MenuItem menuPwdStrength;
     @FXML
     private MenuItem  menuNewDB;
     @FXML
     void createEntry(ActionEvent event) throws Exception {
         entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(),tfURL.getText(),pfPwdField.getText(),tANotes.getText()));
-        entryHandler.createEntryObject(anchorPane);
+       // entryHandler.createEntryObject(anchorPane);
         tfTitel.setText("");
         tfUsername.setText("");
         tfURL.setText("");
@@ -201,6 +209,9 @@ public class EntryController implements Serializable {
 
         btnEditOK.setDisable(true);
         btnEditOK.setVisible(false);
+
+        apCalc .setDisable(true);
+        apCalc.setVisible(false);
     }
 
     void entrySpecs() throws Exception {
@@ -221,12 +232,17 @@ public class EntryController implements Serializable {
         showTableView();
         apPwdGenerate.setDisable(true);
         apPwdGenerate.setVisible(false);
+
+
     }
 
     @FXML
     void copyPWD(ActionEvent event) throws Exception
     {
-
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(generatedPWDfield.getText());
+        clipboard.setContent(content);
     }
 
     @FXML
@@ -235,10 +251,7 @@ public class EntryController implements Serializable {
         entrySpecs();
     }
 
-    @FXML
-    void loadEntry(ActionEvent event) throws Exception {
-      //   entryHandler.loadEntries (entryData,entryData);
-    }
+
 
     @FXML
     void newDB(ActionEvent event)  {
@@ -254,6 +267,11 @@ public class EntryController implements Serializable {
     @FXML
     void openDB(ActionEvent event) throws Exception {
 /*
+Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
+        Stage entryWindow= (Stage) btnSignOut.getScene().getWindow();
+        entryWindow.setScene(new Scene(root));
+
+
         FileChooser fileChooser = new FileChooser();
 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XLS File (*.xlsx)", "*.xlsx");
@@ -308,6 +326,8 @@ public class EntryController implements Serializable {
             btnEditOK.setVisible(true);
             btnCreate.setVisible(false);
             btnCreate.setDisable(true);
+
+
             btnEditOK.setOnAction(e -> {
                 try{
                     entryData.set(entryData.indexOf(selectedItem),selectedItem);
@@ -348,6 +368,15 @@ public class EntryController implements Serializable {
 
     @FXML
    private void initialize() throws Exception {
+
+          apCalc.setDisable(true);
+         apCalc.setVisible(false);
+        btnClose.setOnAction((e -> {
+        showTableView();
+            System.out.println("scooby snacks");
+
+        }));
+
 
 
         colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
@@ -411,6 +440,23 @@ public class EntryController implements Serializable {
         entryTable.setItems(sortedData);
     }
 
+    @FXML
+    void calculatePwd(ActionEvent event) throws Exception {
+        entryTable.setVisible(false);
+        entryTable.setDisable(true);
+         apCalc.setVisible(true);
+         apCalc.setDisable(false);
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
 
+            entryData.set(entryData.indexOf(selectedItem), selectedItem);
+            selectedItem.getPassword();
+            System.out.println(selectedItem.getPassword());
+            double entropy =  Math.log10(Math.pow(PasswordUtils2.cardinality(  selectedItem.getPassword()),selectedItem.getPassword().length()))/Math.log10(2);
+             textCalcEntropy.setText("The calculated entropy is: "+(entropy)+"\nYour password is:\nEstimated time for brute forcing is:  ");
+            System.out.println("the entropy is: "+entropy);
+            System.out.println("the length is "+ selectedItem.getPassword().length());
+        }
+    }
 
 }
