@@ -48,6 +48,7 @@ public class EncryptFile {
 
         try {
 
+            // if entryData == null create empty object, decrypt it
 
             String folderDir = LoginController.selectedDirectoryPath;
             String pwdDir = LoginController.passwordFilePath;
@@ -89,6 +90,7 @@ public class EncryptFile {
             FileUtils.write(folderDir+KeyLengthdir, EncodedKeyLength);
 
             FileUtils.write(folderDir+IVdir, EncodedIV);
+
 
 
         } catch (Exception e) {

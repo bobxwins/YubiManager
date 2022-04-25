@@ -1,1 +1,1 @@
-C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords/folder\folder.xlsx,
+C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\lolz\lolz.xlsx,C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\ok\ok.xlsx,C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\folder\folder.xlsx

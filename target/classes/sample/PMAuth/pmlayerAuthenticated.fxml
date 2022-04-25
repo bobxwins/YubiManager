@@ -6,259 +6,253 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1370.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
-   <children>
-      <Button fx:id="btnOpenEntry" contentDisplay="GRAPHIC_ONLY" disable="true" layoutX="33.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="74.0" style="-fx-background-color: transparent;" text="OpenEntry" visible="false">
-         <graphic>
-            <ImageView fx:id="imgFolder" fitHeight="49.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@folder.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
-      <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
-      <Button fx:id="btnSignOut" layoutX="1143.0" layoutY="678.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
-      <PasswordField fx:id="tfUpdateMP" layoutX="16.0" layoutY="678.0" />
-      <Button fx:id="btnUpMP" layoutX="208.0" layoutY="678.0" mnemonicParsing="false" text="Update MasterPassword" />
-      <MenuBar prefHeight="39.0" prefWidth="1557.0">
-         <menus>
-            <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-               <items>
-                  <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
-                  <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
-                  <Menu fx:id="menuRecent" mnemonicParsing="false" text="Open Recent" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
-                  <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
-                  <MenuItem mnemonicParsing="false" text="Revert" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Preferences…" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Undo" />
-                  <MenuItem mnemonicParsing="false" text="Redo" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Cut" />
-                  <MenuItem mnemonicParsing="false" text="Copy" />
-                  <MenuItem mnemonicParsing="false" text="Paste" />
-                  <MenuItem fx:id="menuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Select All" />
-                  <MenuItem mnemonicParsing="false" text="Unselect All" />
-                  <MenuItem fx:id="deleteDB" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Entries">
-               <items>
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
-                  <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                  <MenuItem fx:id="ctxmenuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
-                  <MenuItem mnemonicParsing="false" text="Select All" />
-                  <MenuItem mnemonicParsing="false" text="Unselect All" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <ToolBar layoutY="30.0" prefHeight="63.0" prefWidth="1557.0">
-         <items>
-            <Button fx:id="btnEnterMenu" mnemonicParsing="false" onAction="#entryMenu" prefHeight="0.0" prefWidth="40.0" text="+">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Button fx:id="btnDeleteRow" mnemonicParsing="false" onAction="#deleteRow" prefHeight="43.0" prefWidth="40.0" text="X" />
-            <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="editEntry">
-               <graphic>
-                  <ImageView fx:id="imgEdit" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@editIcon.jpg" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="saveEntryMenu" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveEntry" prefHeight="49.0" prefWidth="37.0" style="-fx-background-color: transparent;" text="saveEntry">
-               <graphic>
-                  <ImageView fx:id="imgEdit1" fitHeight="39.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@SaveFloppy.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="btnGenerateMenu" mnemonicParsing="false" onAction="#generatePwd" text="Password Generator" />
-            <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="630.0" promptText="Search..." />
-            <ImageView fitHeight="24.0" fitWidth="38.0" y="30.0">
-               <image>
-                  <Image url="@magnifying-glass.png" />
-               </image>
-            </ImageView>
-         </items>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </ToolBar>
-      <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="180.0" prefHeight="200.0" prefWidth="200.0" visible="false">
-         <children>
-            <TextField fx:id="tfPwdLength" layoutX="580.0" layoutY="100.0" prefHeight="31.0" prefWidth="66.0" promptText="Length" text="13" />
-            <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
+
+
                <children>
-                  <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
-                  <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
+                  <Button fx:id="btnOpenEntry" contentDisplay="GRAPHIC_ONLY" disable="true" layoutX="33.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="74.0" style="-fx-background-color: transparent;" text="OpenEntry" visible="false">
                      <graphic>
-                        <ImageView fx:id="copyIMG" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="imgFolder" fitHeight="49.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@redo.png" />
+                              <Image url="@folder.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnCopy1" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
-                     <graphic>
-                        <ImageView fx:id="copyIMG1" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                  <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
+                  <Button fx:id="btnSignOut" layoutX="1143.0" layoutY="678.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
+                  <PasswordField fx:id="tfUpdateMP" layoutX="16.0" layoutY="678.0" />
+                  <Button fx:id="btnUpMP" layoutX="208.0" layoutY="678.0" mnemonicParsing="false" text="Update MasterPassword" />
+                  <MenuBar prefHeight="39.0" prefWidth="1557.0">
+                     <menus>
+                        <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+                           <items>
+                              <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
+                              <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
+                              <Menu fx:id="menuRecent" mnemonicParsing="false" text="Open Recent" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
+                              <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
+                              <MenuItem mnemonicParsing="false" text="Revert" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem mnemonicParsing="false" text="Preferences…" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Undo" />
+                              <MenuItem mnemonicParsing="false" text="Redo" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem mnemonicParsing="false" text="Cut" />
+                              <MenuItem mnemonicParsing="false" text="Copy" />
+                              <MenuItem mnemonicParsing="false" text="Paste" />
+                              <MenuItem fx:id="menuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem mnemonicParsing="false" text="Select All" />
+                              <MenuItem mnemonicParsing="false" text="Unselect All" />
+                              <MenuItem fx:id="deleteDB" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Entries">
+                           <items>
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
+                              <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
+                              <MenuItem fx:id="ctxmenuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
+                              <MenuItem mnemonicParsing="false" text="Select All" />
+                              <MenuItem mnemonicParsing="false" text="Unselect All" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                           </items>
+                        </Menu>
+                     </menus>
+                  </MenuBar>
+                  <ToolBar layoutY="30.0" prefHeight="63.0" prefWidth="1557.0">
+                     <items>
+                        <Button fx:id="btnEnterMenu" mnemonicParsing="false" onAction="#entryMenu" prefHeight="0.0" prefWidth="40.0" text="+">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnDeleteRow" mnemonicParsing="false" onAction="#deleteRow" prefHeight="43.0" prefWidth="40.0" text="X" />
+                        <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="editEntry">
+                           <graphic>
+                              <ImageView fx:id="imgEdit" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@editIcon.jpg" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="saveEntryMenu" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveEntry" prefHeight="49.0" prefWidth="37.0" style="-fx-background-color: transparent;" text="saveEntry">
+                           <graphic>
+                              <ImageView fx:id="imgEdit1" fitHeight="39.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@SaveFloppy.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnGenerateMenu" mnemonicParsing="false" onAction="#generatePwd" text="Password Generator" />
+                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="630.0" promptText="Search..." />
+                        <ImageView fitHeight="24.0" fitWidth="38.0" y="30.0">
                            <image>
-                              <Image url="@copythat.png" />
+                              <Image url="@magnifying-glass.png" />
                            </image>
                         </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-            <Button fx:id="btnReturn" layoutX="560.0" layoutY="400.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="Close" />
-            <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0">
-               <font>
-                  <Font name="Arial Bold" size="21.0" />
-               </font>
-            </Text>
-            <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="500.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
-               <font>
-                  <Font name="Arial" size="21.0" />
-               </font>
-            </Text>
-            <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-320.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
-               <font>
-                  <Font name="Arial" size="21.0" />
-               </font>
-            </Text>
-            <Text fx:id="textGeneEntropy" fontSmoothingType="LCD" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0">
-               <font>
-                  <Font name="Arial" size="21.0" />
-               </font>
-            </Text>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
-         <children>
-            <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="40.0" prefHeight="421.0" prefWidth="635.0">
-              <columns>
-                <TableColumn id="colTitel" fx:id="colTitel" prefWidth="129.0" text="Titel" />
-                <TableColumn fx:id="colUsername" prefWidth="112.0" text="Username" />
-                 <TableColumn fx:id="colURL" prefWidth="114.0" text="URL" />
-                 <TableColumn fx:id="colPassword" prefWidth="123.0" text="Password" />
-                  <TableColumn fx:id="colNotes" prefWidth="156.0" text="Notes" />
-              </columns>
-               <contextMenu>
-                  <ContextMenu fx:id="ctxTableMenu">
-                    <items>
-                      <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
-                        <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
-                        <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                        <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#calculatePwd" text="Calculate Password strengt" />
-                    </items>
-                  </ContextMenu>
-               </contextMenu>
-            </TableView>
-            <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="140.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
-               <left>
-                  <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
+                     </items>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </ToolBar>
+                  <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="180.0" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
-                        <Label fx:id="lblTitel" prefHeight="16.0" prefWidth="63.0" text=" Titel" />
-                        <Label fx:id="lblUsername" text="Username" />
-                        <Label fx:id="lblURL" prefHeight="0.0" prefWidth="63.0" text="URL" />
-                        <Label fx:id="lblPwd" text="Password" />
-                        <Label fx:id="lblNotes" text="Notes" />
-                     </children>
-                  </VBox>
-               </left>
-               <center>
-                  <VBox fx:id="vBoxTf" prefHeight="257.0" prefWidth="702.0" spacing="7.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
-                        <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
-                        <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
-                        <PasswordField fx:id="pfPwdField" />
-                        <TextArea fx:id="tANotes" prefHeight="255.0" prefWidth="600.0" />
-                     </children>
-                  </VBox>
-               </center>
-               <bottom>
-                  <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
-                        <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
-                        <Button fx:id="btnEditOK" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                        <TextField fx:id="tfPwdLength" layoutX="580.0" layoutY="100.0" prefHeight="31.0" prefWidth="66.0" promptText="Length" text="13" />
+                        <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
+                           <children>
+                              <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
+                              <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
+                                 <graphic>
+                                    <ImageView fx:id="copyIMG" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@redo.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnCopy1" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
+                                 <graphic>
+                                    <ImageView fx:id="copyIMG1" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@copythat.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Button fx:id="btnReturn" layoutX="560.0" layoutY="400.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="Close" />
+                        <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                           <font>
+                              <Font name="Arial Bold" size="21.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="500.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                           <font>
+                              <Font name="Arial" size="21.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-320.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                           <font>
+                              <Font name="Arial" size="21.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="textGeneEntropy" fontSmoothingType="LCD" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                           <font>
+                              <Font name="Arial" size="21.0" />
+                           </font>
+                        </Text>
                      </children>
                   </AnchorPane>
-               </bottom>
-            </BorderPane>
-            <AnchorPane fx:id="apCalc" disable="true" layoutX="-30.0" layoutY="82.0" prefHeight="249.0" prefWidth="447.0" visible="false">
-               <children>
-                  <Button fx:id="btnClose" layoutX="870.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" text="Close" />
-                  <Text fx:id="textCalcEntropy" fontSmoothingType="LCD" layoutX="300.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcEntropy">
-                     <font>
-                        <Font name="Arial" size="21.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="textCalcGPU" fontSmoothingType="LCD" layoutX="-116.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcGPU" y="40.0">
-                     <font>
-                        <Font name="Arial" size="21.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="textCalcGPUClusters" fontSmoothingType="LCD" layoutX="690.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Textgpuclusters" y="40.0">
-                     <font>
-                        <Font name="Arial" size="21.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="textPwdQuality" fontSmoothingType="LCD" layoutX="542.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quality">
-                     <font>
-                        <Font name="Arial Bold" size="21.0" />
-                     </font>
-                  </Text>
-                  <Text fontSmoothingType="LCD" layoutX="300.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Selected Password is:">
-                     <font>
-                        <Font name="Arial Bold" size="21.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="textSelectedPWD" fontSmoothingType="LCD" layoutX="570.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true">
-                     <font>
-                        <Font name="Arial Italic" size="21.0" />
-                     </font>
-                  </Text>
+                  <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
+                     <children>
+                        <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="40.0" prefHeight="421.0" prefWidth="635.0">
+                          <columns>
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="129.0" text="Titel" />
+                            <TableColumn fx:id="colUsername" prefWidth="112.0" text="Username" />
+                             <TableColumn fx:id="colURL" prefWidth="114.0" text="URL" />
+                             <TableColumn fx:id="colPassword" prefWidth="123.0" text="Password" />
+                              <TableColumn fx:id="colNotes" prefWidth="156.0" text="Notes" />
+                          </columns>
+                           <contextMenu>
+                              <ContextMenu fx:id="ctxTableMenu">
+                                <items>
+                                  <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
+                                    <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                                    <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
+                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#calculatePwd" text="Calculate Password strengt" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </TableView>
+                        <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="140.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
+                           <left>
+                              <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="lblTitel" prefHeight="16.0" prefWidth="63.0" text=" Titel" />
+                                    <Label fx:id="lblUsername" text="Username" />
+                                    <Label fx:id="lblURL" prefHeight="0.0" prefWidth="63.0" text="URL" />
+                                    <Label fx:id="lblPwd" text="Password" />
+                                    <Label fx:id="lblNotes" text="Notes" />
+                                 </children>
+                              </VBox>
+                           </left>
+                           <center>
+                              <VBox fx:id="vBoxTf" prefHeight="257.0" prefWidth="702.0" spacing="7.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
+                                    <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
+                                    <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
+                                    <PasswordField fx:id="pfPwdField" />
+                                    <TextArea fx:id="tANotes" prefHeight="255.0" prefWidth="600.0" />
+                                 </children>
+                              </VBox>
+                           </center>
+                           <bottom>
+                              <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
+                                    <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                                    <Button fx:id="btnEditOK" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                                 </children>
+                              </AnchorPane>
+                           </bottom>
+                        </BorderPane>
+                        <AnchorPane fx:id="apCalc" disable="true" layoutX="-30.0" layoutY="82.0" prefHeight="249.0" prefWidth="447.0" visible="false">
+                           <children>
+                              <Button fx:id="btnClose" layoutX="870.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" text="Close" />
+                              <Text fx:id="textCalcEntropy" fontSmoothingType="LCD" layoutX="300.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcEntropy">
+                                 <font>
+                                    <Font name="Arial" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="textCalcGPU" fontSmoothingType="LCD" layoutX="-116.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcGPU" y="40.0">
+                                 <font>
+                                    <Font name="Arial" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="textCalcGPUClusters" fontSmoothingType="LCD" layoutX="690.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Textgpuclusters" y="40.0">
+                                 <font>
+                                    <Font name="Arial" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="textPwdQuality" fontSmoothingType="LCD" layoutX="542.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quality">
+                                 <font>
+                                    <Font name="Arial Bold" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Text fontSmoothingType="LCD" layoutX="300.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Selected Password is:">
+                                 <font>
+                                    <Font name="Arial Bold" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="textSelectedPWD" fontSmoothingType="LCD" layoutX="570.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true">
+                                 <font>
+                                    <Font name="Arial Italic" size="21.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+
                </children>
             </AnchorPane>
-         </children>
-      </AnchorPane>
-   </children>
-</AnchorPane>

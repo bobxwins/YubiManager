@@ -7,6 +7,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,8 +23,12 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -64,9 +69,9 @@ public class EntryController implements Serializable {
     @FXML private Text textSelectedPWD;
     @FXML
     private Button btnPwdGenerator;
+ @FXML
+ private AnchorPane anchorPane;
 
-    @FXML
-    private AnchorPane anchorPane;
 
     @FXML private VBox vBoxLabel;
 
@@ -75,7 +80,8 @@ public class EntryController implements Serializable {
     @FXML private AnchorPane apCalc;
 
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
-
+ @FXML
+ private TabPane tabPM;
 
     @FXML
     private Button btnEnterMenu;
@@ -116,6 +122,7 @@ public class EntryController implements Serializable {
     @FXML private Text textGeneGPU;
 
     @FXML private Text textGeneEntropy;
+
 
     @FXML
     void createEntry(ActionEvent event) throws Exception {
@@ -201,8 +208,16 @@ public class EntryController implements Serializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
           entryData.removeAll(entryData);
-            File deleteFile = new File(LoginController.passwordFilePath);
-            deleteFile.delete();
+            File deleteFile = new File(LoginController.passwordFilePath).getAbsoluteFile().getParentFile();
+
+            DatabaseHandler databaseHandler = new DatabaseHandler();
+            databaseHandler.deleteDir(deleteFile);
+
+            String recentFilesString = new String(FileUtils.readAllBytes(LoginController.recentFiles));
+            String[] rFSArray = recentFilesString.split(",");
+            LoginController.passwordFilePath = rFSArray[0];
+            FileUtils.write(LoginController.recentFiles,recentFilesString.substring(recentFilesString.indexOf(",") + 1).getBytes(StandardCharsets.UTF_8));
+
         } else {
             // ... user chose CANCEL or closed the dialog
         }
@@ -270,43 +285,30 @@ public class EntryController implements Serializable {
 
     @FXML
     void newDB(ActionEvent event)  {
-     //   labelEnterPwd.setVisible(false);
         DatabaseHandler databaseHandler = new DatabaseHandler();
-      //  databaseHandler.dialog(menuNewDB);
-     //   updateRecentFileString();
+        databaseHandler.dialog(btnClose);
 
     }
 
 
-
     @FXML
     void openDB(ActionEvent event) throws Exception {
-/*
-Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
-        Stage entryWindow= (Stage) btnSignOut.getScene().getWindow();
-        entryWindow.setScene(new Scene(root));
 
-
-        FileChooser fileChooser = new FileChooser();
-
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XLS File (*.xlsx)", "*.xlsx");
-
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        Stage anotherStage = new Stage();
-        fileChooser.setInitialDirectory(new File(defaultPath));
-        File file = fileChooser.showOpenDialog(anotherStage);
-        if (file ==null)
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        if (databaseHandler.openDB()==false)
         {
             return;
         }
-        labelEnterPwd.setVisible(true);
 
-        passwordFilePath = file.getAbsolutePath();
-        selectedDirectoryPath = file.getAbsoluteFile().getParent() + "\\";
-        EntryHandler.Y = (int) (Screen.getPrimary().getBounds().getHeight() / 2) - 150;
-        updateRecentFileString();
-*/
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setTitle("New Window");
+        stage.setScene(scene);
+        stage.show();
+
     }
 
 
@@ -384,6 +386,12 @@ Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
     @FXML
    private void initialize() throws Exception {
 
+
+       // anchorPane.getChildren().add(tabPane);
+
+
+
+
           apCalc.setDisable(true);
          apCalc.setVisible(false);
         btnClose.setOnAction((e -> {
@@ -402,14 +410,14 @@ Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
         entryData.addAll(ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)));
         entryTable.setItems(entryData);
         filter();
-       /* btnEnterMenu.setOnAction(e -> {
+        btnEnterMenu.setOnAction(e -> {
             try{
           entrySpecs();
             } catch (Exception E) {
 
             }
         });
-        */
+
     }
 
     @FXML
