@@ -61,7 +61,7 @@ public class EntryController implements Serializable {
     private Button btnSignOut;
     @FXML
     private Button btnEditEntry;
-
+    @FXML private Text textSelectedPWD;
     @FXML
     private Button btnPwdGenerator;
 
@@ -75,9 +75,8 @@ public class EntryController implements Serializable {
     @FXML private AnchorPane apCalc;
 
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
-    EntryHandler entryHandler = new EntryHandler();
- @ FXML
- private Text textEntropy;
+
+
     @FXML
     private Button btnEnterMenu;
     @FXML
@@ -109,6 +108,15 @@ public class EntryController implements Serializable {
     @FXML private MenuItem menuPwdStrength;
     @FXML
     private MenuItem  menuNewDB;
+    @FXML
+    private Text textGenePwdQuality;
+
+    @FXML private Text textGeneGPUClusters;
+
+    @FXML private Text textGeneGPU;
+
+    @FXML private Text textGeneEntropy;
+
     @FXML
     void createEntry(ActionEvent event) throws Exception {
         entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(),tfURL.getText(),pfPwdField.getText(),tANotes.getText()));
@@ -156,8 +164,8 @@ public class EntryController implements Serializable {
 
                         generatedPWDfield.setText(PasswordUtils.getPassword(length));
                         double entropy = Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length, length)) / Math.log10(2);
-                        textEntropy.setText("Entropy bits is: " + (entropy));
-
+                    //    textEntropy.setText("Entropy bits is: " + (entropy));
+                PasswordUtils.calcCrackingTime(textGenePwdQuality,textGeneGPU,textGeneEntropy,textGeneGPUClusters,generatedPWDfield.getText());
 
             });
 
@@ -172,7 +180,10 @@ public class EntryController implements Serializable {
 
                 generatedPWDfield.setText(PasswordUtils.getPassword(length));
                 double entropy =  Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length,length))/Math.log10(2);
-                textEntropy.setText("Entropy bits is: "+(entropy));
+               // textEntropy.setText("Entropy bits is: "+(entropy));
+
+                PasswordUtils.calcCrackingTime(textGenePwdQuality,textGeneGPU,textGeneEntropy,textGeneGPUClusters,generatedPWDfield.getText());
+
             } catch (Exception E) {
 
             }
@@ -455,76 +466,11 @@ Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
 
             entryData.set(entryData.indexOf(selectedItem), selectedItem);
             selectedItem.getPassword();
-
-            double entropy =  Math.log10(Math.pow(PasswordUtils.cardinality(  selectedItem.getPassword()),selectedItem.getPassword().length()))/Math.log10(2);
-
-            String quality ="";
-            textPwdQuality.setStyle("-fx-font-size: 21px;");
-            textPwdQuality.setUnderline(false);
-                if(entropy <28)
-                {
-           quality= "Very weak";
-                    textPwdQuality.setFill(Color.DARKRED);
-
-                }
-                if(entropy > 28 && entropy < 35 )
-                {
-                    quality= "Weak";
-
-                    textPwdQuality.setFill(Color.RED);
-                }
-                 if(entropy > 35 && entropy < 59 )
-                 {
-                     quality= "Moderate";
-                     textPwdQuality.setFill(Color.DARKBLUE);
-                 }
-                 if(entropy > 60 && entropy < 127 )
-                 {
-                     quality= "Strong";
-                     textPwdQuality.setFill(Color.GREEN);
-
-                 }
-                 if(entropy >= 127 )
-                 {
-                     textPwdQuality.setFill(Color.DARKGREEN);
-                     textPwdQuality.setUnderline(true);
-                     textPwdQuality.setStyle("-fx-font-size: 30px;");
-                     quality= "Overkill";
-
-                 }
-
-
-          //  DecimalFormat numberFormat = new DecimalFormat("#.000000000000000000000");
-            System.out.println(Math.round(1000/2.7));
-            textPwdQuality.setText(quality);
-
-            PasswordUtils.BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ PasswordUtils.BRUTEFORCEGPU.doubleValue()/2;
-            if (entropy>174)
-            {
-                PasswordUtils.BRUTEFORCETIMEGPU=Double.POSITIVE_INFINITY;
-
-            }
-            textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\nYour password quality is: ");
-            textCalcGPU.setText( "Estimated time for brute forcing the passwords with a GPU is: "
-                    +"\n"+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU)+" seconds"
-            +"\nEstimated hours is: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU/3600)+" hours"+
-                    "\nEstimated days is: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24)+" days"+
-                    "\nEstimated years is: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24/365)+" years");
-
-            PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ PasswordUtils.BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
-
-            if (entropy>174)
-            {
-                PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Double.POSITIVE_INFINITY;
-            }
-
-            textCalcGPUClusters.setText("Estimated time for brute forcing the passwords with GPU Clusters is: "
-                    +"\n"+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
-                    +"\nEstimated hours is: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
-                    "\nEstimated days is: "+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+
-                    "\nEstimated years is: "+String.format("%.3f" , PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24/365)+" years");
+            textSelectedPWD.setText(selectedItem.getPassword());
+            PasswordUtils.calcCrackingTime(textPwdQuality,textCalcGPU,textCalcEntropy,textCalcGPUClusters,selectedItem.getPassword());
 
         }
     }
+
 
 }

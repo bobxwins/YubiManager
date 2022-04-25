@@ -46,7 +46,7 @@ public class EntryHandler implements Serializable  {
         Label entryLabel = new Label("EntryName");
         entryLabel.setLayoutX(105);
         entryLabel.setLayoutY(Y+=5);
-        TableView tableView = new TableView();
+
 
         anchorPane.getChildren().addAll(imgView,entryLabel);
         anchorPane.getChildren().add(newEntryButton);

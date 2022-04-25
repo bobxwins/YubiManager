@@ -1,6 +1,10 @@
 
 package sample;
 
+import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -25,7 +29,7 @@ public   class PasswordUtils {
     static Random rand = new SecureRandom();
 
     public static String getPassword(int length) {
-
+// generates a random password
 
         StringBuilder sb = new StringBuilder();
         sb.append(SYMBOLS);
@@ -107,4 +111,78 @@ public   class PasswordUtils {
         System.out.println("the cardinality is: "+cardinality);
         return cardinality;
     }
+
+    public static void calcCrackingTime(Text textPwdQuality, Text textCalcGPU,Text textCalcEntropy, Text textCalcGPUClusters,String password)
+    {
+        double entropy =  Math.log10(Math.pow(PasswordUtils.cardinality(  password),password.length()))/Math.log10(2);
+//
+        String quality ="";
+        textPwdQuality.setStyle("-fx-font-size: 21px;");
+        textPwdQuality.setUnderline(false);
+        if(entropy <28)
+        {
+            quality= "Very weak";
+            textPwdQuality.setFill(Color.RED);
+
+        }
+        if(entropy > 28 && entropy < 35 )
+        {
+            quality= "Weak";
+
+            textPwdQuality.setFill(Color.INDIANRED);
+        }
+        if(entropy > 35 && entropy < 59 )
+        {
+            quality= "Fair";
+            textPwdQuality.setFill(Color.DARKGOLDENROD);
+        }
+        if(entropy > 60 && entropy < 127 )
+        {
+            quality= "Strong";
+            textPwdQuality.setFill(Color.GREEN);
+
+        }
+        if(entropy >= 127 )
+        {
+            textPwdQuality.setFill(Color.DARKGREEN);
+            textPwdQuality.setUnderline(true);
+            textPwdQuality.setStyle("-fx-font-size: 30px;");
+            quality= "Overkill";
+
+        }
+
+
+        textPwdQuality.setText(quality);
+
+        PasswordUtils.BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ PasswordUtils.BRUTEFORCEGPU.doubleValue()/2;
+        if (entropy>174)
+        {
+            PasswordUtils.BRUTEFORCETIMEGPU=Double.POSITIVE_INFINITY;
+
+        }
+        textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\n\nYour password quality is: ");
+        textCalcGPU.setText( "Estimated time for brute forcing the passwords with a GPU is: "
+                +"\n"+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU)+" seconds"
+                +"\nIn hours: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU/3600)+" hours"+
+                "\nIn days: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24)+" days"+
+                "\nIn years: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24/365)+" years");
+
+        PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ PasswordUtils.BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
+
+        if (entropy>174)
+        {
+            PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Double.POSITIVE_INFINITY;
+        }
+
+        textCalcGPUClusters.setText("Estimated time for brute forcing the passwords with GPU Clusters is: "
+                +"\n"+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
+                +"\nIn hours: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
+                "\nIn days: "+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+
+                "\nIn years: "+String.format("%.3f" , PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24/365)+" years");
+
+    }
 }
+
+
+
+

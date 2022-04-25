@@ -120,11 +120,10 @@
             <Insets />
          </opaqueInsets>
       </ToolBar>
-      <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="220.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+      <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="180.0" prefHeight="200.0" prefWidth="200.0" visible="false">
          <children>
-            <Text fx:id="textEntropy" strokeType="OUTSIDE" strokeWidth="0.0" text="lolk" wrappingWidth="265.0" x="350.0" y="50.0" />
             <TextField fx:id="tfPwdLength" layoutX="580.0" layoutY="100.0" prefHeight="31.0" prefWidth="66.0" promptText="Length" text="13" />
-            <HBox prefHeight="24.0" prefWidth="659.0">
+            <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
                <children>
                   <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
                   <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
@@ -147,7 +146,27 @@
                   </Button>
                </children>
             </HBox>
-            <Button fx:id="btnReturn" layoutX="560.0" layoutY="133.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="Close" />
+            <Button fx:id="btnReturn" layoutX="560.0" layoutY="400.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="Close" />
+            <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font name="Arial Bold" size="21.0" />
+               </font>
+            </Text>
+            <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="500.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+               <font>
+                  <Font name="Arial" size="21.0" />
+               </font>
+            </Text>
+            <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-320.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+               <font>
+                  <Font name="Arial" size="21.0" />
+               </font>
+            </Text>
+            <Text fx:id="textGeneEntropy" fontSmoothingType="LCD" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font name="Arial" size="21.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
@@ -206,25 +225,35 @@
             </BorderPane>
             <AnchorPane fx:id="apCalc" disable="true" layoutX="-30.0" layoutY="82.0" prefHeight="249.0" prefWidth="447.0" visible="false">
                <children>
-                  <Button fx:id="btnClose" layoutX="870.0" layoutY="280.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" text="Close" />
-                  <Text fx:id="textCalcEntropy" fontSmoothingType="LCD" layoutX="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                  <Button fx:id="btnClose" layoutX="870.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" text="Close" />
+                  <Text fx:id="textCalcEntropy" fontSmoothingType="LCD" layoutX="300.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcEntropy">
                      <font>
                         <Font name="Arial" size="21.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textCalcGPU" fontSmoothingType="LCD" layoutX="-136.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" y="40.0">
+                  <Text fx:id="textCalcGPU" fontSmoothingType="LCD" layoutX="-116.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcGPU" y="40.0">
                      <font>
                         <Font name="Arial" size="21.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textCalcGPUClusters" fontSmoothingType="LCD" layoutX="690.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" y="40.0">
+                  <Text fx:id="textCalcGPUClusters" fontSmoothingType="LCD" layoutX="690.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Textgpuclusters" y="40.0">
                      <font>
                         <Font name="Arial" size="21.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPwdQuality" fontSmoothingType="LCD" layoutX="535.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                  <Text fx:id="textPwdQuality" fontSmoothingType="LCD" layoutX="542.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quality">
                      <font>
                         <Font name="Arial Bold" size="21.0" />
+                     </font>
+                  </Text>
+                  <Text fontSmoothingType="LCD" layoutX="300.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Selected Password is:">
+                     <font>
+                        <Font name="Arial Bold" size="21.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textSelectedPWD" fontSmoothingType="LCD" layoutX="570.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true">
+                     <font>
+                        <Font name="Arial Italic" size="21.0" />
                      </font>
                   </Text>
                </children>
