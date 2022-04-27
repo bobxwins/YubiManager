@@ -21,44 +21,36 @@
                      </graphic>
                   </Button>
                   <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
-                  <Button fx:id="btnSignOut" layoutX="1143.0" layoutY="678.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
-                  <PasswordField fx:id="tfUpdateMP" layoutX="16.0" layoutY="678.0" />
-                  <Button fx:id="btnUpMP" layoutX="208.0" layoutY="678.0" mnemonicParsing="false" text="Update MasterPassword" />
+                  <Button fx:id="btnSignOut" layoutX="1387.0" layoutY="675.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
                   <MenuBar prefHeight="39.0" prefWidth="1557.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                            <items>
                               <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
                               <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
-                              <Menu fx:id="menuRecent" mnemonicParsing="false" text="Open Recent" />
+                              <Menu fx:id="menuRecent" mnemonicParsing="false" onAction="#openRecent" text="Open Recent" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
                               <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
-                              <MenuItem mnemonicParsing="false" text="Revert" />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" text="Preferences…" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Edit">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Undo" />
-                              <MenuItem mnemonicParsing="false" text="Redo" />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" text="Cut" />
                               <MenuItem mnemonicParsing="false" text="Copy" />
                               <MenuItem mnemonicParsing="false" text="Paste" />
                               <MenuItem fx:id="menuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete" />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" text="Select All" />
-                              <MenuItem mnemonicParsing="false" text="Unselect All" />
                               <MenuItem fx:id="deleteDB" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Entries">
                            <items>
                               <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="updateMPMenu" mnemonicParsing="false" onAction="#updateMasterPwd" text="Update Master Password" />
                               <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                               <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                               <MenuItem fx:id="ctxmenuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
@@ -115,7 +107,6 @@
                   </ToolBar>
                   <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="180.0" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
-                        <TextField fx:id="tfPwdLength" layoutX="580.0" layoutY="100.0" prefHeight="31.0" prefWidth="66.0" promptText="Length" text="13" />
                         <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
                            <children>
                               <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
@@ -139,23 +130,23 @@
                               </Button>
                            </children>
                         </HBox>
-                        <Button fx:id="btnReturn" layoutX="560.0" layoutY="400.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="Close" />
-                        <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                        <Button fx:id="btnReturn" layoutY="490.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="OK" />
+                        <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
                               <Font name="Arial Bold" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="500.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="520.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-320.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-300.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneEntropy" fontSmoothingType="LCD" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                        <Text fx:id="textGeneEntropy" fontSmoothingType="LCD" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
@@ -164,13 +155,13 @@
                   </AnchorPane>
                   <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
-                        <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="40.0" prefHeight="421.0" prefWidth="635.0">
+                        <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="3.0" prefHeight="458.0" prefWidth="842.0">
                           <columns>
                             <TableColumn id="colTitel" fx:id="colTitel" prefWidth="129.0" text="Titel" />
-                            <TableColumn fx:id="colUsername" prefWidth="112.0" text="Username" />
-                             <TableColumn fx:id="colURL" prefWidth="114.0" text="URL" />
-                             <TableColumn fx:id="colPassword" prefWidth="123.0" text="Password" />
-                              <TableColumn fx:id="colNotes" prefWidth="156.0" text="Notes" />
+                            <TableColumn fx:id="colUsername" prefWidth="174.0" text="Username" />
+                             <TableColumn fx:id="colURL" prefWidth="145.0" text="URL" />
+                             <TableColumn fx:id="colPassword" prefWidth="161.0" text="Password" />
+                              <TableColumn fx:id="colNotes" prefWidth="230.0" text="Notes" />
                           </columns>
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
@@ -178,7 +169,7 @@
                                   <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                                     <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
                                     <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#calculatePwd" text="Calculate Password strengt" />
+                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#calculatePwd" text="Calculate Password strength" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -211,7 +202,7 @@
                                  <children>
                                     <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
                                     <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
-                                    <Button fx:id="btnEditOK" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                                    <Button fx:id="btnEditOK" disable="true" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" visible="false" />
                                  </children>
                               </AnchorPane>
                            </bottom>
@@ -251,6 +242,16 @@
                               </Text>
                            </children>
                         </AnchorPane>
+            <TreeTableView fx:id="entryTreeTableView" layoutX="801.0" layoutY="148.0" prefHeight="200.0" prefWidth="488.0" showRoot="false" visible="false">
+              <columns>
+                  <TreeTableColumn fx:id="columnGroupName" prefWidth="111.0" text="Name" />
+                <TreeTableColumn fx:id="columnTitel" minWidth="4.0" prefWidth="89.0" text="Titel" />
+                <TreeTableColumn fx:id="columnUsername" minWidth="0.0" prefWidth="88.0" text="Username" />
+                  <TreeTableColumn fx:id="columnURL" prefWidth="48.0" text="URL" />
+                  <TreeTableColumn fx:id="columnPwd" prefWidth="75.0" text="Password" />
+                  <TreeTableColumn fx:id="columnNotes" prefWidth="75.0" text="Notes" />
+              </columns>
+            </TreeTableView>
                      </children>
                   </AnchorPane>
 

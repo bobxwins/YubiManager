@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -10,24 +9,27 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import static sample.LoginController.defaultPath;
 
 public class DatabaseHandler {
 
-    void updateRecentFileString()
+    PasswordField masterPasswordField = new PasswordField();
+    PasswordField confirmPasswordField = new PasswordField();
+    PasswordField yubikeyPasswordField = new PasswordField();
+    Dialog<Pair<String, String>> dialog = new Dialog<>();
+    GridPane grid = new GridPane();
+
+   void updateRecentFileString()
 
     {
 
@@ -73,86 +75,66 @@ public class DatabaseHandler {
 
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn, Tab tab) throws  Exception {
 
-        char[] masterPassword = mpField.getText().toCharArray();
-        char[] ybkPassword = ybkSecret.getText().toCharArray();
+            char[] masterPassword = mpField.getText().toCharArray();
+            char[] ybkPassword = ybkSecret.getText().toCharArray();
 
-        StringBuilder sb = new StringBuilder(128);
-        sb.append(masterPassword);
-        sb.append(ybkPassword);
-        LoginController.combinedPasswords = sb.toString().toCharArray();
+            StringBuilder sb = new StringBuilder(128);
+            sb.append(masterPassword);
+            sb.append(ybkPassword);
+            LoginController.combinedPasswords = sb.toString().toCharArray();
 
-    Parent root =  FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
+            Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
-  Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
+            Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
 
-        if (  ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)) != null &&
-                ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)).isEmpty()) {
+            if (ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)) != null &&
+                    ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)).isEmpty()) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("Login failed! Wrong Password!");
-            alert.showAndWait();
-            return false;
-        }
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Information Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText("Login failed! Wrong Password!");
+                alert.showAndWait();
+                return false;
+            }
 
-        entryWindow.setScene(new Scene(root));
-        return true;
+            entryWindow.setScene(new Scene(root));
+            return true;
+
     }
 
-    void dialog(Button btn) {
+    void newDBdialog(Button btn) {
 
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("TestName");
-
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(8);
-        gridPane.setVgap(8);
-        gridPane.setPadding(new Insets(5));
+        dialog.getDialogPane().setContent(grid);
+        setGrid();
 
         TextField fileNameField = new TextField("");
         fileNameField.setPromptText("File name...");
-        PasswordField newMpField = new PasswordField();
-        newMpField.setPromptText("Master Password...");
-        PasswordField confirmMPField = new PasswordField();
-        confirmMPField.setPromptText("Confirm Master Password...");
-        PasswordField newYbkField = new PasswordField();
-        newYbkField.setPromptText("Yubikey static Password...");
 
         Label fileLabel = new Label("Enter new File name:");
-        Label mpLabel = new Label("Enter new Master Password:");
-        Label confirMPLabel = new Label("Confirm new Master Password:");
-        Label ybkLabel = new Label("Enter new  Yubikey Password:");
-        gridPane.addRow(0, fileLabel,fileNameField);
-        gridPane.addRow(1, mpLabel,newMpField);
-        gridPane.addRow(2, confirMPLabel,confirmMPField);
-        gridPane.addRow(3, ybkLabel,newYbkField);
+        grid.addRow(3, fileLabel,fileNameField);
 
-
-        dialog.getDialogPane().setContent(gridPane);
 
         Platform.runLater(() -> fileNameField.requestFocus());
 
         dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    if (!newMpField.getText().equals(confirmMPField.getText())) {
+                    if (!masterPasswordField.getText().equals(confirmPasswordField.getText())) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
-                        alert.setContentText("Login failed! Wrong Password!");
+                        alert.setContentText("Passwords do not match!");
                         alert.showAndWait();
                         return null;
                     }
-                    if (fileNameField.getText().length() == 0 || newMpField.getText().length() == 0 || confirmMPField.getText().length() == 0) {
+                    if (fileNameField.getText().length() == 0 || masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0) {
 
                         return null;
                     }
 
-                    char[] masterPassword = newMpField.getText().toCharArray();
-                    char[] ybkPassword = newYbkField.getText().toCharArray();
+                    char[] masterPassword = masterPasswordField.getText().toCharArray();
+                    char[] ybkPassword = yubikeyPasswordField.getText().toCharArray();
 
                     StringBuilder sb = new StringBuilder(128);
                     sb.append(masterPassword);
@@ -174,7 +156,7 @@ public class DatabaseHandler {
 
         dialog.showAndWait();
         updateRecentFileString();
-        System.out.println("did it get updated??");
+
     }
 
     boolean newScene (Button btnCreateDB ) throws Exception
@@ -239,5 +221,80 @@ public class DatabaseHandler {
         }
         file.delete();
     }
+    void setGrid()
+    {
+
+        dialog.setTitle("TestName");
+
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 10));
+
+        masterPasswordField.setPromptText("Master Password");
+
+        confirmPasswordField.setPromptText("Confirm Master Password");
+
+        yubikeyPasswordField.setPromptText("Yubikey Static Password");
+
+        grid.add(new Label("Master Password:"), 0, 0);
+        grid.add(masterPasswordField, 1, 0);
+        grid.add(new Label("Confirm Password:"), 0, 1);
+        grid.add(confirmPasswordField, 1, 1);
+
+        grid.add(new Label("Yubikey Password:"), 0, 2);
+        grid.add(yubikeyPasswordField, 1, 2);
+
+    }
+
+void updatePasswords() {
+
+    dialog.getDialogPane().setContent(grid);
+    setGrid();
+    dialog.setResultConverter(dialogButton -> {
+        try {
+            if (dialogButton == ButtonType.OK) {
+                if (!masterPasswordField.getText().equals(confirmPasswordField.getText())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Information Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Update failed! Password did not match!");
+                    alert.showAndWait();
+
+                    return null;
+                }
+                if (masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0) {
+
+                    return null;
+                }
+
+                char[] masterPassword = masterPasswordField.getText().toCharArray();
+                char[] ybkPassword = yubikeyPasswordField.getText().toCharArray();
+
+                StringBuilder sb = new StringBuilder(128);
+                sb.append(masterPassword);
+                sb.append(ybkPassword);
+
+                LoginController.combinedPasswords = sb.toString().toCharArray();
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText("Passwords succesfully updated!");
+                alert.showAndWait();
+            }
+        } catch (Exception E) {
+
+
+        }
+        return null;
+    });
+
+    dialog.showAndWait();
 
 }
+}
+
+
+

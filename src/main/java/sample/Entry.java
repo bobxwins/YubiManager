@@ -40,12 +40,6 @@ public class Entry implements Serializable {
     }
 
 
-   /* public PasswordField getPassword() {
-        password.setText(password.getText());
-        return password;
-    }
-    */
-
     public String getNotes() {
 
         return notes;
@@ -53,6 +47,7 @@ public class Entry implements Serializable {
     public void setTitel(String titel) {
         this.titel = titel;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }

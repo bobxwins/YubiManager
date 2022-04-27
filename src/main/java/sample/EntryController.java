@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -12,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
@@ -25,28 +28,49 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+
 import java.util.Optional;
+
+import static java.lang.Integer.parseInt;
 
 
 public class EntryController implements Serializable {
 
-    public static int i = 0;
     @FXML
-    private   TableView <Entry> entryTable ;
+    private TableView<Entry> entryTable;
+
     @FXML
-    private   TableColumn<Entry,String> colTitel;
+    private TreeTableView<Entry> entryTreeTableView;
+
     @FXML
-    private TableColumn<Entry,String> colUsername;
+    private TableColumn<Entry, String> colTitel;
     @FXML
-    private TableColumn<Entry,String> colURL;
+    private TableColumn<Entry, String> colUsername;
     @FXML
-    private TableColumn<Entry,String> colPassword;
+    private TableColumn<Entry, String> colURL;
     @FXML
-    private TableColumn<Entry,String> colNotes;
+    private TableColumn<Entry, String> colPassword;
+    @FXML
+    private TableColumn<Entry, String> colNotes;
+
+    @FXML
+    private TreeTableColumn<Entry, String> columnTitel;
+
+    @FXML
+    private TreeTableColumn<Entry, String> columnUsername;
+
+    @FXML
+    private TreeTableColumn<Entry, String> columnURL;
+
+    @FXML
+    private TreeTableColumn<Entry, String> columnPwd;
+
+    @FXML
+    private TreeTableColumn<Entry, String> columnNotes;
+
+    @FXML
+    private TreeTableColumn<Group, String> columnGroupName;
+
     @FXML
     private TextField tfSearch;
     @FXML
@@ -66,22 +90,32 @@ public class EntryController implements Serializable {
     private Button btnSignOut;
     @FXML
     private Button btnEditEntry;
-    @FXML private Text textSelectedPWD;
+    @FXML
+    private Text textSelectedPWD;
     @FXML
     private Button btnPwdGenerator;
- @FXML
- private AnchorPane anchorPane;
+    @FXML
+    private AnchorPane anchorPane;
 
+    @FXML
+    private TextField testField;
 
-    @FXML private VBox vBoxLabel;
+    @FXML
+    private VBox vBoxLabel;
 
-    @FXML private VBox vBoxTf;
+    @FXML
+    private VBox vBoxTf;
 
-    @FXML private AnchorPane apCalc;
+    @FXML
+    private AnchorPane apCalc;
+    @FXML
+    private Menu menuRecent;
 
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
- @FXML
- private TabPane tabPM;
+
+    private ObservableList<Group> groupData = FXCollections.observableArrayList();
+    @FXML
+    private TabPane tabPM;
 
     @FXML
     private Button btnEnterMenu;
@@ -102,47 +136,76 @@ public class EntryController implements Serializable {
     @FXML
     private Text textCalcGPUClusters;
 
-    @FXML private BorderPane bpEntryMenu;
+    @FXML
+    private BorderPane bpEntryMenu;
 
-    @FXML private AnchorPane apPwdGenerate;
+    @FXML
+    private AnchorPane apPwdGenerate;
 
-    @FXML private AnchorPane entryPane;
-    @FXML private TextField tfPwdLength;
-   static  int length;
+    @FXML
+    private AnchorPane entryPane;
+
+    static int length;
     @FXML
     private MenuItem menuDeleteRow;
-    @FXML private MenuItem menuPwdStrength;
     @FXML
-    private MenuItem  menuNewDB;
+    private MenuItem menuPwdStrength;
+    @FXML
+    private MenuItem menuNewDB;
     @FXML
     private Text textGenePwdQuality;
 
-    @FXML private Text textGeneGPUClusters;
+    @FXML
+    private Text textGeneGPUClusters;
 
-    @FXML private Text textGeneGPU;
+    @FXML
+    private Text textGeneGPU;
 
-    @FXML private Text textGeneEntropy;
+    @FXML
+    private Text textGeneEntropy;
 
+    TreeItem group = new TreeItem(new Group("RATIO", 0));
+    TreeItem group2 = new TreeItem(new Group("RATIO2", 2));
 
     @FXML
     void createEntry(ActionEvent event) throws Exception {
-        entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(),tfURL.getText(),pfPwdField.getText(),tANotes.getText()));
-       // entryHandler.createEntryObject(anchorPane);
+
+        showTableView();
+        entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+
+        TreeItem audimi = new TreeItem(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+        group.getChildren().add(audimi);
+        group2.getChildren().add(audimi);
+        group.getChildren().add(group2);
+
         tfTitel.setText("");
         tfUsername.setText("");
         tfURL.setText("");
         pfPwdField.setText("");
         tANotes.setText("");
-        showTableView();
 
-
+        ObjectIOExample obj = new ObjectIOExample();
+        obj.write(entryData, Paths.get(LoginController.passwordFilePath));
     }
+
     @FXML
     void generatePwd(ActionEvent event) throws Exception {
 
+        Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 4);
+        Slider slider = new Slider(4, 999, 1);
+        slider.setBlockIncrement(1);
+        slider.setMin(4);
+        slider.setMax(999);
+        slider.setValue(4);
+        slider.setPrefWidth(570);
+        slider.setLayoutY(110);
+        slider.setShowTickLabels(true);
 
-        //   double entropy =  Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length, length))/Math.log10(2);
-        //   textEntropy.setText("Entropy bits is: "+(entropy));
+        pwdLengthSpinner.setPrefSize(75, 25);
+        pwdLengthSpinner.setLayoutX(580);
+        pwdLengthSpinner.setLayoutY(100);
+        pwdLengthSpinner.setEditable(true);
+        apPwdGenerate.getChildren().addAll(pwdLengthSpinner,slider);
         apPwdGenerate.setVisible(true);
         apPwdGenerate.setDisable(false);
         entryPane.setDisable(true);
@@ -150,51 +213,49 @@ public class EntryController implements Serializable {
         btnEditOK.setDisable(true);
         btnEditOK.setVisible(false);
 
-        tfPwdLength.setOnKeyReleased( e -> {
+       generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
-            tfPwdLength.textProperty().addListener((observable, oldValue, newValue) -> {
+       PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+
+       pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+
+           pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
+              {
+                  generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+
+                  PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+              });
+
+             generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+
+           PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+             slider.setValue(parseInt(newValue));
 
 
+        });
 
-                        boolean isNumeric = newValue.chars().allMatch(Character::isDigit);
+            slider.setOnMouseDragged(e -> {
+                Double newData = slider.getValue();
+                int value = newData.intValue();
+                pwdLengthSpinner.getValueFactory().setValue(value);
+            });    
 
-                        if (!newValue.matches("\\d*")) {
-                            tfPwdLength.setText(newValue.replaceAll("[^\\d]", ""));
-                            return;
-                        }
-                        if (isNumeric == true && tfPwdLength.getLength() >= 1)
-                        length = Integer.parseInt(tfPwdLength.getText());
-                        tfPwdLength.setText(String.valueOf(PasswordUtils.getPassword(length).
+            btnPwdGenerator.setOnAction(e ->
 
-                                length()));
-                        PasswordUtils.getPassword(Integer.parseInt(tfPwdLength.getText()));
+    {
+        try {
+            length = pwdLengthSpinner.getValue();
 
-                        generatedPWDfield.setText(PasswordUtils.getPassword(length));
-                        double entropy = Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length, length)) / Math.log10(2);
-                    //    textEntropy.setText("Entropy bits is: " + (entropy));
-                PasswordUtils.calcCrackingTime(textGenePwdQuality,textGeneGPU,textGeneEntropy,textGeneGPUClusters,generatedPWDfield.getText());
+            generatedPWDfield.setText(PasswordUtils.getPassword(length));
+
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+
+        } catch (Exception E) {
+
+        }
 
             });
 
-
-        });
-
-        btnPwdGenerator.setOnAction(e -> {
-            try{
-                length= Integer.parseInt(tfPwdLength.getText());
-                tfPwdLength.setText(String.valueOf(PasswordUtils.getPassword(length).length()));
-                PasswordUtils.getPassword(Integer.parseInt(tfPwdLength.getText()));
-
-                generatedPWDfield.setText(PasswordUtils.getPassword(length));
-                double entropy =  Math.log10(Math.pow(PasswordUtils.ALL_CHARS.length,length))/Math.log10(2);
-               // textEntropy.setText("Entropy bits is: "+(entropy));
-
-                PasswordUtils.calcCrackingTime(textGenePwdQuality,textGeneGPU,textGeneEntropy,textGeneGPUClusters,generatedPWDfield.getText());
-
-            } catch (Exception E) {
-
-            }
-        });
     }
     @FXML
     void deleteAll(ActionEvent event) throws Exception
@@ -208,6 +269,8 @@ public class EntryController implements Serializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
           entryData.removeAll(entryData);
+            entryTreeTableView.setRoot(null);
+
             File deleteFile = new File(LoginController.passwordFilePath).getAbsoluteFile().getParentFile();
 
             DatabaseHandler databaseHandler = new DatabaseHandler();
@@ -226,6 +289,7 @@ public class EntryController implements Serializable {
 
     void showTableView()
     {
+
         entryPane.setVisible(true);
         entryPane.setDisable(false);
 
@@ -250,7 +314,6 @@ public class EntryController implements Serializable {
             tfSearch.setDisable(true);
             btnCreate.setVisible(true);
             btnCreate.setDisable(false);
-
             entryTable.setVisible(false);
             entryTable.setDisable(true);
     }
@@ -286,7 +349,7 @@ public class EntryController implements Serializable {
     @FXML
     void newDB(ActionEvent event)  {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.dialog(btnClose);
+        databaseHandler.newDBdialog(btnClose);
 
     }
 
@@ -311,7 +374,22 @@ public class EntryController implements Serializable {
 
     }
 
+@FXML
+void openRecent (ActionEvent event) throws Exception
 
+        { Label label = new Label();
+    DatabaseHandler databaseHandler = new DatabaseHandler();
+    databaseHandler.createMenuItems(menuRecent,label);
+  LoginController.selectedDirectoryPath = new File(LoginController.passwordFilePath).getAbsoluteFile().getParent()+"\\";
+     FXMLLoader fxmlLoader = new FXMLLoader();
+     fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
+
+      Scene scene = new Scene(fxmlLoader.load());
+       Stage stage = new Stage();
+       stage.setTitle("New Window");
+       stage.setScene(scene);
+       stage.show();
+}
 
     @FXML
     void signOut(ActionEvent event) throws Exception {
@@ -323,11 +401,31 @@ public class EntryController implements Serializable {
     @FXML
     void deleteRow(ActionEvent event) throws  Exception {
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        TreeItem<Entry> entryTreeItem = entryTreeTableView.getSelectionModel().getSelectedItem();
+        System.out.println("thee selected item is" + entryTreeItem);
         if (selectedItem != null) {
             entryData.remove(selectedItem);
-
+            ObjectIOExample obj = new ObjectIOExample();
+            obj.write(entryData, Paths.get(LoginController.passwordFilePath));
         }
+/*
+        if (   entryTreeItem .getChildren()!=null &&   entryTreeItem.getParent().getParent()==null ) {
+
+        //   entryTreeItem.getParent().getChildren().remove(entryTreeItem);
+            System.out.println("it isnt null");
+        }
+
+        if (  entryTreeItem.getParent()!=null && entryTreeItem .getChildren()!=null ) {
+
+             group.getChildren().remove(entryTreeItem);
+            System.out.println("it is null");
+        }
+        */
+
+
     }
+
+
     @FXML void editEntry (ActionEvent event) throws  Exception {
 
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
@@ -359,6 +457,8 @@ public class EntryController implements Serializable {
                     pfPwdField.setText("");
                     tANotes.setText("");
                     showTableView();
+                    ObjectIOExample obj = new ObjectIOExample();
+                    obj.write(entryData, Paths.get(LoginController.passwordFilePath));
                 } catch (Exception E) {
 
                 }
@@ -384,39 +484,62 @@ public class EntryController implements Serializable {
 
 
     @FXML
-   private void initialize() throws Exception {
+    void updateMasterPwd(ActionEvent event) throws Exception {
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        databaseHandler.updatePasswords();
+        ObjectIOExample obj = new ObjectIOExample();
+        obj.write(entryData, Paths.get(LoginController.passwordFilePath));
+
+    }
 
 
-       // anchorPane.getChildren().add(tabPane);
+    @FXML
+   private void initialize() throws Exception  {
 
 
+            columnTitel.setCellValueFactory(new TreeItemPropertyValueFactory<>("titel"));
+            columnUsername.setCellValueFactory(new TreeItemPropertyValueFactory<>("username"));
+
+            columnURL.setCellValueFactory(new TreeItemPropertyValueFactory<>("url"));
+            columnPwd.setCellValueFactory(new TreeItemPropertyValueFactory<>("password"));
+
+            columnNotes.setCellValueFactory(new TreeItemPropertyValueFactory<>("notes"));
+
+            columnGroupName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
+
+            entryTreeTableView.setRoot(group);
+
+            apCalc.setDisable(true);
+            apCalc.setVisible(false);
+            btnClose.setOnAction((e -> {
+                showTableView();
 
 
-          apCalc.setDisable(true);
-         apCalc.setVisible(false);
-        btnClose.setOnAction((e -> {
-        showTableView();
+            }));
 
+            colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
+            colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
+            colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
+            colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
+            colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
-        }));
+            colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
+            colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
+            colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
+            colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
+            colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
+            entryData.addAll(ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)));
 
+            entryTable.setItems(entryData);
+            filter();
+            btnEnterMenu.setOnAction(e -> {
+                try {
+                    entrySpecs();
+                } catch (Exception E) {
 
-        colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
-        colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
-        colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
-        colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
-        colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
-        entryData.addAll(ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)));
-        entryTable.setItems(entryData);
-        filter();
-        btnEnterMenu.setOnAction(e -> {
-            try{
-          entrySpecs();
-            } catch (Exception E) {
-
-            }
-        });
+                }
+            });
 
     }
 

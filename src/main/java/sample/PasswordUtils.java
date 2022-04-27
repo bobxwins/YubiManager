@@ -108,7 +108,7 @@ public   class PasswordUtils {
 
         }
 
-        System.out.println("the cardinality is: "+cardinality);
+
         return cardinality;
     }
 

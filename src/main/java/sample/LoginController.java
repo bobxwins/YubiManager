@@ -52,10 +52,10 @@ public class LoginController {
     void login(ActionEvent event) throws Exception {
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
-         if (databaseHandler.loginAuthentication(mpField,ybkSecret,btnSignIn,tabLogin) == false)
-              {
-              return;
-                  }
+        if (databaseHandler.loginAuthentication(mpField, ybkSecret, btnSignIn, tabLogin) == false) {
+            return;
+        }
+
     }
 
 
@@ -64,7 +64,7 @@ public class LoginController {
     void newDB(ActionEvent event) throws Exception {
         labelEnterPwd.setVisible(false);
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.dialog(btnCreateDB);
+        databaseHandler.newDBdialog(btnCreateDB);
 
 
     }
