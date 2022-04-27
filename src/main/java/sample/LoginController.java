@@ -58,8 +58,6 @@ public class LoginController {
 
     }
 
-
-
     @FXML
     void newDB(ActionEvent event) throws Exception {
         labelEnterPwd.setVisible(false);
