@@ -1,7 +1,5 @@
 package sample;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+ 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -113,16 +111,12 @@ public class EntryController implements Serializable {
 
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
 
-    private ObservableList<Group> groupData = FXCollections.observableArrayList();
-    @FXML
-    private TabPane tabPM;
-
     @FXML
     private Button btnEnterMenu;
     @FXML
     private Button btnEditOK;
     @FXML
-    private Button btnCancel;
+    private Button btnDeleteRow;
     @FXML
     private Button btnCreate;
     @FXML
@@ -482,6 +476,11 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
    private void initialize() throws Exception  {
 
+         btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
+                 );
+
+        btnDeleteRow.setStyle(
+                "-fx-background-radius: 5em; " );
 
             columnTitel.setCellValueFactory(new TreeItemPropertyValueFactory<>("titel"));
             columnUsername.setCellValueFactory(new TreeItemPropertyValueFactory<>("username"));
