@@ -26,6 +26,7 @@ public class DatabaseHandler {
     PasswordField masterPasswordField = new PasswordField();
     PasswordField confirmPasswordField = new PasswordField();
     PasswordField yubikeyPasswordField = new PasswordField();
+    Label masterPasswordLabel = new Label ("Master Password");
     Dialog<Pair<String, String>> dialog = new Dialog<>();
     GridPane grid = new GridPane();
 
@@ -104,7 +105,7 @@ public class DatabaseHandler {
     }
 
     void newDBdialog(Button btn) {
-
+        dialog.setTitle("Creating new database");
         dialog.getDialogPane().setContent(grid);
         setGrid();
 
@@ -112,9 +113,10 @@ public class DatabaseHandler {
         fileNameField.setPromptText("File name...");
 
         Label fileLabel = new Label("Enter new File name:");
-        grid.addRow(3, fileLabel,fileNameField);
 
 
+        grid.addRow(0, fileLabel,fileNameField);
+       // grid.addRow()
         Platform.runLater(() -> fileNameField.requestFocus());
 
         dialog.setResultConverter(dialogButton -> {
@@ -224,7 +226,6 @@ public class DatabaseHandler {
     void setGrid()
     {
 
-        dialog.setTitle("TestName");
 
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
@@ -238,18 +239,19 @@ public class DatabaseHandler {
 
         yubikeyPasswordField.setPromptText("Yubikey Static Password");
 
-        grid.add(new Label("Master Password:"), 0, 0);
-        grid.add(masterPasswordField, 1, 0);
-        grid.add(new Label("Confirm Password:"), 0, 1);
-        grid.add(confirmPasswordField, 1, 1);
+        grid.add(new Label("Master Password:"), 0, 1);
+        grid.add(masterPasswordField, 1, 1);
 
-        grid.add(new Label("Yubikey Password:"), 0, 2);
-        grid.add(yubikeyPasswordField, 1, 2);
+        grid.add(new Label("Confirm Password:"), 0, 2);
+        grid.add(confirmPasswordField, 1, 2);
+
+        grid.add(new Label("Yubikey Password:"), 0, 3);
+        grid.add(yubikeyPasswordField, 1, 3);
 
     }
 
 void updatePasswords() {
-
+    dialog.setTitle("Updating passwords");
     dialog.getDialogPane().setContent(grid);
     setGrid();
     dialog.setResultConverter(dialogButton -> {

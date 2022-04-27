@@ -27,12 +27,12 @@
                      </font>
                   </Label>
                   <Button fx:id="btnCreateDB" layoutX="305.0" layoutY="439.0" mnemonicParsing="false" onAction="#newDB" text="Create New Database" />
-                  <Label layoutX="350.0" layoutY="391.0" text="Master Passwod" textFill="#000000f2">
+                  <Label layoutX="360.0" layoutY="391.0" text="Yubikey Secret" textFill="#000000f2">
                      <font>
                         <Font name="System Bold Italic" size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="360.0" layoutY="330.0" text="Yubikey Secret">
+                  <Label layoutX="360.0" layoutY="330.0" text="Master Password">
                      <font>
                         <Font name="System Bold Italic" size="13.0" />
                      </font>
