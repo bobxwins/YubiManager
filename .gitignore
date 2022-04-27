@@ -1,1 +1,3 @@
-/src/main/resources/sample/passwords/
+/src/main/resources/sample/passwords
+*.xlsx
+*.txt
