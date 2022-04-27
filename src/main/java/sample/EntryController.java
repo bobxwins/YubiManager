@@ -238,7 +238,7 @@ public class EntryController implements Serializable {
                 Double newData = slider.getValue();
                 int value = newData.intValue();
                 pwdLengthSpinner.getValueFactory().setValue(value);
-            });    
+            });
 
             btnPwdGenerator.setOnAction(e ->
 
@@ -408,20 +408,6 @@ void openRecent (ActionEvent event) throws Exception
             ObjectIOExample obj = new ObjectIOExample();
             obj.write(entryData, Paths.get(LoginController.passwordFilePath));
         }
-/*
-        if (   entryTreeItem .getChildren()!=null &&   entryTreeItem.getParent().getParent()==null ) {
-
-        //   entryTreeItem.getParent().getChildren().remove(entryTreeItem);
-            System.out.println("it isnt null");
-        }
-
-        if (  entryTreeItem.getParent()!=null && entryTreeItem .getChildren()!=null ) {
-
-             group.getChildren().remove(entryTreeItem);
-            System.out.println("it is null");
-        }
-        */
-
 
     }
 

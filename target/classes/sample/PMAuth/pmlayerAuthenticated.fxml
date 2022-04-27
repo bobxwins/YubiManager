@@ -21,7 +21,7 @@
                      </graphic>
                   </Button>
                   <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
-                  <Button fx:id="btnSignOut" layoutX="1387.0" layoutY="675.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
+                  <Button fx:id="btnSignOut" layoutX="1390.0" layoutY="750.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
                   <MenuBar prefHeight="39.0" prefWidth="1557.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
