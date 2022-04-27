@@ -131,7 +131,7 @@
                            </children>
                         </HBox>
                         <Button fx:id="btnReturn" layoutY="490.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="OK" />
-                        <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="m">
+                        <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
                               <Font name="Arial Bold" size="21.0" />
                            </font>
