@@ -80,7 +80,7 @@
                         <Font name="Bell MT" size="27.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labelEnterPwd" layoutX="449.0" layoutY="260.0" text="Please enter passwords!" textFill="#dd3e3e" visible="false">
+                  <Label fx:id="labelEnterPwd1" layoutX="449.0" layoutY="260.0" text="Please enter passwords!" textFill="#dd3e3e" visible="false">
                      <font>
                         <Font name="System Bold" size="33.0" />
                      </font>

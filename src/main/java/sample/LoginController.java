@@ -1,12 +1,14 @@
 package sample;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 
 import java.io.File;
@@ -32,7 +34,7 @@ public class LoginController {
     @FXML
     private Label recentFileLabel ;
     @FXML
-    private Label labelEnterPwd;
+    private Label labelEnterPwd1;
 
     @FXML
     private Menu menuRecent;
@@ -41,7 +43,11 @@ public class LoginController {
     @FXML
     private  Button  btnYubikey;
 
-     //tabPane.getSlectionModel().select(0);
+    @FXML
+    private AnchorPane anchorPane;
+
+    public static Label labelEnterPwd = new Label("Please Enter Password!");
+
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
 
     public static String defaultPath = System.getProperty("user.dir") + "/resources/sample/passwords";
@@ -49,7 +55,7 @@ public class LoginController {
     public static String selectedDirectoryPath;
     public static String recentFiles = defaultPath+"/RecentFiles.txt";
     public static char[] combinedPasswords;
-
+ @FXML Button btnLogo;
     @FXML
     void login(ActionEvent event) throws Exception {
 
@@ -62,7 +68,8 @@ public class LoginController {
 
     @FXML
     void newDB(ActionEvent event) throws Exception {
-        labelEnterPwd.setVisible(false);
+
+       labelEnterPwd.setVisible(false);
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.newDBdialog(btnCreateDB);
 
@@ -84,7 +91,13 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
-
+        labelEnterPwd.setVisible(false);
+        labelEnterPwd.setLayoutX(449);
+        labelEnterPwd.setLayoutY(260);
+        labelEnterPwd.setFont(new Font(33));
+        labelEnterPwd.setTextFill(Color.RED);
+        labelEnterPwd.setStyle("-fx-font-weight: bold;");
+        anchorPane.getChildren().add(labelEnterPwd);
         btnYubikey.setStyle(   "-fx-background-radius: 5em; "
         );
 
@@ -92,11 +105,13 @@ public class LoginController {
         new FileOutputStream(recentFiles, true).close();
         String recentFilesString = new String(FileUtils.readAllBytes(recentFiles));
          String[] rFSArray = recentFilesString.split(",");
-       passwordFilePath = rFSArray[0];
+         passwordFilePath = rFSArray[0];
 
         recentFileLabel.setText(passwordFilePath );
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.createMenuItems(menuRecent,labelEnterPwd);
+
+
+        databaseHandler.createMenuItems(menuRecent, labelEnterPwd);
 
         selectedDirectoryPath = new File(passwordFilePath).getAbsoluteFile().getParent()+"\\";
 

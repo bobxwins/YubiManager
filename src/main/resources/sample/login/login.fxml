@@ -80,7 +80,7 @@
                         <Font name="Bell MT" size="27.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labelEnterPwd" layoutX="449.0" layoutY="260.0" text="Please enter passwords!" textFill="#dd3e3e" visible="false">
+                  <Label fx:id="labelEnterPwd1" layoutX="449.0" layoutY="260.0" text="Please enter passwords!" textFill="#dd3e3e" visible="false">
                      <font>
                         <Font name="System Bold" size="33.0" />
                      </font>
@@ -102,7 +102,7 @@
       </Label>
       <Button fx:id="btnYubikey" layoutX="507.0" layoutY="16.0" mnemonicParsing="false" prefHeight="139.0" prefWidth="264.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7">
          <graphic>
-            <ImageView fitHeight="121.0" fitWidth="258.0">
+            <ImageView fx:id="btnLogo" fitHeight="121.0" fitWidth="258.0">
                <image>
                   <Image url="@yubikey-5-nfc.jpg" />
                </image>
