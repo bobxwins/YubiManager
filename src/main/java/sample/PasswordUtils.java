@@ -36,6 +36,11 @@ public   class PasswordUtils {
     public static String getPassword(int length) {
 // generates a random password
 
+        if (length <4)
+        {
+            length=4;
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append(SYMBOLS);
         sb.append(LOWERCASE);
@@ -43,7 +48,6 @@ public   class PasswordUtils {
         sb.append(NUMBERS);
        ALL_CHARS = sb.toString().toCharArray();
 
-       // assert length >= 12 : "Password is too short!!";
         char[] password = new char[length];
 
         //get the requirements out of the way
@@ -52,7 +56,7 @@ public   class PasswordUtils {
         password[2] = NUMBERS[rand.nextInt(NUMBERS.length)];
         password[3] = SYMBOLS[rand.nextInt(SYMBOLS.length)];
 
-        //populate rest of the password with random chars
+        //populate rest of the password with random chars,until password array's length is equal to the speified length
         for (int i = 4; i < length; i++) {
             password[i] = ALL_CHARS[rand.nextInt(ALL_CHARS.length)];
         }
@@ -63,8 +67,6 @@ public   class PasswordUtils {
             char temp = password[i];
             password[i] = password[randomPosition];
             password[randomPosition] = temp;
-
-
 
         }
 

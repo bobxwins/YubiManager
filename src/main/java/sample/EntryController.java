@@ -33,12 +33,12 @@ import static java.lang.Integer.parseInt;
 
 
 public class EntryController implements Serializable {
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private TableView<Entry> entryTable;
 
-    @FXML
-    private TreeTableView<Entry> entryTreeTableView;
 
     @FXML
     private TableColumn<Entry, String> colTitel;
@@ -85,29 +85,15 @@ public class EntryController implements Serializable {
     @FXML
     private Text textPwdQuality;
 
-
     @FXML
     private Button btnSignOut;
     @FXML
-    private Button btnEditEntry;
-    @FXML
-    private Text textSelectedPWD;
+    private Button btnGenerateMenu;
+
     @FXML
     private Button btnPwdGenerator;
-    @FXML
-    private AnchorPane anchorPane;
 
-    @FXML
-    private TextField testField;
 
-    @FXML
-    private VBox vBoxLabel;
-
-    @FXML
-    private VBox vBoxTf;
-
-    @FXML
-    private AnchorPane apCalc;
     @FXML
     private Menu menuRecent;
 
@@ -121,8 +107,10 @@ public class EntryController implements Serializable {
     private Button btnDeleteRow;
     @FXML
     private Button btnCreate;
+
     @FXML
-    private Button btnClose;
+    private Button btnReturn;
+
     @FXML
     private TextField generatedPWDfield;
     @FXML
@@ -159,20 +147,13 @@ public class EntryController implements Serializable {
 
     @FXML
     private Text textEntropy;
-
-    TreeItem group = new TreeItem(new Group("RATIO", 0));
-    TreeItem group2 = new TreeItem(new Group("RATIO2", 2));
-
+    Slider slider = new Slider(4, 999, 1);
     @FXML
     void createEntry(ActionEvent event) throws Exception {
 
         showTableView();
         entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
 
-        TreeItem audimi = new TreeItem(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
-        group.getChildren().add(audimi);
-        group2.getChildren().add(audimi);
-        group.getChildren().add(group2);
 
         tfTitel.setText("");
         tfUsername.setText("");
@@ -188,7 +169,7 @@ public class EntryController implements Serializable {
     void generatePwd(ActionEvent event) throws Exception {
 
         Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 4);
-        Slider slider = new Slider(4, 999, 1);
+
         slider.setBlockIncrement(1);
         slider.setMin(4);
         slider.setMax(999);
@@ -209,10 +190,21 @@ public class EntryController implements Serializable {
         btnEditOK.setDisable(true);
         btnEditOK.setVisible(false);
 
-       generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
 
-       PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+            entryData.set(entryData.indexOf(selectedItem), selectedItem);
 
+            generatedPWDfield.setText(selectedItem.getPassword());
+            PasswordUtils.calcCrackingTime(textPwdQuality,textCalcGPU,textCalcEntropy,textCalcGPUClusters,generatedPWDfield.getText());
+        }
+
+         else {
+             generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
+
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+
+        }
        pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
 
            pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
@@ -227,7 +219,6 @@ public class EntryController implements Serializable {
            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
              slider.setValue(parseInt(newValue));
 
-
         });
 
             slider.setOnMouseDragged(e -> {
@@ -236,8 +227,16 @@ public class EntryController implements Serializable {
                 pwdLengthSpinner.getValueFactory().setValue(value);
             });
 
-            btnPwdGenerator.setOnAction(e ->
 
+        generatedPWDfield.setOnKeyReleased(e ->
+        {
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+        });
+
+
+
+            btnPwdGenerator.setOnAction(e ->
+  // when Generator button is pressed
     {
         try {
             length = pwdLengthSpinner.getValue();
@@ -264,7 +263,7 @@ public class EntryController implements Serializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
           entryData.removeAll(entryData);
-            entryTreeTableView.setRoot(null);
+
 
             File deleteFile = new File(LoginController.passwordFilePath).getAbsoluteFile().getParentFile();
 
@@ -297,8 +296,8 @@ public class EntryController implements Serializable {
         btnEditOK.setDisable(true);
         btnEditOK.setVisible(false);
 
-        apCalc .setDisable(true);
-        apCalc.setVisible(false);
+        /*apCalc .setDisable(true);
+        apCalc.setVisible(false); */
     }
 
     void entrySpecs() throws Exception {
@@ -318,8 +317,7 @@ public class EntryController implements Serializable {
         showTableView();
         apPwdGenerate.setDisable(true);
         apPwdGenerate.setVisible(false);
-
-
+        apPwdGenerate.getChildren().remove(slider);
     }
 
     @FXML
@@ -342,7 +340,7 @@ public class EntryController implements Serializable {
     @FXML
     void newDB(ActionEvent event)  {
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.newDBdialog(btnClose);
+        databaseHandler.newDBdialog(btnReturn);
 
     }
 
@@ -394,8 +392,6 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
     void deleteRow(ActionEvent event) throws  Exception {
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        TreeItem<Entry> entryTreeItem = entryTreeTableView.getSelectionModel().getSelectedItem();
-        System.out.println("thee selected item is" + entryTreeItem);
         if (selectedItem != null) {
             entryData.remove(selectedItem);
             ObjectIOExample obj = new ObjectIOExample();
@@ -491,15 +487,17 @@ void openRecent (ActionEvent event) throws Exception
 
             columnGroupName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
 
-            entryTreeTableView.setRoot(group);
 
-            apCalc.setDisable(true);
+
+           /* apCalc.setDisable(true);
             apCalc.setVisible(false);
-            btnClose.setOnAction((e -> {
+            */
+        /*    btnClose.setOnAction((e -> {
                 showTableView();
 
 
             }));
+            */
 
             colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
             colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
@@ -570,22 +568,24 @@ void openRecent (ActionEvent event) throws Exception
         entryTable.setItems(sortedData);
     }
 
-    @FXML
+ /*   @FXML
     void calculatePwd(ActionEvent event) throws Exception {
         entryTable.setVisible(false);
         entryTable.setDisable(true);
-         apCalc.setVisible(true);
+      /*   apCalc.setVisible(true);
          apCalc.setDisable(false);
+
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
 
             entryData.set(entryData.indexOf(selectedItem), selectedItem);
             selectedItem.getPassword();
             textSelectedPWD.setText(selectedItem.getPassword());
+
             PasswordUtils.calcCrackingTime(textPwdQuality,textCalcGPU,textCalcEntropy,textCalcGPUClusters,selectedItem.getPassword());
 
         }
     }
-
+*/
 
 }

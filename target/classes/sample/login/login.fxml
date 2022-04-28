@@ -100,11 +100,6 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <ImageView fitHeight="121.0" fitWidth="258.0" layoutX="-28.0" layoutY="97.0" scaleX="0.5" scaleY="0.5">
-         <image>
-            <Image url="@yubikey-5-nfc.jpg" />
-         </image>
-      </ImageView>
       <Button fx:id="btnYubikey" layoutX="507.0" layoutY="16.0" mnemonicParsing="false" prefHeight="139.0" prefWidth="264.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7">
          <graphic>
             <ImageView fitHeight="121.0" fitWidth="258.0">

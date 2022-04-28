@@ -169,7 +169,7 @@
                                   <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                                     <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
                                     <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#calculatePwd" text="Calculate Password strength" />
+                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -209,7 +209,6 @@
                         </BorderPane>
                         <AnchorPane fx:id="apCalc" disable="true" layoutX="-30.0" layoutY="82.0" prefHeight="249.0" prefWidth="447.0" visible="false">
                            <children>
-                              <Button fx:id="btnClose" layoutX="870.0" layoutY="380.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="102.0" text="Close" />
                               <Text fx:id="textCalcEntropy" fontSmoothingType="LCD" layoutX="300.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextCalcEntropy">
                                  <font>
                                     <Font name="Arial" size="21.0" />
@@ -228,16 +227,6 @@
                               <Text fx:id="textPwdQuality" fontSmoothingType="LCD" layoutX="542.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quality">
                                  <font>
                                     <Font name="Arial Bold" size="21.0" />
-                                 </font>
-                              </Text>
-                              <Text fontSmoothingType="LCD" layoutX="300.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Selected Password is:">
-                                 <font>
-                                    <Font name="Arial Bold" size="21.0" />
-                                 </font>
-                              </Text>
-                              <Text fx:id="textSelectedPWD" fontSmoothingType="LCD" layoutX="570.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" underline="true">
-                                 <font>
-                                    <Font name="Arial Italic" size="21.0" />
                                  </font>
                               </Text>
                            </children>
