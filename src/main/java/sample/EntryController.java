@@ -187,20 +187,18 @@ public class EntryController implements Serializable {
 
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-
             entryData.set(entryData.indexOf(selectedItem), selectedItem);
 
-            generatedPWDfield.setText(selectedItem.getPassword());
-            PasswordUtils.calcCrackingTime(textPwdQuality,textCalcGPU,textCalcEntropy,textCalcGPUClusters,generatedPWDfield.getText());
-            entryTable.getSelectionModel().clearSelection();
-        }
+         generatedPWDfield.setText(selectedItem.getPassword());
+      PasswordUtils.calcCrackingTime(textPwdQuality, textCalcGPU, textCalcEntropy, textCalcGPUClusters, generatedPWDfield.getText());
+       entryTable.getSelectionModel().clearSelection();
+       } else {
+            generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
-         else {
-             generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
 
-          PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                    }
 
-        }
        pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
 
            pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
