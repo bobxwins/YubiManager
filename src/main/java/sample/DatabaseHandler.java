@@ -26,7 +26,6 @@ public class DatabaseHandler {
     PasswordField masterPasswordField = new PasswordField();
     PasswordField confirmPasswordField = new PasswordField();
     PasswordField yubikeyPasswordField = new PasswordField();
-    Label masterPasswordLabel = new Label ("Master Password");
     Dialog<Pair<String, String>> dialog = new Dialog<>();
     GridPane grid = new GridPane();
 

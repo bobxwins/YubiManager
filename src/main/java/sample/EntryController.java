@@ -372,17 +372,17 @@ void openRecent (ActionEvent event) throws Exception
         if (selectedItem != null) {
             entrySpecs();
 
-             tfTitel.setText(selectedItem.getTitel());
+            tfTitel.setText(selectedItem.getTitel());
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
             pfPwdField.setText(selectedItem.getPassword());
             tANotes.setText(selectedItem.getNotes());
+          //sets the TextFields and passwordfield to be equal to the fields of the selected row
+
             btnEditOK.setDisable(false);
             btnEditOK.setVisible(true);
             btnCreate.setVisible(false);
             btnCreate.setDisable(true);
-
-
             btnEditOK.setOnAction(e -> {
                 try{
                     entryData.set(entryData.indexOf(selectedItem),selectedItem);
@@ -391,11 +391,14 @@ void openRecent (ActionEvent event) throws Exception
                     selectedItem.setURL( tfURL.getText());
                     selectedItem.setPassword( pfPwdField.getText());
                     selectedItem.setNotes(tANotes.getText());
-                    tfTitel.setText("");
+
+               /*     tfTitel.setText("");
                     tfUsername.setText("");
                     tfURL.setText("");
                     pfPwdField.setText("");
                     tANotes.setText("");
+                    */
+
                     showTableView();
                     ObjectIOExample obj = new ObjectIOExample();
                     obj.write(entryData, Paths.get(LoginController.passwordFilePath));
