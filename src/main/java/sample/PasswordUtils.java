@@ -144,7 +144,7 @@ public   class PasswordUtils {
             quality= "Fair";
             textPwdQuality.setFill(Color.DARKGOLDENROD);
         }
-        if(entropy > 60 && entropy < 127 )
+        if(entropy > 59 && entropy < 127 )
         {
             quality= "Strong";
             textPwdQuality.setFill(Color.GREEN);

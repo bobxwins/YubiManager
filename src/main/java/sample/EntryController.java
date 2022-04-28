@@ -12,13 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+ 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -52,24 +51,6 @@ public class EntryController implements Serializable {
     private TableColumn<Entry, String> colNotes;
 
     @FXML
-    private TreeTableColumn<Entry, String> columnTitel;
-
-    @FXML
-    private TreeTableColumn<Entry, String> columnUsername;
-
-    @FXML
-    private TreeTableColumn<Entry, String> columnURL;
-
-    @FXML
-    private TreeTableColumn<Entry, String> columnPwd;
-
-    @FXML
-    private TreeTableColumn<Entry, String> columnNotes;
-
-    @FXML
-    private TreeTableColumn<Group, String> columnGroupName;
-
-    @FXML
     private TextField tfSearch;
     @FXML
     private TextField tfTitel;
@@ -83,16 +64,10 @@ public class EntryController implements Serializable {
     private TextArea tANotes;
 
     @FXML
-    private Text textPwdQuality;
-
-    @FXML
     private Button btnSignOut;
-    @FXML
-    private Button btnGenerateMenu;
 
     @FXML
     private Button btnPwdGenerator;
-
 
     @FXML
     private Menu menuRecent;
@@ -148,8 +123,6 @@ public class EntryController implements Serializable {
 
         showTableView();
         entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
-
-
         tfTitel.setText("");
         tfUsername.setText("");
         tfURL.setText("");
@@ -190,9 +163,10 @@ public class EntryController implements Serializable {
             entryData.set(entryData.indexOf(selectedItem), selectedItem);
 
          generatedPWDfield.setText(selectedItem.getPassword());
-      PasswordUtils.calcCrackingTime(textPwdQuality, textCalcGPU, textCalcEntropy, textCalcGPUClusters, generatedPWDfield.getText());
+      PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
        entryTable.getSelectionModel().clearSelection();
-       } else {
+       }
+        else {
             generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
             PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
@@ -227,8 +201,8 @@ public class EntryController implements Serializable {
 
 
 
-            btnPwdGenerator.setOnAction(e ->
-  // when Generator button is pressed
+    btnPwdGenerator.setOnAction(e ->
+          // when Generator button is pressed
     {
         try {
             length = pwdLengthSpinner.getValue();
@@ -469,27 +443,6 @@ void openRecent (ActionEvent event) throws Exception
         btnDeleteRow.setStyle(
                 "-fx-background-radius: 5em; " );
 
-            columnTitel.setCellValueFactory(new TreeItemPropertyValueFactory<>("titel"));
-            columnUsername.setCellValueFactory(new TreeItemPropertyValueFactory<>("username"));
-
-            columnURL.setCellValueFactory(new TreeItemPropertyValueFactory<>("url"));
-            columnPwd.setCellValueFactory(new TreeItemPropertyValueFactory<>("password"));
-
-            columnNotes.setCellValueFactory(new TreeItemPropertyValueFactory<>("notes"));
-
-            columnGroupName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
-
-
-
-           /* apCalc.setDisable(true);
-            apCalc.setVisible(false);
-            */
-        /*    btnClose.setOnAction((e -> {
-                showTableView();
-
-
-            }));
-            */
 
             colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
             colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
