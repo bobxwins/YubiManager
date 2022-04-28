@@ -5,10 +5,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import java.text.DecimalFormat;
 import java.util.Random;
+
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 
 public   class PasswordUtils {
@@ -114,9 +119,10 @@ public   class PasswordUtils {
 
     public static void calcCrackingTime(Text textPwdQuality, Text textCalcGPU,Text textCalcEntropy, Text textCalcGPUClusters,String password)
     {
-        double entropy =  Math.log10(Math.pow(PasswordUtils.cardinality(  password),password.length()))/Math.log10(2);
-//
+        double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
+
         String quality ="";
+        String doubleFormat ="%.3f";
         textPwdQuality.setStyle("-fx-font-size: 21px;");
         textPwdQuality.setUnderline(false);
         if(entropy <28)
@@ -144,41 +150,40 @@ public   class PasswordUtils {
         }
         if(entropy >= 127 )
         {
-            textPwdQuality.setFill(Color.DARKGREEN);
-            textPwdQuality.setUnderline(true);
-            textPwdQuality.setStyle("-fx-font-size: 30px;");
-            quality= "Overkill";
+            textPwdQuality.setStyle("-fx-font-size: 25px;");
+            quality= "AMAZING!";
 
         }
 
+
+
+        BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ BRUTEFORCEGPU.doubleValue()/2;
+
+        if (entropy>194)
+        {
+            textPwdQuality.setFill(Color.GREEN);
+            textPwdQuality.setUnderline(true);
+            textPwdQuality.setStyle("-fx-font-size: 30px;");
+            quality= "Overkill!!";
+             doubleFormat ="%.3g";
+        }
 
         textPwdQuality.setText(quality);
 
-        PasswordUtils.BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ PasswordUtils.BRUTEFORCEGPU.doubleValue()/2;
-        if (entropy>174)
-        {
-            PasswordUtils.BRUTEFORCETIMEGPU=Double.POSITIVE_INFINITY;
-
-        }
         textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\n\nYour password quality is: ");
-        textCalcGPU.setText( "Estimated time for brute forcing the passwords with a GPU is: "
-                +"\n"+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU)+" seconds"
-                +"\nIn hours: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPU/3600)+" hours"+
-                "\nIn days: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24)+" days"+
-                "\nIn years: "+String.format("%.3f",PasswordUtils.BRUTEFORCETIMEGPU/3600/24/365)+" years");
+        textCalcGPU.setText( "Estimated time for brute forcing the passwords with 1 GPU is: "
+                +"\n"+String.format(doubleFormat, BRUTEFORCETIMEGPU)+" seconds"
+                +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIMEGPU/3600)+" hours"+
+                "\nIn days: "+String.format(doubleFormat,BRUTEFORCETIMEGPU/3600/24)+" days"+
+                "\nIn years: "+String.format(doubleFormat,BRUTEFORCETIMEGPU/3600/24/365)+" years");
 
-        PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ PasswordUtils.BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
-
-        if (entropy>174)
-        {
-            PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS=Double.POSITIVE_INFINITY;
-        }
+        BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
 
         textCalcGPUClusters.setText("Estimated time for brute forcing the passwords with GPU Clusters is: "
-                +"\n"+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
-                +"\nIn hours: "+String.format("%.3f", PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
-                "\nIn days: "+String.format("%.3f" ,PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+
-                "\nIn years: "+String.format("%.3f" , PasswordUtils.BRUTEFORCETIMEGPUCLUSTERS/3600/24/365)+" years");
+                +"\n"+String.format(doubleFormat ,BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
+                +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
+                "\nIn days: "+String.format(doubleFormat ,BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+
+                "\nIn years: "+String.format(doubleFormat , BRUTEFORCETIMEGPUCLUSTERS/3600/24/365)+" years");
 
     }
 }

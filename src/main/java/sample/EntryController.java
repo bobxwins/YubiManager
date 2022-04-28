@@ -7,7 +7,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -84,6 +84,8 @@ public class EntryController implements Serializable {
 
     @FXML
     private Text textPwdQuality;
+
+
     @FXML
     private Button btnSignOut;
     @FXML
@@ -156,7 +158,7 @@ public class EntryController implements Serializable {
     private Text textGeneGPU;
 
     @FXML
-    private Text textGeneEntropy;
+    private Text textEntropy;
 
     TreeItem group = new TreeItem(new Group("RATIO", 0));
     TreeItem group2 = new TreeItem(new Group("RATIO2", 2));
@@ -209,7 +211,7 @@ public class EntryController implements Serializable {
 
        generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
-       PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+       PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
 
        pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -217,12 +219,12 @@ public class EntryController implements Serializable {
               {
                   generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
 
-                  PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                  PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
               });
 
              generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
 
-           PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+           PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
              slider.setValue(parseInt(newValue));
 
 
@@ -242,7 +244,7 @@ public class EntryController implements Serializable {
 
             generatedPWDfield.setText(PasswordUtils.getPassword(length));
 
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textGeneEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
 
         } catch (Exception E) {
 
@@ -259,7 +261,6 @@ public class EntryController implements Serializable {
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Warning, this will permanently delete all your passwords");
         alert.setContentText("Are you sure you want to proceed?");
-
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
           entryData.removeAll(entryData);
@@ -275,8 +276,6 @@ public class EntryController implements Serializable {
             LoginController.passwordFilePath = rFSArray[0];
             FileUtils.write(LoginController.recentFiles,recentFilesString.substring(recentFilesString.indexOf(",") + 1).getBytes(StandardCharsets.UTF_8));
 
-        } else {
-            // ... user chose CANCEL or closed the dialog
         }
 
     }

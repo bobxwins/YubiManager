@@ -136,7 +136,7 @@
                               <Font name="Arial Bold" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="520.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="505.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
@@ -146,7 +146,7 @@
                               <Font name="Arial" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneEntropy" fontSmoothingType="LCD" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                        <Text fx:id="textEntropy" fontSmoothingType="LCD" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>

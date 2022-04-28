@@ -38,6 +38,8 @@ public class LoginController {
     private Menu menuRecent;
     @FXML
     private Tab tabLogin;
+    @FXML
+    private  Button  btnYubikey;
 
      //tabPane.getSlectionModel().select(0);
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
@@ -82,6 +84,10 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
+
+        btnYubikey.setStyle(   "-fx-background-radius: 5em; "
+        );
+
 
         new FileOutputStream(recentFiles, true).close();
         String recentFilesString = new String(FileUtils.readAllBytes(recentFiles));
