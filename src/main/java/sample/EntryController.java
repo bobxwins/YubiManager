@@ -130,12 +130,7 @@ public class EntryController implements Serializable {
     private AnchorPane entryPane;
 
     static int length;
-    @FXML
-    private MenuItem menuDeleteRow;
-    @FXML
-    private MenuItem menuPwdStrength;
-    @FXML
-    private MenuItem menuNewDB;
+
     @FXML
     private Text textGenePwdQuality;
 
@@ -197,12 +192,13 @@ public class EntryController implements Serializable {
 
             generatedPWDfield.setText(selectedItem.getPassword());
             PasswordUtils.calcCrackingTime(textPwdQuality,textCalcGPU,textCalcEntropy,textCalcGPUClusters,generatedPWDfield.getText());
+            entryTable.getSelectionModel().clearSelection();
         }
 
          else {
              generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+          PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
 
         }
        pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
@@ -229,9 +225,7 @@ public class EntryController implements Serializable {
 
 
         generatedPWDfield.setOnKeyReleased(e ->
-        {
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
-        });
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText()));
 
 
 
