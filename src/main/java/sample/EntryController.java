@@ -328,19 +328,21 @@ public class EntryController implements Serializable {
         stage.setTitle("New Window");
         stage.setScene(scene);
         stage.show();
+        LoginController.labelEnterPwd.setVisible(true);
 
     }
 
 @FXML
 void openRecent (ActionEvent event) throws Exception
 
-        { Label label = new Label();
+        {
 
-  LoginController.selectedDirectoryPath = new File(LoginController.passwordFilePath).getAbsoluteFile().getParent()+"\\";
+
+      LoginController.selectedDirectoryPath = new File(LoginController.passwordFilePath).getAbsoluteFile().getParent()+"\\";
      FXMLLoader fxmlLoader = new FXMLLoader();
      fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
 
-      Scene scene = new Scene(fxmlLoader.load());
+       Scene scene = new Scene(fxmlLoader.load());
        Stage stage = new Stage();
        stage.setTitle("New Window");
        stage.setScene(scene);
@@ -438,9 +440,10 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
    private void initialize() throws Exception  {
-        Label label = new Label();
+
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.createMenuItems(menuRecent,label);
+
+        databaseHandler.createMenuItems(menuRecent,LoginController.labelEnterPwd);
 
          btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
                  );
