@@ -55,7 +55,7 @@ public class LoginController {
     public static String selectedDirectoryPath;
     public static String recentFiles = defaultPath+"/RecentFiles.txt";
     public static char[] combinedPasswords;
- @FXML Button btnLogo;
+
     @FXML
     void login(ActionEvent event) throws Exception {
 

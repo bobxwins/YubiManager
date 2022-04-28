@@ -126,7 +126,13 @@ public class DatabaseHandler {
                         alert.showAndWait();
                         return null;
                     }
-                    if (fileNameField.getText().length() == 0 || masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0) {
+                    if (fileNameField.getText().length() == 0 || masterPasswordField.getText().length() == 0
+                            || confirmPasswordField.getText().length() == 0 || yubikeyPasswordField.getText().length() == 0) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Please fill all fields!");
+                        alert.showAndWait();
 
                         return null;
                     }
@@ -222,7 +228,6 @@ public class DatabaseHandler {
     void setGrid()
     {
 
-
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         grid.setHgap(10);
@@ -246,7 +251,7 @@ public class DatabaseHandler {
 
     }
 
-void updatePasswords() {
+    void updatePasswords() {
     dialog.setTitle("Updating passwords");
     dialog.getDialogPane().setContent(grid);
     setGrid();
@@ -262,26 +267,30 @@ void updatePasswords() {
 
                     return null;
                 }
-                if (masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0) {
-
-                    return null;
+                if (masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0 || yubikeyPasswordField.getText().length() == 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Information Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please fill all fields!");
+                    alert.showAndWait();
+                   return null;
                 }
 
-                char[] masterPassword = masterPasswordField.getText().toCharArray();
-                char[] ybkPassword = yubikeyPasswordField.getText().toCharArray();
+                    char[] masterPassword = masterPasswordField.getText().toCharArray();
+                    char[] ybkPassword = yubikeyPasswordField.getText().toCharArray();
 
-                StringBuilder sb = new StringBuilder(128);
-                sb.append(masterPassword);
-                sb.append(ybkPassword);
+                    StringBuilder sb = new StringBuilder(128);
+                    sb.append(masterPassword);
+                    sb.append(ybkPassword);
 
-                LoginController.combinedPasswords = sb.toString().toCharArray();
+                    LoginController.combinedPasswords = sb.toString().toCharArray();
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText("Passwords succesfully updated!");
-                alert.showAndWait();
-            }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Passwords succesfully updated!");
+                    alert.showAndWait();
+                     }
         } catch (Exception E) {
 
 
