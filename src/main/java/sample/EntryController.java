@@ -12,7 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
- 
+
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
@@ -335,8 +335,7 @@ public class EntryController implements Serializable {
 void openRecent (ActionEvent event) throws Exception
 
         { Label label = new Label();
-    DatabaseHandler databaseHandler = new DatabaseHandler();
-    databaseHandler.createMenuItems(menuRecent,label);
+
   LoginController.selectedDirectoryPath = new File(LoginController.passwordFilePath).getAbsoluteFile().getParent()+"\\";
      FXMLLoader fxmlLoader = new FXMLLoader();
      fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
@@ -436,6 +435,9 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
    private void initialize() throws Exception  {
+        Label label = new Label();
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        databaseHandler.createMenuItems(menuRecent,label);
 
          btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
                  );
@@ -513,24 +515,5 @@ void openRecent (ActionEvent event) throws Exception
         entryTable.setItems(sortedData);
     }
 
- /*   @FXML
-    void calculatePwd(ActionEvent event) throws Exception {
-        entryTable.setVisible(false);
-        entryTable.setDisable(true);
-      /*   apCalc.setVisible(true);
-         apCalc.setDisable(false);
-
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-
-            entryData.set(entryData.indexOf(selectedItem), selectedItem);
-            selectedItem.getPassword();
-            textSelectedPWD.setText(selectedItem.getPassword());
-
-            PasswordUtils.calcCrackingTime(textPwdQuality,textCalcGPU,textCalcEntropy,textCalcGPUClusters,selectedItem.getPassword());
-
-        }
-    }
-*/
 
 }

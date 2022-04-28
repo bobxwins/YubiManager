@@ -71,10 +71,7 @@ public class DatabaseHandler {
       return true;
 }
 
-
-
-
-    boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn, Tab tab) throws  Exception {
+    boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
             char[] masterPassword = mpField.getText().toCharArray();
             char[] ybkPassword = ybkSecret.getText().toCharArray();
@@ -188,7 +185,7 @@ public class DatabaseHandler {
 
         return true;
     }
-    public  void createMenuItems(Menu menuRecent, Label labelEnterPwd) {
+    public  void createMenuItems(Menu menuRecent,Label label) {
         String recentFilesString = new String(FileUtils.readAllBytes(LoginController.recentFiles));
 
         String[] rFSArray = recentFilesString.split(",");
@@ -202,11 +199,11 @@ public class DatabaseHandler {
 
                 menuItems.setOnAction(e ->
                 {
-                    labelEnterPwd.setVisible(true);
                     LoginController.passwordFilePath = menuItems.getText();
                     String path = Paths.get(LoginController.passwordFilePath).getParent()+"\\";
 
                     LoginController.selectedDirectoryPath = path;
+                    label.setVisible(true);
 
                 });
             }

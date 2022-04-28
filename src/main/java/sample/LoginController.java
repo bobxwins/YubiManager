@@ -54,7 +54,7 @@ public class LoginController {
     void login(ActionEvent event) throws Exception {
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        if (databaseHandler.loginAuthentication(mpField, ybkSecret, btnSignIn, tabLogin) == false) {
+        if (databaseHandler.loginAuthentication(mpField, ybkSecret, btnSignIn ) == false) {
             return;
         }
 
