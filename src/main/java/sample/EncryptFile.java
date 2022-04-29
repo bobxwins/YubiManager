@@ -59,7 +59,7 @@ public class EncryptFile {
 
             secureRandom.nextBytes(salt);
 
-            PBEKeySpec keySpec = new PBEKeySpec(LoginController.combinedPasswords, salt, iterationCount, keylength);
+            PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(), salt, iterationCount, keylength);
 
             SecretKeyFactory factory =
                     SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");

@@ -34,7 +34,7 @@ public class DecryptFile {
             SecretKeyFactory factory =
                     SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");
 
-            PBEKeySpec keySpec = new PBEKeySpec(LoginController.combinedPasswords, getSalt(folderDir), iterationCountInt, keylengthInt);
+            PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(), getSalt(folderDir), iterationCountInt, keylengthInt);
 
             SecretKey key = factory.generateSecret(keySpec);
 

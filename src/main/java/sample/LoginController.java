@@ -9,8 +9,6 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.FileOutputStream;
 
-
-
 public class LoginController {
 
     @FXML
@@ -28,14 +26,11 @@ public class LoginController {
     @FXML
     private Menu menuRecent;
 
-    @FXML
-    private  Button  btnYubikey;
-  @FXML private ImageView imgOpen;
+    @FXML private  Button  btnYubikey;
+    @FXML private ImageView imgOpen;
     @FXML private ImageView imgLocked;
     @FXML
     private AnchorPane anchorPane;
-
-    public static char[] combinedPasswords;
 
     @FXML
     void login(ActionEvent event) throws Exception {
@@ -80,12 +75,11 @@ public class LoginController {
         btnYubikey.setOnAction(e-> {
                     if(!imgOpen.isVisible())
                     {
-
-                            imgOpen.setVisible(true);
-                            imgLocked.setVisible(false);
+                        imgOpen.setVisible(true);
+                        imgLocked.setVisible(false);
                         return;
                     }
-                      imgOpen.setVisible(false);
+                    imgOpen.setVisible(false);
                     imgLocked.setVisible(true);
 
         }
@@ -95,7 +89,7 @@ public class LoginController {
          new FileOutputStream( Global.getRecentFilesDir(), true).close();
 
          Global.setRecentFilesContent(new String(FileUtils.readAllBytes( Global.getRecentFilesDir())));
-         
+
         DatabaseHandler databaseHandler = new DatabaseHandler();
 
         databaseHandler.createMenuItems(menuRecent, Global.getLabelEnterPwd());

@@ -73,15 +73,8 @@ public class DatabaseHandler {
 
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
-            char[] masterPassword = mpField.getText().toCharArray();
-            char[] ybkPassword = ybkSecret.getText().toCharArray();
-
-            StringBuilder sb = new StringBuilder(128);
-            sb.append(masterPassword);
-            sb.append(ybkPassword);
-            Global.setCombinedPasswords(sb.toString().toCharArray());
-
-            LoginController.combinedPasswords =  sb.toString().toCharArray();
+            Global.setCombinedPasswords(mpField,ybkSecret);
+            System.out.println("the combined passswords are:+"+String.valueOf(Global.getCombinedPasswords()));
 
             Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
@@ -140,14 +133,7 @@ public class DatabaseHandler {
                         return null;
                     }
 
-                    char[] masterPassword = masterPasswordField.getText().toCharArray();
-                    char[] ybkPassword = yubikeyPasswordField.getText().toCharArray();
-
-                    StringBuilder sb = new StringBuilder(128);
-                    sb.append(masterPassword);
-                    sb.append(ybkPassword);
-
-                   LoginController.combinedPasswords = sb.toString().toCharArray();
+                    Global.setCombinedPasswords(masterPasswordField,yubikeyPasswordField);
 
                     Global.setPasswordFilePath(fileNameField.getText());
 
@@ -276,14 +262,8 @@ public class DatabaseHandler {
                    return null;
                 }
 
-                    char[] masterPassword = masterPasswordField.getText().toCharArray();
-                    char[] ybkPassword = yubikeyPasswordField.getText().toCharArray();
+                    Global.setCombinedPasswords(masterPasswordField,yubikeyPasswordField);
 
-                    StringBuilder sb = new StringBuilder(128);
-                    sb.append(masterPassword);
-                    sb.append(ybkPassword);
-
-                    LoginController.combinedPasswords = sb.toString().toCharArray();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");

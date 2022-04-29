@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -95,7 +96,14 @@ public final class Global {
     public static char[] getCombinedPasswords() throws Exception{
         return combinedPasswords;
     }
-    public static void setCombinedPasswords(char[] combinedPasswords) throws Exception{
-        Global.combinedPasswords= combinedPasswords;
+    public static void setCombinedPasswords(PasswordField mpField, PasswordField ybkSecret) throws Exception{
+
+        char[] masterPassword = mpField.getText().toCharArray();
+        char[] ybkPassword = ybkSecret.getText().toCharArray();
+
+        StringBuilder sb = new StringBuilder(128);
+        sb.append(masterPassword);
+        sb.append(ybkPassword);
+        combinedPasswords= sb.toString().toCharArray();
     }
 }
