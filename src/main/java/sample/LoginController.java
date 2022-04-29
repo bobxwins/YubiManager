@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -42,7 +43,8 @@ public class LoginController {
     private Tab tabLogin;
     @FXML
     private  Button  btnYubikey;
-
+  @FXML private ImageView imgOpen;
+    @FXML private ImageView imgLocked;
     @FXML
     private AnchorPane anchorPane;
 
@@ -55,7 +57,7 @@ public class LoginController {
     public static String selectedDirectoryPath;
     public static String recentFiles = defaultPath+"/RecentFiles.txt";
     public static char[] combinedPasswords;
-
+    public static String colm;
     @FXML
     void login(ActionEvent event) throws Exception {
 
@@ -100,18 +102,34 @@ public class LoginController {
         anchorPane.getChildren().add(labelEnterPwd);
         btnYubikey.setStyle(   "-fx-background-radius: 5em; "
         );
+        btnYubikey.setOnAction(e-> {
+                    if(!imgOpen.isVisible())
+                    {
+                     
+                            imgOpen.setVisible(true);
+                            imgLocked.setVisible(false);
+                        return;
+                    }
+                      imgOpen.setVisible(false);
+                    imgLocked.setVisible(true);
+
+
+
+        }
+
+                );
 
 
         new FileOutputStream(recentFiles, true).close();
         String recentFilesString = new String(FileUtils.readAllBytes(recentFiles));
          String[] rFSArray = recentFilesString.split(",");
          passwordFilePath = rFSArray[0];
-
+          colm ="yes";
         recentFileLabel.setText(passwordFilePath );
         DatabaseHandler databaseHandler = new DatabaseHandler();
 
 
-        databaseHandler.createMenuItems(menuRecent, labelEnterPwd);
+      databaseHandler.createMenuItems(menuRecent, labelEnterPwd);
 
         selectedDirectoryPath = new File(passwordFilePath).getAbsoluteFile().getParent()+"\\";
 

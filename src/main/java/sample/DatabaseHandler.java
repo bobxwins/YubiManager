@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
-import static sample.LoginController.defaultPath;
 
 public class DatabaseHandler {
 
@@ -51,24 +50,44 @@ public class DatabaseHandler {
     public boolean openDB() {
         FileChooser fileChooser = new FileChooser();
 
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XLS File (*.xlsx)", "*.xlsx");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("AES File (*.aes)", "*.aes");
 
         fileChooser.getExtensionFilters().add(extFilter);
 
         Stage anotherStage = new Stage();
-        fileChooser.setInitialDirectory(new File(defaultPath));
+        fileChooser.setInitialDirectory(new File(LoginController.defaultPath));
         File file = fileChooser.showOpenDialog(anotherStage);
         if (file == null) {
 
             return false;
         }
+        // button  set on action
         LoginController.passwordFilePath = file.getAbsolutePath();
-        System.out.println("the password file path is :"+ LoginController.passwordFilePath);
+
         LoginController.selectedDirectoryPath = file.getAbsoluteFile().getParent() + "\\";
-        System.out.println("the selectedDirectoryPath  is :"+ LoginController.selectedDirectoryPath);
+
         updateRecentFileString();
+
       return true;
 }
+public static String getPasswordFilePath ()
+{
+    return null;
+}
+
+    public static void setPasswordFilePath ()
+    {
+        return;
+    }
+
+    public static String getSelectedFilePath ()
+    {
+        return null;
+    }
+    public static void setSeletedFilePath ()
+    {
+        return;
+    }
 
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
@@ -168,14 +187,14 @@ public class DatabaseHandler {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage anotherStage = new Stage();
-        directoryChooser.setInitialDirectory(new File(defaultPath));
+        directoryChooser.setInitialDirectory(new File(LoginController.defaultPath));
         File selectedDirectory = directoryChooser.showDialog(anotherStage);
 
         if (selectedDirectory != null) {
           LoginController.selectedDirectoryPath=selectedDirectory.getAbsolutePath()+"\\"+LoginController.passwordFilePath+"\\";
 
             new File(LoginController.selectedDirectoryPath).mkdir();
-            LoginController.passwordFilePath =  LoginController. selectedDirectoryPath+LoginController.passwordFilePath+".xlsx";
+            LoginController.passwordFilePath =  LoginController. selectedDirectoryPath+LoginController.passwordFilePath+".aes";
             FileUtils.write(  LoginController.passwordFilePath,"".getBytes(StandardCharsets.UTF_8));
 
         }
@@ -205,9 +224,8 @@ public class DatabaseHandler {
                 menuItems.setOnAction(e ->
                 {
                     LoginController.passwordFilePath = menuItems.getText();
-                    String path = Paths.get(LoginController.passwordFilePath).getParent()+"\\";
+                    LoginController.selectedDirectoryPath = Paths.get(LoginController.passwordFilePath).getParent()+"\\";
 
-                    LoginController.selectedDirectoryPath = path;
                     label.setVisible(true);
 
                 });

@@ -1,1 +1,1 @@
-C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\ratio\ratio.xlsx,C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\123\123.xlsx,
+C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\2\2.aes,C:\Users\bob-w\Dokumenter\YubiManager\src\main\resources\sample\passwords\123\123.aes,

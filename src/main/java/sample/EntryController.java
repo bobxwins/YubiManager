@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.bouncycastle.crypto.io.SignerOutputStream;
 
 import java.io.File;
 import java.io.Serializable;
@@ -37,7 +38,6 @@ public class EntryController implements Serializable {
 
     @FXML
     private TableView<Entry> entryTable;
-
 
     @FXML
     private TableColumn<Entry, String> colTitel;
@@ -88,12 +88,7 @@ public class EntryController implements Serializable {
 
     @FXML
     private TextField generatedPWDfield;
-    @FXML
-    private Text textCalcEntropy;
-    @FXML
-    private Text textCalcGPU;
-    @FXML
-    private Text textCalcGPUClusters;
+
 
     @FXML
     private BorderPane bpEntryMenu;
@@ -117,7 +112,13 @@ public class EntryController implements Serializable {
 
     @FXML
     private Text textEntropy;
+
+    @FXML
+    private MenuItem menuOpenDB;
+
+
     Slider slider = new Slider(4, 999, 1);
+
     @FXML
     void createEntry(ActionEvent event) throws Exception {
 
@@ -293,6 +294,11 @@ public class EntryController implements Serializable {
         final ClipboardContent content = new ClipboardContent();
         content.putString(generatedPWDfield.getText());
         clipboard.setContent(content);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Password succesfully copied!");
+        alert.showAndWait();
     }
 
     @FXML
@@ -314,22 +320,28 @@ public class EntryController implements Serializable {
     @FXML
     void openDB(ActionEvent event) throws Exception {
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        if (databaseHandler.openDB()==false)
+      DatabaseHandler databaseHandler = new DatabaseHandler();
+       if (!databaseHandler.openDB()==true)
         {
             return;
         }
+        String pwdFPNewValue= LoginController.passwordFilePath;
+         String directoryNewValue = LoginController.selectedDirectoryPath;
+       //the new values of passwordFilePath and selectedDirectoryPath will be lost upon loading the FXML login "login.fxml"
+        //so to keep the new values of both Strings,I create 2 new strings that store the values of the new paths,
+        //load login.FXML, then set the values of the static path Strings to the new values.
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
+           FXMLLoader fxmlLoader = new FXMLLoader();
+           fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("New Window");
-        stage.setScene(scene);
-        stage.show();
-        LoginController.labelEnterPwd.setVisible(true);
-
+           Scene scene = new Scene(fxmlLoader.load());
+           Stage stage = new Stage();
+           stage.setTitle("New Window");
+           stage.setScene(scene);
+           stage.show();
+           LoginController.labelEnterPwd.setVisible(true);
+           LoginController.passwordFilePath =   pwdFPNewValue;
+           LoginController.selectedDirectoryPath = directoryNewValue;
     }
 
 @FXML
@@ -337,9 +349,7 @@ void openRecent (ActionEvent event) throws Exception
 
         {
 
-
-      LoginController.selectedDirectoryPath = new File(LoginController.passwordFilePath).getAbsoluteFile().getParent()+"\\";
-     FXMLLoader fxmlLoader = new FXMLLoader();
+      FXMLLoader fxmlLoader = new FXMLLoader();
      fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
 
        Scene scene = new Scene(fxmlLoader.load());
@@ -394,12 +404,6 @@ void openRecent (ActionEvent event) throws Exception
                     selectedItem.setPassword( pfPwdField.getText());
                     selectedItem.setNotes(tANotes.getText());
 
-               /*     tfTitel.setText("");
-                    tfUsername.setText("");
-                    tfURL.setText("");
-                    pfPwdField.setText("");
-                    tANotes.setText("");
-                    */
 
                     showTableView();
                     ObjectIOExample obj = new ObjectIOExample();
@@ -444,6 +448,7 @@ void openRecent (ActionEvent event) throws Exception
         DatabaseHandler databaseHandler = new DatabaseHandler();
 
         databaseHandler.createMenuItems(menuRecent,LoginController.labelEnterPwd);
+
 
          btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
                  );
@@ -519,6 +524,7 @@ void openRecent (ActionEvent event) throws Exception
         SortedList<Entry> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(entryTable.comparatorProperty());
         entryTable.setItems(sortedData);
+
     }
 
 
