@@ -90,17 +90,17 @@
                         <Font name="Bell MT" size="27.0" />
                      </font>
                   </Label>
-      <Label layoutX="380.0" layoutY="125.0" text="Yubikey Password Manager">
+      <Label layoutX="380.0" layoutY="175.0" text="Yubikey Password Manager">
          <font>
             <Font size="46.0" />
          </font>
       </Label>
-      <Label layoutX="310.0" layoutY="200.0" text="Sign in or create a new database to securely store your passwords">
+      <Label layoutX="310.0" layoutY="250.0" text="Sign in or create a new database to securely store your passwords">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="btnYubikey" layoutX="507.0" layoutY="16.0" mnemonicParsing="false" prefHeight="139.0" prefWidth="264.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7">
+      <Button fx:id="btnYubikey" layoutX="507.0" layoutY="66.0" mnemonicParsing="false" prefHeight="139.0" prefWidth="264.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7">
          <graphic>
             <ImageView fx:id="imgViewLogo" fitHeight="121.0" fitWidth="258.0">
                <image>
@@ -109,12 +109,12 @@
             </ImageView>
          </graphic>
       </Button>
-      <ImageView fx:id="imgOpen" fitHeight="68.0" fitWidth="104.0" layoutX="960.0" layoutY="125.0">
+      <ImageView fx:id="imgOpen" fitHeight="68.0" fitWidth="104.0" layoutX="960.0" layoutY="175.0">
          <image>
             <Image url="@locked.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="imgLocked" fitHeight="68.0" fitWidth="104.0" layoutX="948.0" layoutY="125.0" visible="false">
+      <ImageView fx:id="imgLocked" fitHeight="68.0" fitWidth="104.0" layoutX="948.0" layoutY="175.0" visible="false">
          <image>
             <Image url="@open.png" />
          </image>

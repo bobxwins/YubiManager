@@ -20,8 +20,8 @@ public class DecryptFile {
     public byte[] Decryption() {
 
         try {
-            String folderDir = LoginController.selectedDirectoryPath;
-            String pwdDir = LoginController.passwordFilePath;
+            String folderDir = Global.getSelectedDirectoryPath();
+
 
             byte[] storedkeylength = FileUtils.readAllBytes(folderDir+"KeyLength.txt");
 
@@ -42,7 +42,7 @@ public class DecryptFile {
 
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(getIV(folderDir)));
 
-            byte[] input = FileUtils.readAllBytes(pwdDir);
+            byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
             byte[] output = cipher.doFinal(input);
 
             String decodedOutput = new String(output);

@@ -28,26 +28,25 @@ public class DatabaseHandler {
     Dialog<Pair<String, String>> dialog = new Dialog<>();
     GridPane grid = new GridPane();
 
-   void updateRecentFileString()
+   void updateRecentFileString() throws  Exception
 
     {
+        String updateRecentFilesContent = "," + new String(FileUtils.readAllBytes(Global.getRecentFilesDir()));
 
-        String recentFilesString = "," + new String(FileUtils.readAllBytes(LoginController.recentFiles));
-
-        String[] rFSArray = recentFilesString.split(",");
-        boolean contains = Stream.of(rFSArray).anyMatch(x -> x.equals(LoginController.passwordFilePath));
+        String[] rFCArray = updateRecentFilesContent.split(",");
+        boolean contains = Stream.of(rFCArray).anyMatch(x -> x.equals(Global.getPasswordFilePath()));
         if (  contains == true) {
 
             return;
         }
 
-        String combinedRecentString = LoginController.passwordFilePath + recentFilesString;
+        String combinedRecentString = Global.getPasswordFilePath() + updateRecentFilesContent;
         System.out.println("the combined string is " + combinedRecentString);
-        FileUtils.write(LoginController.recentFiles, combinedRecentString.getBytes(StandardCharsets.UTF_8));
+        FileUtils.write( Global.getRecentFilesDir(), combinedRecentString.getBytes(StandardCharsets.UTF_8));
     }
 
 
-    public boolean openDB() {
+    public boolean openDB() throws Exception {
         FileChooser fileChooser = new FileChooser();
 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("AES File (*.aes)", "*.aes");
@@ -55,39 +54,22 @@ public class DatabaseHandler {
         fileChooser.getExtensionFilters().add(extFilter);
 
         Stage anotherStage = new Stage();
-        fileChooser.setInitialDirectory(new File(LoginController.defaultPath));
+        fileChooser.setInitialDirectory(new File(Global.getDefaultDir()));
         File file = fileChooser.showOpenDialog(anotherStage);
         if (file == null) {
 
             return false;
         }
         // button  set on action
-        LoginController.passwordFilePath = file.getAbsolutePath();
+        Global.setPasswordFilePath( file.getAbsolutePath());
 
-        LoginController.selectedDirectoryPath = file.getAbsoluteFile().getParent() + "\\";
+        Global.setSelectedDirectoryPath(  file.getAbsoluteFile().getParent() + "\\");
 
         updateRecentFileString();
 
       return true;
 }
-public static String getPasswordFilePath ()
-{
-    return null;
-}
 
-    public static void setPasswordFilePath ()
-    {
-        return;
-    }
-
-    public static String getSelectedFilePath ()
-    {
-        return null;
-    }
-    public static void setSeletedFilePath ()
-    {
-        return;
-    }
 
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
@@ -97,14 +79,16 @@ public static String getPasswordFilePath ()
             StringBuilder sb = new StringBuilder(128);
             sb.append(masterPassword);
             sb.append(ybkPassword);
-            LoginController.combinedPasswords = sb.toString().toCharArray();
+            Global.setCombinedPasswords(sb.toString().toCharArray());
+
+            LoginController.combinedPasswords =  sb.toString().toCharArray();
 
             Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
             Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
 
-            if (ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)) != null &&
-                    ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)).isEmpty()) {
+            if (ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())) != null &&
+                    ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())).isEmpty()) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Information Dialog");
@@ -119,7 +103,7 @@ public static String getPasswordFilePath ()
 
     }
 
-    void newDBdialog(Button btn) {
+    void newDBdialog(Button btn) throws Exception {
         dialog.setTitle("Creating new database");
         dialog.getDialogPane().setContent(grid);
         setGrid();
@@ -165,7 +149,7 @@ public static String getPasswordFilePath ()
 
                    LoginController.combinedPasswords = sb.toString().toCharArray();
 
-                   LoginController.passwordFilePath = fileNameField.getText();
+                    Global.setPasswordFilePath(fileNameField.getText());
 
                     newScene(btn);
                 }
@@ -187,15 +171,15 @@ public static String getPasswordFilePath ()
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage anotherStage = new Stage();
-        directoryChooser.setInitialDirectory(new File(LoginController.defaultPath));
+        directoryChooser.setInitialDirectory(new File(Global.getDefaultDir()));
         File selectedDirectory = directoryChooser.showDialog(anotherStage);
 
         if (selectedDirectory != null) {
-          LoginController.selectedDirectoryPath=selectedDirectory.getAbsolutePath()+"\\"+LoginController.passwordFilePath+"\\";
+            Global.setSelectedDirectoryPath(selectedDirectory.getAbsolutePath()+"\\"+Global.getPasswordFilePath()+"\\");
 
-            new File(LoginController.selectedDirectoryPath).mkdir();
-            LoginController.passwordFilePath =  LoginController. selectedDirectoryPath+LoginController.passwordFilePath+".aes";
-            FileUtils.write(  LoginController.passwordFilePath,"".getBytes(StandardCharsets.UTF_8));
+            new File( Global.getSelectedDirectoryPath()).mkdir();
+            Global.setPasswordFilePath(   Global.getSelectedDirectoryPath()+Global.getPasswordFilePath()+".aes");
+            FileUtils.write( Global.getPasswordFilePath(),"".getBytes(StandardCharsets.UTF_8));
 
         }
         else {
@@ -209,22 +193,20 @@ public static String getPasswordFilePath ()
 
         return true;
     }
-    public  void createMenuItems(Menu menuRecent,Label label) {
-        String recentFilesString = new String(FileUtils.readAllBytes(LoginController.recentFiles));
+    public  void createMenuItems(Menu menuRecent,Label label) throws Exception {
 
-        String[] rFSArray = recentFilesString.split(",");
 
-        for (int i = 0; i < rFSArray.length; i++) {
+        for (int i = 0; i < Global.getRFCArray().length; i++) {
 
-            MenuItem menuItems = new MenuItem(rFSArray[i]);
+            MenuItem menuItems = new MenuItem(Global.getRFCArray()[i]);
 
 
                 menuRecent.getItems().addAll(menuItems);
 
                 menuItems.setOnAction(e ->
                 {
-                    LoginController.passwordFilePath = menuItems.getText();
-                    LoginController.selectedDirectoryPath = Paths.get(LoginController.passwordFilePath).getParent()+"\\";
+                    Global.setPasswordFilePath( menuItems.getText());
+                   Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
 
                     label.setVisible(true);
 

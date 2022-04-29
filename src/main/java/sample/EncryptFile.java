@@ -50,9 +50,8 @@ public class EncryptFile {
 
             // if entryData == null create empty object, decrypt it
 
-            String folderDir = LoginController.selectedDirectoryPath;
-            String pwdDir = LoginController.passwordFilePath;
-
+            String folderDir = Global.getSelectedDirectoryPath();
+            String pwdDir = Global.getPasswordFilePath();
 
             SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", "BC");
 
@@ -70,10 +69,10 @@ public class EncryptFile {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING", "BC");
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(generatedIV));
 
-            byte[] input = FileUtils.readAllBytes(pwdDir);
+            byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
             byte[] output = cipher.doFinal(input);
 
-            FileUtils.write(pwdDir, output);
+            FileUtils.write(Global.getPasswordFilePath(), output);
 
             byte[] EncodedSalt = Base64.getEncoder().encode(salt);
 

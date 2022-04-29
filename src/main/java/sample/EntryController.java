@@ -131,7 +131,7 @@ public class EntryController implements Serializable {
         tANotes.setText("");
 
         ObjectIOExample obj = new ObjectIOExample();
-        obj.write(entryData, Paths.get(LoginController.passwordFilePath));
+        obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
     }
 
     @FXML
@@ -231,17 +231,16 @@ public class EntryController implements Serializable {
         if (result.get() == ButtonType.OK){
           entryData.removeAll(entryData);
 
-
-            File deleteFile = new File(LoginController.passwordFilePath).getAbsoluteFile().getParentFile();
+            File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
 
             DatabaseHandler databaseHandler = new DatabaseHandler();
             databaseHandler.deleteDir(deleteFile);
 
-            String recentFilesString = new String(FileUtils.readAllBytes(LoginController.recentFiles));
-            String[] rFSArray = recentFilesString.split(",");
-            LoginController.passwordFilePath = rFSArray[0];
-            FileUtils.write(LoginController.recentFiles,recentFilesString.substring(recentFilesString.indexOf(",") + 1).getBytes(StandardCharsets.UTF_8));
-
+            Global.setPasswordFilePath( Global.getRFCArray()[0]);
+          //sets the passwordfilepath to the first path written in RecentFilesDir txt document
+            FileUtils.write(Global.getRecentFilesDir(),Global.getRecentFilesContent().substring(Global.getRecentFilesContent().indexOf(",")
+                    + 1).getBytes(StandardCharsets.UTF_8));
+// removes the deleted database from the recentFilesDIR text document.
         }
 
     }
@@ -310,7 +309,7 @@ public class EntryController implements Serializable {
 
 
     @FXML
-    void newDB(ActionEvent event)  {
+    void newDB(ActionEvent event) throws  Exception {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.newDBdialog(btnReturn);
 
@@ -325,8 +324,8 @@ public class EntryController implements Serializable {
         {
             return;
         }
-        String pwdFPNewValue= LoginController.passwordFilePath;
-         String directoryNewValue = LoginController.selectedDirectoryPath;
+        String pwdFPNewValue= Global.getPasswordFilePath();
+        String directoryNewValue =  Global.getSelectedDirectoryPath();
        //the new values of passwordFilePath and selectedDirectoryPath will be lost upon loading the FXML login "login.fxml"
         //so to keep the new values of both Strings,I create 2 new strings that store the values of the new paths,
         //load login.FXML, then set the values of the static path Strings to the new values.
@@ -339,9 +338,9 @@ public class EntryController implements Serializable {
            stage.setTitle("New Window");
            stage.setScene(scene);
            stage.show();
-           LoginController.labelEnterPwd.setVisible(true);
-           LoginController.passwordFilePath =   pwdFPNewValue;
-           LoginController.selectedDirectoryPath = directoryNewValue;
+           Global.getLabelEnterPwd().setVisible(true);
+        Global.setPasswordFilePath( pwdFPNewValue);
+        Global.setSelectedDirectoryPath(  directoryNewValue);
     }
 
 @FXML
@@ -372,7 +371,7 @@ void openRecent (ActionEvent event) throws Exception
         if (selectedItem != null) {
             entryData.remove(selectedItem);
             ObjectIOExample obj = new ObjectIOExample();
-            obj.write(entryData, Paths.get(LoginController.passwordFilePath));
+            obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
         }
 
     }
@@ -407,7 +406,7 @@ void openRecent (ActionEvent event) throws Exception
 
                     showTableView();
                     ObjectIOExample obj = new ObjectIOExample();
-                    obj.write(entryData, Paths.get(LoginController.passwordFilePath));
+                    obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
                 } catch (Exception E) {
 
                 }
@@ -421,7 +420,7 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
         ObjectIOExample obj = new ObjectIOExample();
-        obj.write(entryData, Paths.get(LoginController.passwordFilePath));
+        obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
@@ -437,7 +436,7 @@ void openRecent (ActionEvent event) throws Exception
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.updatePasswords();
         ObjectIOExample obj = new ObjectIOExample();
-        obj.write(entryData, Paths.get(LoginController.passwordFilePath));
+        obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
 
     }
 
@@ -447,7 +446,7 @@ void openRecent (ActionEvent event) throws Exception
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
 
-        databaseHandler.createMenuItems(menuRecent,LoginController.labelEnterPwd);
+        databaseHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());
 
 
          btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
@@ -469,7 +468,7 @@ void openRecent (ActionEvent event) throws Exception
             colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
             colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
-            entryData.addAll(ObjectIOExample.read(Paths.get(LoginController.passwordFilePath)));
+            entryData.addAll(ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())));
 
             entryTable.setItems(entryData);
             filter();
