@@ -51,7 +51,7 @@ public class EncryptFile {
             // if entryData == null create empty object, decrypt it
 
             String folderDir = Global.getSelectedDirectoryPath();
-            String pwdDir = Global.getPasswordFilePath();
+
 
             SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", "BC");
 

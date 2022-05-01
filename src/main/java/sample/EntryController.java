@@ -514,6 +514,7 @@ void openRecent (ActionEvent event) throws Exception
             // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
         }
 
+
         String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -543,8 +544,7 @@ void openRecent (ActionEvent event) throws Exception
                             }
                         });
 
-                      //boolean isSelected = toggleButton.isSelected();
-                           // toggleButton.setSelected(false);
+
                         toggleButton.setOnAction(e -> {
                             if (!imgPwdVisible.isVisible() ) {
                                 imgPwdVisible.setVisible(true);
@@ -556,7 +556,7 @@ void openRecent (ActionEvent event) throws Exception
                          imgPwdNotVisible.setVisible(true);
                          textPassword.setText(finalHidePwd);
                         });
-                            imgPwdVisible.setVisible(false);
+                             imgPwdVisible.setVisible(false);
                             imgPwdNotVisible.setVisible(true);
                             textPassword.setText(finalHidePwd);
 

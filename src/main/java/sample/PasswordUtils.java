@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public   class PasswordUtils {
 
@@ -95,6 +96,9 @@ public   class PasswordUtils {
             cardinality=cardinality+UPPERCASE.length;
 
         }
+     /*   if (password.indexOf(SYMBOLS) != -1) {
+        }
+        */
 
         boolean atleastOneNumber = password.matches(".*[0-9]+.*");
 
@@ -104,9 +108,8 @@ public   class PasswordUtils {
             cardinality=cardinality+NUMBERS.length;
 
         }
-
-        boolean atleastOneSymbol = password.matches(".*[^A-Åa-å0-9]+.*");
-
+  
+        boolean atleastOneSymbol = password.matches(".*[+¤§$^$*.[]{}()?-\\\\\"!@#%&/\\,><':;|_~`]]+.*");
         if (atleastOneSymbol)
 
         {

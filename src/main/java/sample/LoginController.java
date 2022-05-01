@@ -1,13 +1,18 @@
 package sample;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.FileOutputStream;
+import java.nio.file.Paths;
 
 public class LoginController {
 
@@ -26,12 +31,20 @@ public class LoginController {
     @FXML
     private Menu menuRecent;
 
+
+
     @FXML private  Button  btnYubikey;
     @FXML private ImageView imgOpen;
     @FXML private ImageView imgLocked;
     @FXML
     private AnchorPane anchorPane;
 
+    @FXML
+    private TableColumn<String,String> recent;
+
+    @FXML TableView<String> recentFilesTable;
+
+    private ObservableList<String> recentFilesData = FXCollections.observableArrayList();
     @FXML
     void login(ActionEvent event) throws Exception {
 
@@ -67,9 +80,29 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
-         Global.setLabelRecentFiles(Global.getPasswordFilePath());
 
-        anchorPane.getChildren().addAll(Global.getLabelEnterPwd(), Global.getLabelRecentFiles());
+         recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+         recentFilesData.addAll(Global.getRFCArray());
+         recentFilesTable.setItems(recentFilesData);
+
+         recentFilesTable.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+              try{
+                 String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
+                 if (selectedItem != null) {
+                                Global.getLabelEnterPwd().setVisible(true);
+                                System.out.println(selectedItem);
+                               Global.setPasswordFilePath(selectedItem);
+                               Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
+                     System.out.println("the seelcted path is " +  Global.getSelectedDirectoryPath());
+                            }
+               //   Global.getLabelEnterPwd().setVisible(false);
+                  }
+                           catch (Exception E) {
+
+                           }     });
+
+        anchorPane.getChildren().addAll(Global.getLabelEnterPwd());
         btnYubikey.setStyle(   "-fx-background-radius: 5em; "
         );
         btnYubikey.setOnAction(e-> {

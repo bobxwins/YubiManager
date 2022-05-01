@@ -80,7 +80,7 @@ public final class Global {
         return labelEnterPwd;
     }
 
-    public static Label getLabelRecentFiles() throws Exception{
+   /* public static Label getLabelRecentFiles() throws Exception{
         labelRecentFile.setLayoutX(151);
         labelRecentFile.setLayoutY(39);
         labelRecentFile.setFont(new Font(27));
@@ -92,7 +92,7 @@ public final class Global {
     public static void setLabelRecentFiles(String passwordFilePath) throws Exception{
         labelRecentFile.setText(passwordFilePath );
     }
-
+*/
     public static char[] getCombinedPasswords() throws Exception{
         return combinedPasswords;
     }

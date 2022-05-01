@@ -169,13 +169,13 @@
 
                </children>
             </AnchorPane>
-                        <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="3.0" prefHeight="458.0" prefWidth="842.0">
+                        <TableView fx:id="entryTable" editable="true" layoutX="157.0" layoutY="3.0" prefHeight="458.0" prefWidth="1184.0">
 
                           <columns>
-                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="202.0" text="Titel" />
-                            <TableColumn fx:id="colUsername" prefWidth="181.0" text="Username" />
-                             <TableColumn fx:id="colURL" prefWidth="191.0" text="URL" />
-                              <TableColumn fx:id="colNotes" prefWidth="267.0" text="Notes" />
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
+                            <TableColumn fx:id="colUsername" prefWidth="278.0" text="Username" />
+                             <TableColumn fx:id="colURL" prefWidth="266.0" text="URL" />
+                              <TableColumn fx:id="colNotes" prefWidth="333.0" text="Notes" />
                           </columns>
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
@@ -289,6 +289,7 @@
                   <Font size="28.0" />
                </font>
             </Text>
+            <TextArea editable="false" layoutX="-43.0" layoutY="275.0" prefHeight="185.0" prefWidth="1169.0" visible="false" />
                      </children>
                   </AnchorPane>
 
