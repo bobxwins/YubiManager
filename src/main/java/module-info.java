@@ -11,6 +11,7 @@ module sample  {
     requires eu.hansolo.tilesfx;
     requires org.bouncycastle.provider;
     requires org.apache.commons.lang3;
+    requires java.desktop;
     opens sample to javafx.fxml;
     exports sample;
 }

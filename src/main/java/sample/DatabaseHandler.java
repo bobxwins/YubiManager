@@ -3,12 +3,14 @@ package sample;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -22,9 +24,11 @@ import java.util.stream.Stream;
 
 public class DatabaseHandler {
 
-    PasswordField masterPasswordField = new PasswordField();
+    PasswordField masterPasswordField  = new PasswordField();
     PasswordField confirmPasswordField = new PasswordField();
     PasswordField yubikeyPasswordField = new PasswordField();
+    // These are the 3 password fields generated when the user creates a new Database.
+
     Dialog<Pair<String, String>> dialog = new Dialog<>();
     GridPane grid = new GridPane();
 
@@ -41,7 +45,6 @@ public class DatabaseHandler {
         }
 
         String combinedRecentString = Global.getPasswordFilePath() + updateRecentFilesContent;
-        System.out.println("the combined string is " + combinedRecentString);
         FileUtils.write( Global.getRecentFilesDir(), combinedRecentString.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -74,11 +77,10 @@ public class DatabaseHandler {
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
             Global.setCombinedPasswords(mpField,ybkSecret);
-            System.out.println("the combined passswords are:+"+String.valueOf(Global.getCombinedPasswords()));
 
             Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
-            Stage entryWindow = (Stage) btnSignIn.getScene().getWindow();
+            Stage stage = (Stage) btnSignIn.getScene().getWindow();
 
             if (ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())) != null &&
                     ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())).isEmpty()) {
@@ -91,7 +93,7 @@ public class DatabaseHandler {
                 return false;
             }
 
-            entryWindow.setScene(new Scene(root));
+            stage.setScene(new Scene(root));
             return true;
 
     }
@@ -157,6 +159,7 @@ public class DatabaseHandler {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage anotherStage = new Stage();
+
         directoryChooser.setInitialDirectory(new File(Global.getDefaultDir()));
         File selectedDirectory = directoryChooser.showDialog(anotherStage);
 
@@ -174,7 +177,7 @@ public class DatabaseHandler {
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
-
+        entryWindow.setMaximized(true);
         entryWindow.setScene(new Scene(root));
 
         return true;
@@ -279,6 +282,19 @@ public class DatabaseHandler {
     });
 
     dialog.showAndWait();
+
+}
+static void stageFullScreen(Button btnSignOut) throws Exception
+{
+    Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
+    Stage stage= (Stage) btnSignOut.getScene().getWindow();
+    Screen screen = Screen.getPrimary();
+    Rectangle2D bounds = screen.getVisualBounds();
+    stage.setX(bounds.getMinX());
+    stage.setY(bounds.getMinY());
+    stage.setWidth(bounds.getWidth());
+    stage.setHeight(bounds.getHeight());
+    stage.setScene(new Scene(root));
 
 }
 }

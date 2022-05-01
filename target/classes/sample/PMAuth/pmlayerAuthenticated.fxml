@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -21,7 +22,6 @@
                      </graphic>
                   </Button>
                   <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
-                  <Button fx:id="btnSignOut" layoutX="1390.0" layoutY="750.0" mnemonicParsing="false" onAction="#signOut" prefHeight="31.0" prefWidth="127.0" text="Sign Out" />
                   <MenuBar prefHeight="39.0" prefWidth="1557.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
@@ -33,18 +33,9 @@
                               <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
                               <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
                               <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
-                           </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Edit">
-                           <items>
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" text="Copy" />
-                              <MenuItem mnemonicParsing="false" text="Paste" />
-                              <MenuItem fx:id="menuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem fx:id="deleteDB" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Entries">
@@ -55,9 +46,8 @@
                               <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                               <MenuItem fx:id="ctxmenuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
-                              <MenuItem mnemonicParsing="false" text="Select All" />
-                              <MenuItem mnemonicParsing="false" text="Unselect All" />
+                              <MenuItem mnemonicParsing="false" text="Copy Username" />
+                  <MenuItem mnemonicParsing="false" text="Copy Password" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
@@ -94,6 +84,15 @@
                            </graphic>
                         </Button>
                         <Button fx:id="btnGenerateMenu" mnemonicParsing="false" onAction="#generatePwd" text="Password Generator" />
+            <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="editEntry">
+               <graphic>
+                  <ImageView fx:id="imgLock" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@lock.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
                         <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="630.0" promptText="Search..." />
                         <ImageView fitHeight="24.0" fitWidth="38.0" y="30.0">
                            <image>
@@ -155,13 +154,28 @@
                   </AnchorPane>
                   <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
+            <AnchorPane fx:id="selectedRowPane" layoutX="169.0" layoutY="462.0" prefHeight="225.0" prefWidth="850.0">
+               <children>
+                  <VBox layoutX="-10.0" layoutY="48.0" prefHeight="192.0" prefWidth="1184.0">
+                     <children>
+                        <TableView fx:id="menuTableView" editable="true" prefHeight="185.0" prefWidth="1169.0">
+                            <placeholder>
+                                <Label text="" />
+                            </placeholder>
+                         </TableView>
+                     </children>
+
+                  </VBox>
+
+               </children>
+            </AnchorPane>
                         <TableView fx:id="entryTable" editable="true" layoutX="172.0" layoutY="3.0" prefHeight="458.0" prefWidth="842.0">
+
                           <columns>
-                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="129.0" text="Titel" />
-                            <TableColumn fx:id="colUsername" prefWidth="174.0" text="Username" />
-                             <TableColumn fx:id="colURL" prefWidth="145.0" text="URL" />
-                             <TableColumn fx:id="colPassword" prefWidth="161.0" text="Password" />
-                              <TableColumn fx:id="colNotes" prefWidth="230.0" text="Notes" />
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="202.0" text="Titel" />
+                            <TableColumn fx:id="colUsername" prefWidth="181.0" text="Username" />
+                             <TableColumn fx:id="colURL" prefWidth="191.0" text="URL" />
+                              <TableColumn fx:id="colNotes" prefWidth="267.0" text="Notes" />
                           </columns>
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
@@ -207,16 +221,74 @@
                               </AnchorPane>
                            </bottom>
                         </BorderPane>
-            <TreeTableView fx:id="entryTreeTableView" layoutX="801.0" layoutY="148.0" prefHeight="200.0" prefWidth="488.0" showRoot="false" visible="false">
-              <columns>
-                  <TreeTableColumn fx:id="columnGroupName" prefWidth="111.0" text="Name" />
-                <TreeTableColumn fx:id="columnTitel" minWidth="4.0" prefWidth="89.0" text="Titel" />
-                <TreeTableColumn fx:id="columnUsername" minWidth="0.0" prefWidth="88.0" text="Username" />
-                  <TreeTableColumn fx:id="columnURL" prefWidth="48.0" text="URL" />
-                  <TreeTableColumn fx:id="columnPwd" prefWidth="75.0" text="Password" />
-                  <TreeTableColumn fx:id="columnNotes" prefWidth="75.0" text="Notes" />
-              </columns>
-            </TreeTableView>
+            <Text layoutX="180.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="textUsername" layoutX="270.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Hyperlink fx:id="hyperLink" layoutX="555.0" layoutY="546.0" text="Hyperlink" underline="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Hyperlink>
+            <Text fx:id="textURL" layoutX="270.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="textPassword" layoutX="300.0" layoutY="605.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="textNotes" layoutX="270.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <ToggleButton fx:id="toggleButton" layoutX="250.0" layoutY="578.0" mnemonicParsing="false" onAction="#togglePasswordVisible" prefHeight="31.0" prefWidth="46.0" scaleX="0.8" scaleY="0.8" scaleZ="0.8">
+               <graphic>
+                  <AnchorPane>
+                     <children>
+                        <ImageView fx:id="imgPwdNotVisible" fitHeight="31.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@notvisible.jpg" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="imgPwdVisible" fitHeight="31.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" visible="false">
+                           <image>
+                              <Image url="@visible.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </graphic>
+            </ToggleButton>
+            <Text layoutX="520.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="URL">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text layoutX="180.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text layoutX="205.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notes">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="textTitel" layoutX="165.0" layoutY="499.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125">
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Text>
                      </children>
                   </AnchorPane>
 

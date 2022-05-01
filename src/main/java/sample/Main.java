@@ -20,8 +20,10 @@ public class Main extends Application   {
 
      Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
          Scene scene = new Scene (root);
+         primaryStage.setMaximized(true);
       primaryStage.setScene(scene);
           primaryStage.show();
+
     }
 
 

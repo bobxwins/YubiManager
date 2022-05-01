@@ -1,5 +1,6 @@
 package sample;
- 
+import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -8,22 +9,29 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.bouncycastle.crypto.io.SignerOutputStream;
 
+import javafx.stage.Stage;
+
+
+import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
@@ -32,7 +40,7 @@ import java.util.Optional;
 import static java.lang.Integer.parseInt;
 
 
-public class EntryController implements Serializable {
+public class EntryController implements Serializable   {
     @FXML
     private AnchorPane anchorPane;
 
@@ -45,8 +53,7 @@ public class EntryController implements Serializable {
     private TableColumn<Entry, String> colUsername;
     @FXML
     private TableColumn<Entry, String> colURL;
-    @FXML
-    private TableColumn<Entry, String> colPassword;
+
     @FXML
     private TableColumn<Entry, String> colNotes;
 
@@ -87,8 +94,23 @@ public class EntryController implements Serializable {
     private Button btnReturn;
 
     @FXML
+    private ToggleButton toggleButton;
+
+    @FXML
     private TextField generatedPWDfield;
 
+    @FXML
+    private Text textUsername;
+
+    @FXML
+    private Hyperlink hyperLink;
+    @FXML
+    private Text textPassword;
+    @FXML
+    private Text textNotes;
+
+    @FXML
+    private Text textTitel;
 
     @FXML
     private BorderPane bpEntryMenu;
@@ -114,81 +136,90 @@ public class EntryController implements Serializable {
     private Text textEntropy;
 
     @FXML
-    private MenuItem menuOpenDB;
+     private ImageView imgPwdVisible;
+
+    @FXML
+    private ImageView imgPwdNotVisible;
 
 
     Slider slider = new Slider(4, 999, 1);
 
     @FXML
-    void createEntry(ActionEvent event) throws Exception {
+    void togglePasswordVisible(ActionEvent event) {
 
-        showTableView();
-        entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
-        tfTitel.setText("");
-        tfUsername.setText("");
-        tfURL.setText("");
-        pfPwdField.setText("");
-        tANotes.setText("");
 
-        ObjectIOExample obj = new ObjectIOExample();
-        obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+
     }
 
-    @FXML
-    void generatePwd(ActionEvent event) throws Exception {
+        @FXML
+        void createEntry (ActionEvent event) throws Exception {
 
-        Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 4);
+            showTableView();
+            entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+            tfTitel.setText("");
+            tfUsername.setText("");
+            tfURL.setText("");
+            pfPwdField.setText("");
+            tANotes.setText("");
 
-        slider.setBlockIncrement(1);
-        slider.setMin(4);
-        slider.setMax(999);
-        slider.setValue(4);
-        slider.setPrefWidth(570);
-        slider.setLayoutY(110);
-        slider.setShowTickLabels(true);
+            ObjectIOExample obj = new ObjectIOExample();
+            obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+        }
 
-        pwdLengthSpinner.setPrefSize(75, 25);
-        pwdLengthSpinner.setLayoutX(580);
-        pwdLengthSpinner.setLayoutY(100);
-        pwdLengthSpinner.setEditable(true);
-        apPwdGenerate.getChildren().addAll(pwdLengthSpinner,slider);
-        apPwdGenerate.setVisible(true);
-        apPwdGenerate.setDisable(false);
-        entryPane.setDisable(true);
-        entryPane.setVisible(false);
-        btnEditOK.setDisable(true);
-        btnEditOK.setVisible(false);
+        @FXML
+        void generatePwd (ActionEvent event) throws Exception {
 
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            entryData.set(entryData.indexOf(selectedItem), selectedItem);
+            Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 4);
 
-         generatedPWDfield.setText(selectedItem.getPassword());
-      PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
-       entryTable.getSelectionModel().clearSelection();
-       }
-        else {
-            generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
+            slider.setBlockIncrement(1);
+            slider.setMin(4);
+            slider.setMax(999);
+            slider.setValue(4);
+            slider.setPrefWidth(570);
+            slider.setLayoutY(110);
+            slider.setShowTickLabels(true);
 
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+            pwdLengthSpinner.setPrefSize(75, 25);
+            pwdLengthSpinner.setLayoutX(580);
+            pwdLengthSpinner.setLayoutY(100);
+            pwdLengthSpinner.setEditable(true);
+            apPwdGenerate.getChildren().addAll(pwdLengthSpinner, slider);
+            apPwdGenerate.setVisible(true);
+            apPwdGenerate.setDisable(false);
+            entryPane.setDisable(true);
+            entryPane.setVisible(false);
+            btnEditOK.setDisable(true);
+            btnEditOK.setVisible(false);
 
-                    }
+            Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                entryData.set(entryData.indexOf(selectedItem), selectedItem);
 
-       pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+                generatedPWDfield.setText(selectedItem.getPassword());
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                entryTable.getSelectionModel().clearSelection();
+            } else {
+                generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
-           pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
-              {
-                  generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
 
-                  PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
-              });
+            }
 
-             generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+            pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
 
-           PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
-             slider.setValue(parseInt(newValue));
+                pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
+                {
+                    generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
 
-        });
+                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                });
+
+                generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                slider.setValue(parseInt(newValue));
+
+            });
 
             slider.setOnMouseDragged(e -> {
                 Double newData = slider.getValue();
@@ -197,76 +228,75 @@ public class EntryController implements Serializable {
             });
 
 
-        generatedPWDfield.setOnKeyReleased(e ->
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText()));
+            generatedPWDfield.setOnKeyReleased(e ->
+                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText()));
 
 
+            btnPwdGenerator.setOnAction(e ->
+                    // when Generator button is pressed
+            {
+                try {
+                    length = pwdLengthSpinner.getValue();
 
-    btnPwdGenerator.setOnAction(e ->
-          // when Generator button is pressed
-    {
-        try {
-            length = pwdLengthSpinner.getValue();
+                    generatedPWDfield.setText(PasswordUtils.getPassword(length));
 
-            generatedPWDfield.setText(PasswordUtils.getPassword(length));
+                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
 
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                } catch (Exception E) {
 
-        } catch (Exception E) {
-
-        }
+                }
 
             });
 
-    }
-    @FXML
-    void deleteAll(ActionEvent event) throws Exception
-    {
+        }
+        @FXML
+        void deleteAll (ActionEvent event) throws Exception
+        {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText("Warning, this will permanently delete all your passwords");
-        alert.setContentText("Are you sure you want to proceed?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-          entryData.removeAll(entryData);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Warning, this will permanently delete all your passwords");
+            alert.setContentText("Are you sure you want to proceed?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                entryData.removeAll(entryData);
 
-            File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
+                File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
 
-            DatabaseHandler databaseHandler = new DatabaseHandler();
-            databaseHandler.deleteDir(deleteFile);
+                DatabaseHandler databaseHandler = new DatabaseHandler();
+                databaseHandler.deleteDir(deleteFile);
 
-            Global.setPasswordFilePath( Global.getRFCArray()[0]);
-          //sets the passwordfilepath to the first path written in RecentFilesDir txt document
-            FileUtils.write(Global.getRecentFilesDir(),Global.getRecentFilesContent().substring(Global.getRecentFilesContent().indexOf(",")
-                    + 1).getBytes(StandardCharsets.UTF_8));
+                Global.setPasswordFilePath(Global.getRFCArray()[0]);
+                //sets the passwordfilepath to the first path written in RecentFilesDir txt document
+                FileUtils.write(Global.getRecentFilesDir(), Global.getRecentFilesContent().substring(Global.getRecentFilesContent().indexOf(",")
+                        + 1).getBytes(StandardCharsets.UTF_8));
 // removes the deleted database from the recentFilesDIR text document.
+            }
+
         }
 
-    }
+        void showTableView ()
+        {
 
-    void showTableView()
-    {
+            entryPane.setVisible(true);
+            entryPane.setDisable(false);
 
-        entryPane.setVisible(true);
-        entryPane.setDisable(false);
+            bpEntryMenu.setDisable(true);
+            bpEntryMenu.setVisible(false);
 
-        bpEntryMenu.setDisable(true);
-        bpEntryMenu.setVisible(false);
+            tfSearch.setDisable(false);
 
-        tfSearch.setDisable(false);
+            entryTable.setVisible(true);
+            entryTable.setDisable(false);
 
-        entryTable.setVisible(true);
-        entryTable.setDisable(false);
-
-        btnEditOK.setDisable(true);
-        btnEditOK.setVisible(false);
+            btnEditOK.setDisable(true);
+            btnEditOK.setVisible(false);
 
         /*apCalc .setDisable(true);
         apCalc.setVisible(false); */
-    }
+        }
 
-    void entrySpecs() throws Exception {
+        void entrySpecs () throws Exception {
             bpEntryMenu.setVisible(true);
             bpEntryMenu.setDisable(false);
             tfSearch.setDisable(true);
@@ -274,7 +304,8 @@ public class EntryController implements Serializable {
             btnCreate.setDisable(false);
             entryTable.setVisible(false);
             entryTable.setDisable(true);
-    }
+        }
+
 
 
     @FXML
@@ -335,6 +366,7 @@ public class EntryController implements Serializable {
 
            Scene scene = new Scene(fxmlLoader.load());
            Stage stage = new Stage();
+           stage.setMaximized(true);
            stage.setTitle("New Window");
            stage.setScene(scene);
            stage.show();
@@ -353,6 +385,7 @@ void openRecent (ActionEvent event) throws Exception
 
        Scene scene = new Scene(fxmlLoader.load());
        Stage stage = new Stage();
+       stage.setMaximized(true);
        stage.setTitle("New Window");
        stage.setScene(scene);
        stage.show();
@@ -360,9 +393,7 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
     void signOut(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
-        Stage entryWindow= (Stage) btnSignOut.getScene().getWindow();
-        entryWindow.setScene(new Scene(root));
+        DatabaseHandler.stageFullScreen(btnSignOut);
     }
 
     @FXML
@@ -444,10 +475,61 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
    private void initialize() throws Exception  {
 
+        String pwd="";
+        for (int i = 0; i < 12; i++) {
+            pwd='\u2022'+ pwd;
+            // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
+        }
+
+        String finalPwd = pwd;
+        entryTable.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+
+                        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+
+                        if (selectedItem != null) {
+                            textTitel.setText(selectedItem.getTitel());
+                            textNotes.setText(selectedItem.getNotes());
+                            textUsername.setText(selectedItem.getUsername());
+                            hyperLink.setText(selectedItem.getUrl());
+                            hyperLink.setOnAction(e ->
+                            {
+                                try {
+                                    Desktop.getDesktop().browse(new URI(selectedItem.getUrl()));
+                                    // opens the hyperlink in the user's main browser
+                                 }
+                                catch (Exception E) {
+
+                                }
+                            textNotes.setText(selectedItem.getNotes());
+
+                            if (!selectedItem.getPassword().isEmpty()) {
+                                textPassword.setText(finalPwd);
+                            } else {
+                                textPassword.setText(selectedItem.getPassword());
+                            }
+                        });
+
+                        toggleButton.setOnAction(e -> {
+                            if (imgPwdNotVisible.isVisible()) {
+                                imgPwdVisible.setVisible(true);
+                                imgPwdNotVisible.setVisible(false);
+                                textPassword.setText(selectedItem.getPassword());
+                            } else {
+                                imgPwdVisible.setVisible(false);
+                                imgPwdNotVisible.setVisible(true);
+                                textPassword.setText(finalPwd);
+                            }
+
+                        });
+
+
+    }
+                });
+
         DatabaseHandler databaseHandler = new DatabaseHandler();
 
         databaseHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());
-
 
          btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
                  );
@@ -459,14 +541,8 @@ void openRecent (ActionEvent event) throws Exception
             colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
             colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
             colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
-            colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
             colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
-            colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
-            colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
-            colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
-            colPassword.setCellValueFactory(new PropertyValueFactory<Entry, String>("password"));
-            colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
             entryData.addAll(ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())));
 
@@ -509,10 +585,6 @@ void openRecent (ActionEvent event) throws Exception
                     return true; // Filter matches URL.
                 } else
 
-                if (entry.getPassword().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches pwd.
-                } else
-
                 if (entry.getNotes().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches notes
                 }
@@ -525,6 +597,5 @@ void openRecent (ActionEvent event) throws Exception
         entryTable.setItems(sortedData);
 
     }
-
 
 }
