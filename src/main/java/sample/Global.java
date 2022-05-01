@@ -19,7 +19,7 @@ public final class Global {
             e.printStackTrace();
         }
     }
-    // getRFCArray() throws an exception, so it has to be caught everytime it's invoked.
+    // getRFCArray() throws an exception, so the exception has to be caught everytime the function is invoked.
 
     private static  String selectedDirectoryPath =  new File(passwordFilePath).getAbsoluteFile().getParent()+"\\";
      private static String defaultPath ;

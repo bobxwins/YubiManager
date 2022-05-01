@@ -1,20 +1,13 @@
 
 package sample;
 
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-import java.text.DecimalFormat;
 import java.util.Random;
-
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
-
 
 public   class PasswordUtils {
 
@@ -25,21 +18,21 @@ public   class PasswordUtils {
     static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ".toCharArray();
     static char[] NUMBERS = "0123456789".toCharArray();
     static char[] ALL_CHARS ;
-    final static BigInteger BRUTEFORCEGPU = new BigInteger ("6877000000"); // 6877 millions password guesses pr second
+    final static BigInteger BRUTEFORCEGPU = new BigInteger ("6877000000"); // 68,77 billions password guesses pr second
     final static BigInteger BRUTEFOCEGPUCLUSTERS = new BigInteger ("10000000000000"); // 10 trillion password guesses pr second
     static double BRUTEFORCETIMEGPU;
     static double BRUTEFORCETIMEGPUCLUSTERS;
 
 
-    static Random rand = new SecureRandom();
+    static SecureRandom rand = new SecureRandom();
 
     public static String getPassword(int length) {
 // generates a random password
 
-        if (length <4)
+     /*   if (length <4)
         {
             length=4;
-        }
+        } */
 
         StringBuilder sb = new StringBuilder();
         sb.append(SYMBOLS);
@@ -56,17 +49,24 @@ public   class PasswordUtils {
         password[2] = NUMBERS[rand.nextInt(NUMBERS.length)];
         password[3] = SYMBOLS[rand.nextInt(SYMBOLS.length)];
 
-        //populate rest of the password with random chars,until password array's length is equal to the speified length
+        //populate rest of the password with random chars,until password array's length is equal to the specified length
         for (int i = 4; i < length; i++) {
             password[i] = ALL_CHARS[rand.nextInt(ALL_CHARS.length)];
+
+            // returns a random char from the ALL_CHARS char array
         }
 
         //shuffle it up
         for (int i = 0; i < password.length; i++) {
             int randomPosition = rand.nextInt(password.length);
+            // integer with a random value within the range of the password.
             char temp = password[i];
+            // The value of the temporary char is assigned to be of the current position of the password array
             password[i] = password[randomPosition];
+            // replaces the value of a char from the current password array, with another random char
+
             password[randomPosition] = temp;
+            // The generated temp char is put in a random position of the password array.
 
         }
 
@@ -123,8 +123,11 @@ public   class PasswordUtils {
     {
         double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
 
+        // Statement above is equal to: E= log2(Cardinality^PasswordLength)
+
         String quality ="";
         String doubleFormat ="%.3f";
+        // puts 3 decimals of the calculated entropy
         textPwdQuality.setStyle("-fx-font-size: 21px;");
         textPwdQuality.setUnderline(false);
         if(entropy <28)
@@ -133,18 +136,18 @@ public   class PasswordUtils {
             textPwdQuality.setFill(Color.RED);
 
         }
-        if(entropy > 28 && entropy < 35 )
+        if(entropy >= 28  )
         {
             quality= "Weak";
 
             textPwdQuality.setFill(Color.INDIANRED);
         }
-        if(entropy > 35 && entropy < 59 )
+        if(entropy >= 35  )
         {
             quality= "Fair";
             textPwdQuality.setFill(Color.DARKGOLDENROD);
         }
-        if(entropy > 59 && entropy < 127 )
+        if(entropy >= 59  )
         {
             quality= "Strong";
             textPwdQuality.setFill(Color.GREEN);
@@ -168,6 +171,7 @@ public   class PasswordUtils {
             textPwdQuality.setStyle("-fx-font-size: 30px;");
             quality= "Overkill!!";
              doubleFormat ="%.3g";
+             // uses scientific notations
         }
 
         textPwdQuality.setText(quality);

@@ -46,8 +46,8 @@
                               <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                               <MenuItem fx:id="ctxmenuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" text="Copy Username" />
-                  <MenuItem mnemonicParsing="false" text="Copy Password" />
+                              <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
+                  <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
@@ -118,7 +118,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="btnCopy1" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
+                              <Button fx:id="btnCopy" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyGeneratedPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
                                  <graphic>
                                     <ImageView fx:id="copyIMG1" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                                        <image>

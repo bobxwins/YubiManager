@@ -318,12 +318,45 @@ public class EntryController implements Serializable   {
     }
 
     @FXML
-    void copyPWD(ActionEvent event) throws Exception
+    void copyGeneratedPWD(ActionEvent event) throws Exception
     {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
         content.putString(generatedPWDfield.getText());
         clipboard.setContent(content);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Password succesfully copied!");
+        alert.showAndWait();
+    }
+
+    @FXML
+    void copyUsername(ActionEvent event) throws Exception
+    {
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            content.putString(selectedItem.getUsername());
+            clipboard.setContent(content);
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Username succesfully copied!");
+        alert.showAndWait();
+    }
+
+    @FXML
+    void copyPwd(ActionEvent event) throws Exception
+    { final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            content.putString(selectedItem.getPassword());
+            clipboard.setContent(content);
+        }
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
@@ -495,7 +528,7 @@ void openRecent (ActionEvent event) throws Exception
                             hyperLink.setOnAction(e ->
                             {
                                 try {
-                                    Desktop.getDesktop().browse(new URI(selectedItem.getUrl()));
+                                    Desktop.getDesktop().browse(new URI("www."+selectedItem.getUrl()));
                                     // opens the hyperlink in the user's main browser
                                  }
                                 catch (Exception E) {

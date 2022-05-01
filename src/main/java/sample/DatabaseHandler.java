@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
 
 
 public class DatabaseHandler {
-
+    private Timeline timer;
     PasswordField masterPasswordField  = new PasswordField();
     PasswordField confirmPasswordField = new PasswordField();
     PasswordField yubikeyPasswordField = new PasswordField();
@@ -107,7 +108,6 @@ public class DatabaseHandler {
         fileNameField.setPromptText("File name...");
 
         Label fileLabel = new Label("Enter new File name:");
-
 
         grid.addRow(0, fileLabel,fileNameField);
        // grid.addRow()
