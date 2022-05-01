@@ -475,13 +475,13 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
    private void initialize() throws Exception  {
 
-        String pwd="";
+        String hidePwd="";
         for (int i = 0; i < 12; i++) {
-            pwd='\u2022'+ pwd;
+            hidePwd='\u2022'+ hidePwd;
             // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
         }
 
-        String finalPwd = pwd;
+        String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
 
@@ -503,29 +503,29 @@ void openRecent (ActionEvent event) throws Exception
                                 }
                             textNotes.setText(selectedItem.getNotes());
 
-                            if (!selectedItem.getPassword().isEmpty()) {
-                                textPassword.setText(finalPwd);
+                             if (!selectedItem.getPassword().isEmpty()) {
+                                textPassword.setText(finalHidePwd);
                             } else {
                                 textPassword.setText(selectedItem.getPassword());
                             }
                         });
 
-                     //   boolean isSelected = toggleButton.isSelected();
+                      //boolean isSelected = toggleButton.isSelected();
                            // toggleButton.setSelected(false);
                         toggleButton.setOnAction(e -> {
                             if (!imgPwdVisible.isVisible() ) {
                                 imgPwdVisible.setVisible(true);
                                 imgPwdNotVisible.setVisible(false);
-                                textPassword.setText(selectedItem.getPassword());
+                                 textPassword.setText(selectedItem.getPassword());
                         return;     }
 
-                                imgPwdVisible.setVisible(false);
-                                imgPwdNotVisible.setVisible(true);
-                                textPassword.setText(finalPwd);
-
-
+                         imgPwdVisible.setVisible(false);
+                         imgPwdNotVisible.setVisible(true);
+                         textPassword.setText(finalHidePwd);
                         });
-
+                            imgPwdVisible.setVisible(false);
+                            imgPwdNotVisible.setVisible(true);
+                            textPassword.setText(finalHidePwd);
 
     }
                 });
