@@ -510,16 +510,19 @@ void openRecent (ActionEvent event) throws Exception
                             }
                         });
 
+                     //   boolean isSelected = toggleButton.isSelected();
+                           // toggleButton.setSelected(false);
                         toggleButton.setOnAction(e -> {
-                            if (imgPwdNotVisible.isVisible()) {
+                            if (!imgPwdVisible.isVisible() ) {
                                 imgPwdVisible.setVisible(true);
                                 imgPwdNotVisible.setVisible(false);
                                 textPassword.setText(selectedItem.getPassword());
-                            } else {
+                        return;     }
+
                                 imgPwdVisible.setVisible(false);
                                 imgPwdNotVisible.setVisible(true);
                                 textPassword.setText(finalPwd);
-                            }
+
 
                         });
 
