@@ -7,16 +7,14 @@ import javafx.scene.text.Text;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-import java.util.Random;
-import java.util.regex.Pattern;
-
 public   class PasswordUtils {
 
 
     static char[] SYMBOLS = "+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
 
     static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyzæøå".toCharArray();
-    static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ".toCharArray();
+    private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ".toCharArray();
+    private static char[] UPPERCASE2 = "".toCharArray();
     static char[] NUMBERS = "0123456789".toCharArray();
     static char[] ALL_CHARS ;
     final static BigInteger BRUTEFORCEGPU = new BigInteger ("6877000000"); // 68,77 billions password guesses pr second
@@ -30,10 +28,7 @@ public   class PasswordUtils {
     public static String getPassword(int length) {
 // generates a random password
 
-     /*   if (length <4)
-        {
-            length=4;
-        } */
+
 
         StringBuilder sb = new StringBuilder();
         sb.append(SYMBOLS);
@@ -45,6 +40,7 @@ public   class PasswordUtils {
         char[] password = new char[length];
 
         //get the requirements out of the way
+
         password[0] = LOWERCASE[rand.nextInt(LOWERCASE.length)];
         password[1] = UPPERCASE[rand.nextInt(UPPERCASE.length)];
         password[2] = NUMBERS[rand.nextInt(NUMBERS.length)];
@@ -74,7 +70,7 @@ public   class PasswordUtils {
 
         return new String(password);
     }
-    public static int cardinality( String password)
+    private static int cardinality( String password)
     {
         int cardinality =0;
 
@@ -85,20 +81,18 @@ public   class PasswordUtils {
         {
 
             cardinality=cardinality+LOWERCASE.length;
-
+         
 
         }
         boolean atleastOneUpper = password.matches(".*[ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ]+.*");
 
-
         if (atleastOneUpper)
         {
-            cardinality=cardinality+UPPERCASE.length;
+
+            cardinality=cardinality +UPPERCASE.length; //+//UPPERCASE.length;
 
         }
-     /*   if (password.indexOf(SYMBOLS) != -1) {
-        }
-        */
+
 
         boolean atleastOneNumber = password.matches(".*[0-9]+.*");
 
@@ -106,16 +100,16 @@ public   class PasswordUtils {
 
         {
             cardinality=cardinality+NUMBERS.length;
-
+            System.out.println("the NUMBERS is noww" + cardinality);
         }
-  
-        boolean atleastOneSymbol = password.matches(".*[+¤§$^$*.[]{}()?-\\\\\"!@#%&/\\,><':;|_~`]]+.*");
+        boolean atleastOneSymbol = password.matches(".*[^A-Åa-å0-9]+.*");
+       // boolean atleastOneSymbol = password.matches(".*[+¤§$^$*.-\\[-\\]{}()?-\\\\\"!@#%&/\\,><':;|_~`]]+.*");
         if (atleastOneSymbol)
 
         {
 
             cardinality=cardinality+SYMBOLS.length;
-
+            System.out.println("the SYMBOL CARDIN IS" + cardinality);
         }
 
 
@@ -125,7 +119,7 @@ public   class PasswordUtils {
     public static void calcCrackingTime(Text textPwdQuality, Text textCalcGPU,Text textCalcEntropy, Text textCalcGPUClusters,String password)
     {
         double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
-
+        System.out.println("the cardinality is:"+ cardinality(  password));
         // Statement above is equal to: E= log2(Cardinality^PasswordLength)
 
         String quality ="";

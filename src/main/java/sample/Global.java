@@ -46,7 +46,7 @@ public final class Global {
     public static void setSelectedDirectoryPath(String selectedDirectoryPath) {
         Global.selectedDirectoryPath = selectedDirectoryPath;
     }
-
+// save as
     public static String getRecentFilesContent() {
         return recentFilesContent;
     }
@@ -80,19 +80,7 @@ public final class Global {
         return labelEnterPwd;
     }
 
-   /* public static Label getLabelRecentFiles() throws Exception{
-        labelRecentFile.setLayoutX(151);
-        labelRecentFile.setLayoutY(39);
-        labelRecentFile.setFont(new Font(27));
-        labelRecentFile.setTextFill(Color.TURQUOISE);
-        labelRecentFile.setStyle("-fx-font-weight: bold;");
-        return labelRecentFile;
-    }
 
-    public static void setLabelRecentFiles(String passwordFilePath) throws Exception{
-        labelRecentFile.setText(passwordFilePath );
-    }
-*/
     public static char[] getCombinedPasswords() throws Exception{
         return combinedPasswords;
     }
