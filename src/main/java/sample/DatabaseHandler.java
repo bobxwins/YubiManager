@@ -288,12 +288,13 @@ static void stageFullScreen(Button btnSignOut) throws Exception
 {
     Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
     Stage stage= (Stage) btnSignOut.getScene().getWindow();
-    Screen screen = Screen.getPrimary();
+  /*  Screen screen = Screen.getPrimary();
     Rectangle2D bounds = screen.getVisualBounds();
     stage.setX(bounds.getMinX());
     stage.setY(bounds.getMinY());
     stage.setWidth(bounds.getWidth());
     stage.setHeight(bounds.getHeight());
+    */
     stage.setScene(new Scene(root));
 
 }
