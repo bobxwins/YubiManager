@@ -399,7 +399,7 @@ public class EntryController implements Serializable   {
 
            Scene scene = new Scene(fxmlLoader.load());
            Stage stage = new Stage();
-           stage.setMaximized(true);
+      //     stage.setMaximized(true);
            stage.setTitle("New Window");
            stage.setScene(scene);
            stage.show();
@@ -418,7 +418,7 @@ void openRecent (ActionEvent event) throws Exception
 
        Scene scene = new Scene(fxmlLoader.load());
        Stage stage = new Stage();
-       stage.setMaximized(true);
+     //  stage.setMaximized(true);
        stage.setTitle("New Window");
        stage.setScene(scene);
        stage.show();

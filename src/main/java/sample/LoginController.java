@@ -91,10 +91,10 @@ public class LoginController {
                  String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
                  if (selectedItem != null) {
                                 Global.getLabelEnterPwd().setVisible(true);
-                                System.out.println(selectedItem);
+
                                Global.setPasswordFilePath(selectedItem);
                                Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
-                     System.out.println("the seelcted path is " +  Global.getSelectedDirectoryPath());
+
                             }
                //   Global.getLabelEnterPwd().setVisible(false);
                   }

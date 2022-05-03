@@ -81,7 +81,7 @@ public   class PasswordUtils {
         {
 
             cardinality=cardinality+LOWERCASE.length;
-         
+
 
         }
         boolean atleastOneUpper = password.matches(".*[ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ]+.*");
@@ -100,7 +100,7 @@ public   class PasswordUtils {
 
         {
             cardinality=cardinality+NUMBERS.length;
-            System.out.println("the NUMBERS is noww" + cardinality);
+
         }
         boolean atleastOneSymbol = password.matches(".*[^A-Åa-å0-9]+.*");
        // boolean atleastOneSymbol = password.matches(".*[+¤§$^$*.-\\[-\\]{}()?-\\\\\"!@#%&/\\,><':;|_~`]]+.*");
@@ -109,7 +109,7 @@ public   class PasswordUtils {
         {
 
             cardinality=cardinality+SYMBOLS.length;
-            System.out.println("the SYMBOL CARDIN IS" + cardinality);
+
         }
 
 
@@ -119,7 +119,7 @@ public   class PasswordUtils {
     public static void calcCrackingTime(Text textPwdQuality, Text textCalcGPU,Text textCalcEntropy, Text textCalcGPUClusters,String password)
     {
         double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
-        System.out.println("the cardinality is:"+ cardinality(  password));
+
         // Statement above is equal to: E= log2(Cardinality^PasswordLength)
 
         String quality ="";
@@ -161,7 +161,7 @@ public   class PasswordUtils {
 
         BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ BRUTEFORCEGPU.doubleValue()/2;
 
-        if (entropy>194)
+        if (entropy>128)
         {
             textPwdQuality.setFill(Color.GREEN);
             textPwdQuality.setUnderline(true);
@@ -174,7 +174,7 @@ public   class PasswordUtils {
         textPwdQuality.setText(quality);
 
         textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\n\nYour password quality is: ");
-        textCalcGPU.setText( "Estimated time for brute forcing the passwords with 1 GPU is: "
+        textCalcGPU.setText( "Bruteforcing the passwords with 1 GPU takes: "
                 +"\n"+String.format(doubleFormat, BRUTEFORCETIMEGPU)+" seconds"
                 +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIMEGPU/3600)+" hours"+
                 "\nIn days: "+String.format(doubleFormat,BRUTEFORCETIMEGPU/3600/24)+" days"+
@@ -182,7 +182,7 @@ public   class PasswordUtils {
 
         BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
 
-        textCalcGPUClusters.setText("Estimated time for brute forcing the passwords with GPU Clusters is: "
+        textCalcGPUClusters.setText("Bruteforcing the passwords with GPU clusters takes: "
                 +"\n"+String.format(doubleFormat ,BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
                 +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
                 "\nIn days: "+String.format(doubleFormat ,BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+

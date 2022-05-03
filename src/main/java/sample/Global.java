@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.File;
-import java.io.FileOutputStream;
+
 
 public final class Global {
 

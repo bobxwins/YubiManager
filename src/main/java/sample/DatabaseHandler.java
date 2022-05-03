@@ -177,7 +177,7 @@ public class DatabaseHandler {
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
-        entryWindow.setMaximized(true);
+       //  entryWindow.setMaximized(true);
         entryWindow.setScene(new Scene(root));
 
         return true;

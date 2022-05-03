@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1370.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
+<AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1206.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
 
 
                <children>
@@ -22,7 +22,7 @@
                      </graphic>
                   </Button>
                   <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
-                  <MenuBar prefHeight="39.0" prefWidth="1557.0">
+                  <MenuBar prefHeight="39.0" prefWidth="1207.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                            <items>
@@ -31,7 +31,6 @@
                               <Menu fx:id="menuRecent" mnemonicParsing="false" onAction="#openRecent" text="Open Recent" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
-                              <MenuItem fx:id="menuSaveAs" mnemonicParsing="false" text="Save As…" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
                               <SeparatorMenuItem mnemonicParsing="false" />
@@ -57,7 +56,7 @@
                         </Menu>
                      </menus>
                   </MenuBar>
-                  <ToolBar layoutY="30.0" prefHeight="63.0" prefWidth="1557.0">
+                  <ToolBar layoutY="30.0" prefHeight="63.0" prefWidth="1207.0">
                      <items>
             <Button fx:id="btnEnterMenu" mnemonicParsing="false" onAction="#entryMenu" prefHeight="44.0" prefWidth="40.0" text="+">
                <font>
@@ -135,12 +134,12 @@
                               <Font name="Arial Bold" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="505.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="335.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-300.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-330.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
@@ -152,13 +151,13 @@
                         </Text>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="entryPane" layoutX="170.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
+                  <AnchorPane fx:id="entryPane" layoutX="-135.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
-            <AnchorPane fx:id="selectedRowPane" layoutX="169.0" layoutY="462.0" prefHeight="225.0" prefWidth="850.0">
+            <AnchorPane fx:id="selectedRowPane" layoutX="169.0" layoutY="435.0" prefHeight="225.0" prefWidth="850.0">
                <children>
-                  <VBox layoutX="-10.0" layoutY="48.0" prefHeight="192.0" prefWidth="1184.0">
+                  <VBox layoutX="-33.0" layoutY="48.0" prefHeight="192.0" prefWidth="1207.0">
                      <children>
-                        <TableView fx:id="menuTableView" editable="true" prefHeight="185.0" prefWidth="1169.0">
+                        <TableView fx:id="menuTableView" editable="true" prefHeight="185.0" prefWidth="1203.0">
                             <placeholder>
                                 <Label text="" />
                             </placeholder>
@@ -169,13 +168,13 @@
 
                </children>
             </AnchorPane>
-                        <TableView fx:id="entryTable" editable="true" layoutX="157.0" layoutY="3.0" prefHeight="458.0" prefWidth="1184.0">
+                        <TableView fx:id="entryTable" editable="true" layoutX="135.0" layoutY="3.0" prefHeight="137.0" prefWidth="1207.0">
 
                           <columns>
                             <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
                             <TableColumn fx:id="colUsername" prefWidth="278.0" text="Username" />
                              <TableColumn fx:id="colURL" prefWidth="266.0" text="URL" />
-                              <TableColumn fx:id="colNotes" prefWidth="333.0" text="Notes" />
+                              <TableColumn fx:id="colNotes" prefWidth="356.0" text="Notes" />
                           </columns>
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
@@ -188,7 +187,7 @@
                               </ContextMenu>
                            </contextMenu>
                         </TableView>
-                        <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="140.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
+                        <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="500.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
                            <left>
                               <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
                                  <children>
@@ -284,7 +283,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Text>
-            <Text fx:id="textTitel" layoutX="165.0" layoutY="499.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125">
+            <Text fx:id="textTitel" layoutX="165.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125">
                <font>
                   <Font size="28.0" />
                </font>
