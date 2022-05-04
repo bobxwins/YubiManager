@@ -161,6 +161,18 @@
                             <placeholder>
                                 <Label text="" />
                             </placeholder>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
+                                    <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
+                                    <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
                          </TableView>
                      </children>
 
@@ -183,11 +195,13 @@
                                     <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
                                     <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                                     <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
+                        <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
+                        <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
                         </TableView>
-                        <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="500.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
+                        <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="400.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
                            <left>
                               <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
                                  <children>

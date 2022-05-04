@@ -43,10 +43,7 @@
                               <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
                               <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
                               <Menu fx:id="menuRecent" mnemonicParsing="false" text="Open Recent" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem mnemonicParsing="false" text="Revert" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
                            </items>
                         </Menu>

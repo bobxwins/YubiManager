@@ -515,12 +515,10 @@ void openRecent (ActionEvent event) throws Exception
         }
 
 
+
         String finalHidePwd = hidePwd;
-        entryTable.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-
-                        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-
+        entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
                         if (selectedItem != null) {
                             textTitel.setText(selectedItem.getTitel());
                             textNotes.setText(selectedItem.getNotes());
