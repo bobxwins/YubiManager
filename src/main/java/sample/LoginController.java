@@ -80,7 +80,6 @@ public class LoginController {
         String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Global.getRecentFilesData().remove(selectedItem);
-           // SerializedObject //obj = new SerializedObject();
             SerializedObject.writeRecentFiles(Global.getRecentFilesData(), Paths.get(Global.getPasswordFilePath()));
         }
 

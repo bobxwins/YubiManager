@@ -111,7 +111,7 @@
          <contextMenu>
             <ContextMenu>
               <items>
-                <MenuItem fx:id="deleteRow" mnemonicParsing="false" text="Delete" />
+                <MenuItem mnemonicParsing="false" onAction="#deleteRow" text="Delete" />
               </items>
             </ContextMenu>
          </contextMenu>
