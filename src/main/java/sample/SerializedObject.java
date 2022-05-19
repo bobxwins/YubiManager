@@ -2,7 +2,6 @@ package sample;
 
     import javafx.collections.FXCollections;
     import javafx.collections.ObservableList;
-    import org.bouncycastle.util.encoders.Hex;
 
     import java.io.*;
     import java.nio.file.Files;
@@ -21,8 +20,8 @@ public class SerializedObject {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(new ArrayList<>(entry));
             oos.close();
-            EncryptFile encryptFile = new EncryptFile();
-            encryptFile.encryption();
+            FileProtector fileProtector = new FileProtector();
+            fileProtector.encryption();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

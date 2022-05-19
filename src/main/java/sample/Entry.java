@@ -12,9 +12,7 @@ public class Entry implements Serializable {
         this.username=usernameString;
         this.url=urlString;
           this.password=passwordString;
-
         this.notes=noteString;
-
     }
     String titel, username, url,password,notes;
 

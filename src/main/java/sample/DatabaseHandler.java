@@ -42,7 +42,7 @@ public class DatabaseHandler {
         String[] rFCArray = updateRecentFilesContent.split(",");
         boolean contains = Stream.of(rFCArray).anyMatch(x -> x.equals(Global.getPasswordFilePath()));
         if (  contains == true) {
-         // makes sure not add the same filepath twice in RecentFiles.txt
+         // makes sure not add the same filepath twice in EncryptionSpecs.txt
             return;
         }
 
@@ -191,10 +191,9 @@ public class DatabaseHandler {
     public  void createMenuItems(Menu menuRecent,Label label) throws Exception {
 
 
-        for (int i = 0; i < "Global.getRFCArray()".length(); i++) {
+        for (int i = 0; i < Global.getRecentFilesData().size(); i++) {
 
             MenuItem menuItems = new MenuItem();
-
 
                 menuRecent.getItems().addAll(menuItems);
 

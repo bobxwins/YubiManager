@@ -54,7 +54,7 @@ public final class Global {
     }
 
     public static String getRecentFilesDir() throws Exception{
-        recentFilesDir = getDefaultDir() +"/RecentFiles.txt";
+        recentFilesDir = getDefaultDir() +"/EncryptionSpecs.txt";
         return recentFilesDir;
     }
 
@@ -62,13 +62,6 @@ public final class Global {
         defaultPath  = System.getProperty("user.dir") + "/resources/sample/passwords";
         return defaultPath;
     }
-
-  /*  public static String [] getRFCArray() throws Exception{
-        recentFilesData = new String(FileUtils.readAllBytes(getRecentFilesDir())) ;
-        rFCArray = recentFilesData.split(",");
-        return rFCArray;
-    }
-    */
 
     public static Label getLabelEnterPwd() throws Exception{
         labelEnterPwd.setVisible(false);

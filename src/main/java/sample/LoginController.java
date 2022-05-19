@@ -9,8 +9,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 public class LoginController {
@@ -80,7 +82,8 @@ public class LoginController {
         String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Global.getRecentFilesData().remove(selectedItem);
-            SerializedObject.writeRecentFiles(Global.getRecentFilesData(), Paths.get(Global.getPasswordFilePath()));
+            SerializedObject.writeRecentFiles(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+           //updates the recentFile text file, after deleting the selected table item
         }
 
     }
@@ -89,7 +92,6 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
-
 
        Global.getRecentFilesData().addAll(SerializedObject.readRecentFiles());
        recentFilesTable.setItems(Global.getRecentFilesData());

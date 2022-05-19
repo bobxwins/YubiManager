@@ -6,7 +6,6 @@ import javax.crypto.*;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.security.PrivateKey;
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKey;
@@ -15,11 +14,10 @@ import java.security.Security;
 
 import java.util.Base64;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 
-public class EncryptFile {
+public class FileProtector {
 
 
      static {
@@ -44,13 +42,10 @@ public class EncryptFile {
 
     private static int keylength = 256;
 
-
-
     public void encryption() {
 
         try {
 
-            // if entryData == null create empty object, decrypt it
 
             SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", "BC");
 
@@ -88,11 +83,10 @@ public class EncryptFile {
             FileUtils.write(KeyLengthdir, EncodedKeyLength);
 
             FileUtils.write(IVdir, EncodedIV);
-
+  // serialize Saltdir,IterationCountdir,KeyLengthdir + ivDir til en enkelt fil
 
 
         } catch (Exception e) {
-
 
         }
 
