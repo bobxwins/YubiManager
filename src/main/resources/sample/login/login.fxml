@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import java.lang.*?>
@@ -69,49 +70,52 @@
                         <Font name="Bell MT" size="27.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labelEnterPwd1" layoutX="449.0" layoutY="260.0" text="Please enter passwords!" textFill="#dd3e3e" visible="false">
-                     <font>
-                        <Font name="System Bold" size="33.0" />
-                     </font>
-                  </Label>
                   <Label layoutX="77.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Newest file added:" textFill="#153136" visible="false">
                      <font>
                         <Font name="Bell MT" size="27.0" />
                      </font>
                   </Label>
-      <Label layoutX="380.0" layoutY="175.0" text="Yubikey Password Manager">
+      <Label layoutX="320.0" layoutY="108.0" text="Yubipass" textFill="#652626">
          <font>
-            <Font size="46.0" />
+            <Font name="Calibri Bold Italic" size="59.0" />
          </font>
       </Label>
-      <Label layoutX="310.0" layoutY="250.0" text="Sign in or create a new database to securely store your passwords">
+      <Label layoutX="110.0" layoutY="250.0" text="Sign in or create a new database now to securely store your passwords!">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="btnYubikey" layoutX="507.0" layoutY="66.0" mnemonicParsing="false" prefHeight="139.0" prefWidth="264.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7">
+      <Button fx:id="btnYubikey" layoutX="510.0" layoutY="89.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fx:id="imgViewLogo" fitHeight="121.0" fitWidth="258.0">
+            <ImageView fx:id="imgViewLogo" fitHeight="97.0" fitWidth="228.0">
                <image>
                   <Image url="@yubikey-5-nfc.jpg" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <ImageView fx:id="imgOpen" fitHeight="68.0" fitWidth="104.0" layoutX="960.0" layoutY="175.0">
+      <ImageView fx:id="imgLocked" fitHeight="68.0" fitWidth="104.0" layoutX="960.0" layoutY="225.0">
          <image>
             <Image url="@locked.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="imgLocked" fitHeight="68.0" fitWidth="104.0" layoutX="948.0" layoutY="175.0" visible="false">
+      <ImageView fx:id="imgUnLocked" fitHeight="68.0" fitWidth="104.0" layoutX="947.0" layoutY="225.0" visible="false">
          <image>
             <Image url="@open.png" />
          </image>
       </ImageView>
-      <TableView fx:id="recentFilesTable" layoutX="349.0" layoutY="587.0" prefHeight="109.0" prefWidth="665.0">
+      <TableView fx:id="recentFilesTable" layoutX="300.0" layoutY="587.0" prefHeight="128.0" prefWidth="665.0">
         <columns>
           <TableColumn fx:id="recent" minWidth="0.0" prefWidth="664.0" text="Recent Databases" />
         </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem fx:id="deleteRow" mnemonicParsing="false" text="Delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
       </TableView>
+      <Button fx:id="btnYubikey11" layoutX="98.0" layoutY="100.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" rotate="180.0" style="-fx-background-color: transparent;" />
                </children>
             </AnchorPane>

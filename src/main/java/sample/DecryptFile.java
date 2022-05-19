@@ -20,7 +20,7 @@ public class DecryptFile {
     public byte[] Decryption() {
 
         try {
-            String folderDir = Global.getSelectedDirectoryPath();
+            String folderDir =  Global.getSelectedDirectoryPath();
 
 
             byte[] storedkeylength = FileUtils.readAllBytes(folderDir+"KeyLength.txt");
@@ -45,7 +45,7 @@ public class DecryptFile {
             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
             byte[] output = cipher.doFinal(input);
 
-            String decodedOutput = new String(output);
+          //  String decodedOutput = new String(output);
 
             return output;
      //   return decodedOutput;
@@ -55,7 +55,7 @@ public class DecryptFile {
         return "".getBytes(StandardCharsets.UTF_8);
     }
 
-    public  byte[] getIV (String folderDir) {
+    private   byte[] getIV (String folderDir) {
 
         byte[] genIVByte = FileUtils.readAllBytes(folderDir+"GenIV.txt");
 
@@ -66,7 +66,7 @@ public class DecryptFile {
         return decodedIV ;
     }
 
-    public byte[] getSalt (String folderDir) {
+    private byte[] getSalt (String folderDir) {
 
         byte[] genSaltbytes = FileUtils.readAllBytes(folderDir+"Salt.txt");
 

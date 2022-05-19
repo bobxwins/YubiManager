@@ -12,16 +12,11 @@
 
 
                <children>
-                  <Button fx:id="btnOpenEntry" contentDisplay="GRAPHIC_ONLY" disable="true" layoutX="33.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="74.0" style="-fx-background-color: transparent;" text="OpenEntry" visible="false">
-                     <graphic>
-                        <ImageView fx:id="imgFolder" fitHeight="49.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@folder.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Label fx:id="labelEntry" layoutX="105.0" layoutY="282.0" text="EntryName" visible="false" />
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button mnemonicParsing="false" text="Button" />
+        </items>
+      </ToolBar>
                   <MenuBar prefHeight="39.0" prefWidth="1207.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
@@ -56,7 +51,7 @@
                         </Menu>
                      </menus>
                   </MenuBar>
-                  <ToolBar layoutY="30.0" prefHeight="63.0" prefWidth="1207.0">
+                  <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1208.0">
                      <items>
             <Button fx:id="btnEnterMenu" mnemonicParsing="false" onAction="#entryMenu" prefHeight="44.0" prefWidth="40.0" text="+">
                <font>
@@ -83,7 +78,7 @@
                            </graphic>
                         </Button>
                         <Button fx:id="btnGenerateMenu" mnemonicParsing="false" onAction="#generatePwd" text="Password Generator" />
-            <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="editEntry">
+            <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="editEntry">
                <graphic>
                   <ImageView fx:id="imgLock" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -92,12 +87,7 @@
                   </ImageView>
                </graphic>
             </Button>
-                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="630.0" promptText="Search..." />
-                        <ImageView fitHeight="24.0" fitWidth="38.0" y="30.0">
-                           <image>
-                              <Image url="@magnifying-glass.png" />
-                           </image>
-                        </ImageView>
+                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="729.0" promptText="Search..." style="-fx-background-image: url(PMAuth/magnifying-glass.png);" />
                      </items>
                      <opaqueInsets>
                         <Insets />
@@ -134,12 +124,7 @@
                               <Font name="Arial Bold" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textGeneGPUClusters" fontSmoothingType="LCD" layoutX="335.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
-                           <font>
-                              <Font name="Arial" size="21.0" />
-                           </font>
-                        </Text>
-                        <Text fx:id="textGeneGPU" fontSmoothingType="LCD" layoutX="-330.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textBruteForceTime" fontSmoothingType="LCD" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
@@ -153,34 +138,8 @@
                   </AnchorPane>
                   <AnchorPane fx:id="entryPane" layoutX="-135.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
-            <AnchorPane fx:id="selectedRowPane" layoutX="169.0" layoutY="435.0" prefHeight="225.0" prefWidth="850.0">
-               <children>
-                  <VBox layoutX="-33.0" layoutY="48.0" prefHeight="192.0" prefWidth="1207.0">
-                     <children>
-                        <TableView fx:id="menuTableView" editable="true" prefHeight="185.0" prefWidth="1203.0">
-                            <placeholder>
-                                <Label text="" />
-                            </placeholder>
-                           <contextMenu>
-                              <ContextMenu>
-                                <items>
-                                    <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
-                                    <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
-                                    <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
-                                </items>
-                              </ContextMenu>
-                           </contextMenu>
-                         </TableView>
-                     </children>
-
-                  </VBox>
-
-               </children>
-            </AnchorPane>
-                        <TableView fx:id="entryTable" editable="true" layoutX="135.0" layoutY="3.0" prefHeight="137.0" prefWidth="1207.0">
+            <AnchorPane fx:id="selectedRowPane" disable="true" layoutX="169.0" layoutY="500.0" prefHeight="219.0" prefWidth="1162.0" />
+                        <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="137.0" prefWidth="1189.0">
 
                           <columns>
                             <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
@@ -234,77 +193,103 @@
                               </AnchorPane>
                            </bottom>
                         </BorderPane>
-            <Text layoutX="180.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Text>
-            <Text fx:id="textUsername" layoutX="270.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Hyperlink fx:id="hyperLink" layoutX="555.0" layoutY="546.0" text="Hyperlink" underline="true">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Hyperlink>
-            <Text fx:id="textURL" layoutX="270.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Text fx:id="textPassword" layoutX="300.0" layoutY="605.0" strokeType="OUTSIDE" strokeWidth="0.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Text fx:id="textNotes" layoutX="270.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <ToggleButton fx:id="toggleButton" layoutX="250.0" layoutY="578.0" mnemonicParsing="false" onAction="#togglePasswordVisible" prefHeight="31.0" prefWidth="46.0" scaleX="0.8" scaleY="0.8" scaleZ="0.8">
-               <graphic>
-                  <AnchorPane>
+            <AnchorPane layoutX="134.0" layoutY="550.0" prefHeight="117.0" prefWidth="1195.0">
+               <children>
+                  <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="1189.0">
                      <children>
-                        <ImageView fx:id="imgPwdNotVisible" fitHeight="31.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@notvisible.jpg" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="imgPwdVisible" fitHeight="31.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" visible="false">
-                           <image>
-                              <Image url="@visible.png" />
-                           </image>
-                        </ImageView>
+                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="1184.0">
+                            <placeholder>
+                                <Label text="" />
+                            </placeholder>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
+                                    <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
+                                    <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                         </TableView>
+                     </children>
+      
+                        </VBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" x="50.0" y="35.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textUsername" strokeType="OUTSIDE" strokeWidth="0.0" x="130.0" y="35.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="URL" x="400.0" y="35.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Hyperlink fx:id="hyperLink" layoutX="430.0" layoutY="11.0" text="Hyperlink" underline="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Hyperlink>
+                  <Text fx:id="textURL" strokeType="OUTSIDE" strokeWidth="0.0" x="440.0" y="35.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" x="50.0" y="75.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPassword" strokeType="OUTSIDE" strokeWidth="0.0" x="180.0" y="75.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Notes" x="50.0" y="115.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textNotes" strokeType="OUTSIDE" strokeWidth="0.0" x="105.0" y="115.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textTitel" layoutX="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125" x="10.0" y="-17.0">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Text>
+                  <ToggleButton fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" onAction="#togglePasswordVisible" prefHeight="31.0" prefWidth="46.0">
+                     <graphic>
+                        <AnchorPane>
+                           <children>
+                              <ImageView fx:id="imgPwdNotVisible" fitHeight="31.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@notvisible.jpg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="imgPwdVisible" fitHeight="31.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" visible="false">
+                                 <image>
+                                    <Image url="@visible.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                     </graphic>
+                  </ToggleButton>
+               </children>
+            </AnchorPane>
                      </children>
                   </AnchorPane>
-               </graphic>
-            </ToggleButton>
-            <Text layoutX="520.0" layoutY="570.0" strokeType="OUTSIDE" strokeWidth="0.0" text="URL">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Text>
-            <Text layoutX="180.0" layoutY="600.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Text>
-            <Text layoutX="205.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notes">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Text>
-            <Text fx:id="textTitel" layoutX="165.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125">
-               <font>
-                  <Font size="28.0" />
-               </font>
-            </Text>
-            <TextArea editable="false" layoutX="-43.0" layoutY="275.0" prefHeight="185.0" prefWidth="1169.0" visible="false" />
-                     </children>
-                  </AnchorPane>
+      <ToolBar layoutX="452.0" layoutY="39.0" prefHeight="20.0" prefWidth="756.0" visible="false" />
 
                </children>
             </AnchorPane>

@@ -5,6 +5,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.*;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import java.security.PrivateKey;
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKey;
@@ -25,14 +27,14 @@ public class EncryptFile {
 
         Security.addProvider(new BouncyCastleProvider());
     }
+    private String folderDir = Global.getSelectedDirectoryPath();
+    private String IVdir = folderDir+"GenIV.txt";
 
-    public    String IVdir = "GenIV.txt";
+    private String Saltdir = folderDir+ "Salt.txt";
 
-    public    String Saltdir = "Salt.txt";
+    private String IterationCountdir = folderDir+"IterationCount.txt";
 
-    public   String IterationCountdir = "IterationCount.txt";
-
-    public    String KeyLengthdir = "KeyLength.txt";
+    private String KeyLengthdir = folderDir+"KeyLength.txt";
 
     private static byte[] generatedIV = new byte[16]; //16
 
@@ -40,7 +42,7 @@ public class EncryptFile {
 
     private static int iterationCount = 5000;
 
-    private static int keylength = 192;
+    private static int keylength = 256;
 
 
 
@@ -49,9 +51,6 @@ public class EncryptFile {
         try {
 
             // if entryData == null create empty object, decrypt it
-
-            String folderDir = Global.getSelectedDirectoryPath();
-
 
             SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", "BC");
 
@@ -82,13 +81,13 @@ public class EncryptFile {
 
             byte[] EncodedIV = Base64.getEncoder().encode(generatedIV);
 
-            FileUtils.write(folderDir+Saltdir, EncodedSalt);
+            FileUtils.write(Saltdir, EncodedSalt);
 
-            FileUtils.write(folderDir+IterationCountdir, EncodedIterationCount);
+            FileUtils.write(IterationCountdir, EncodedIterationCount);
 
-            FileUtils.write(folderDir+KeyLengthdir, EncodedKeyLength);
+            FileUtils.write(KeyLengthdir, EncodedKeyLength);
 
-            FileUtils.write(folderDir+IVdir, EncodedIV);
+            FileUtils.write(IVdir, EncodedIV);
 
 
 

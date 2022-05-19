@@ -1,6 +1,4 @@
 package sample;
-import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -130,7 +128,7 @@ public class EntryController implements Serializable   {
     private Text textGeneGPUClusters;
 
     @FXML
-    private Text textGeneGPU;
+    private Text textBruteForceTime;
 
     @FXML
     private Text textEntropy;
@@ -147,8 +145,6 @@ public class EntryController implements Serializable   {
     @FXML
     void togglePasswordVisible(ActionEvent event) {
 
-
-
     }
 
         @FXML
@@ -162,8 +158,9 @@ public class EntryController implements Serializable   {
             pfPwdField.setText("");
             tANotes.setText("");
 
-            ObjectIOExample obj = new ObjectIOExample();
-            obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+            SerializedObject obj = new SerializedObject();
+          //  obj
+            SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
         }
 
         @FXML
@@ -196,12 +193,12 @@ public class EntryController implements Serializable   {
                 entryData.set(entryData.indexOf(selectedItem), selectedItem);
 
                 generatedPWDfield.setText(selectedItem.getPassword());
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
                 entryTable.getSelectionModel().clearSelection();
             } else {
                 generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
 
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
 
             }
 
@@ -211,12 +208,12 @@ public class EntryController implements Serializable   {
                 {
                     generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
 
-                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
                 });
 
                 generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
 
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
                 slider.setValue(parseInt(newValue));
 
             });
@@ -229,7 +226,7 @@ public class EntryController implements Serializable   {
 
 
             generatedPWDfield.setOnKeyReleased(e ->
-                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText()));
+                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText()));
 
 
             btnPwdGenerator.setOnAction(e ->
@@ -240,7 +237,7 @@ public class EntryController implements Serializable   {
 
                     generatedPWDfield.setText(PasswordUtils.getPassword(length));
 
-                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textGeneGPU, textEntropy, textGeneGPUClusters, generatedPWDfield.getText());
+                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
 
                 } catch (Exception E) {
 
@@ -259,18 +256,18 @@ public class EntryController implements Serializable   {
             alert.setContentText("Are you sure you want to proceed?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                entryData.removeAll(entryData);
+                entryData.remove(entryData);
 
                 File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
 
                 DatabaseHandler databaseHandler = new DatabaseHandler();
                 databaseHandler.deleteDir(deleteFile);
 
-                Global.setPasswordFilePath(Global.getRFCArray()[0]);
+               // Global.setPasswordFilePath(Global.getRFCArray()[0]);
                 //sets the passwordfilepath to the first path written in RecentFilesDir txt document
-                FileUtils.write(Global.getRecentFilesDir(), Global.getRecentFilesContent().substring(Global.getRecentFilesContent().indexOf(",")
-                        + 1).getBytes(StandardCharsets.UTF_8));
-// removes the deleted database from the recentFilesDIR text document.
+              //  FileUtils.write(Global.getRecentFilesDir(), Global.getRecentFilesData().substring(Global.getRecentFilesData().indexOf(",")
+                  //      + 1).getBytes(StandardCharsets.UTF_8));
+
             }
 
         }
@@ -292,8 +289,6 @@ public class EntryController implements Serializable   {
             btnEditOK.setDisable(true);
             btnEditOK.setVisible(false);
 
-        /*apCalc .setDisable(true);
-        apCalc.setVisible(false); */
         }
 
         void entrySpecs () throws Exception {
@@ -434,8 +429,9 @@ void openRecent (ActionEvent event) throws Exception
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             entryData.remove(selectedItem);
-            ObjectIOExample obj = new ObjectIOExample();
-            obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+             SerializedObject obj = new SerializedObject();
+          //  obj
+            SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
         }
 
     }
@@ -469,8 +465,9 @@ void openRecent (ActionEvent event) throws Exception
 
 
                     showTableView();
-                    ObjectIOExample obj = new ObjectIOExample();
-                    obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+                   SerializedObject obj = new SerializedObject();
+                   // obj
+                    SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
                 } catch (Exception E) {
 
                 }
@@ -483,8 +480,9 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
-        ObjectIOExample obj = new ObjectIOExample();
-        obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+        SerializedObject obj = new SerializedObject();
+       // obj
+        SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
@@ -499,14 +497,21 @@ void openRecent (ActionEvent event) throws Exception
     void updateMasterPwd(ActionEvent event) throws Exception {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.updatePasswords();
-        ObjectIOExample obj = new ObjectIOExample();
-        obj.write(entryData, Paths.get(Global.getPasswordFilePath()));
+        SerializedObject obj = new SerializedObject();
+
+      //  obj
+        SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
 
     }
 
 
     @FXML
    private void initialize() throws Exception  {
+
+        String image = Main.class.getResource("PMAuth/magnifying-glass.png").toExternalForm();
+        tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
+               " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;" );
+
 
         String hidePwd="";
         for (int i = 0; i < 12; i++) {
@@ -578,7 +583,7 @@ void openRecent (ActionEvent event) throws Exception
             colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
 
-            entryData.addAll(ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())));
+            entryData.addAll(SerializedObject.readEntries());
 
             entryTable.setItems(entryData);
             filter();

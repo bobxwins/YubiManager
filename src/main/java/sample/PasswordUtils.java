@@ -10,20 +10,19 @@ import java.security.SecureRandom;
 public   class PasswordUtils {
 
 
-    static char[] SYMBOLS = "+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
+   private static char[] SYMBOLS = "+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
 
-    static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyzæøå".toCharArray();
+   private static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyzæøå".toCharArray();
     private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ".toCharArray();
     private static char[] UPPERCASE2 = "".toCharArray();
-    static char[] NUMBERS = "0123456789".toCharArray();
-    static char[] ALL_CHARS ;
-    final static BigInteger BRUTEFORCEGPU = new BigInteger ("6877000000"); // 68,77 billions password guesses pr second
-    final static BigInteger BRUTEFOCEGPUCLUSTERS = new BigInteger ("10000000000000"); // 10 trillion password guesses pr second
-    static double BRUTEFORCETIMEGPU;
-    static double BRUTEFORCETIMEGPUCLUSTERS;
+  private  static char[] NUMBERS = "0123456789".toCharArray();
+   private static char[] ALL_CHARS ;
+  private  final static BigInteger GUESSAMOUNT = new BigInteger ("10000000000000"); // 10 trillion password guesses pr second
+ // private   static double BRUTEFORCETIMEGPU;
+  private  static double BRUTEFORCETIME;
 
 
-    static SecureRandom rand = new SecureRandom();
+   private static SecureRandom rand = new SecureRandom();
 
     public static String getPassword(int length) {
 // generates a random password
@@ -116,52 +115,45 @@ public   class PasswordUtils {
         return cardinality;
     }
 
-    public static void calcCrackingTime(Text textPwdQuality, Text textCalcGPU,Text textCalcEntropy, Text textCalcGPUClusters,String password)
+    public static void calcCrackingTime(Text textPwdQuality, Text textBruteForceTime,Text textCalcEntropy,String password)
     {
         double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
 
         // Statement above is equal to: E= log2(Cardinality^PasswordLength)
 
         String quality ="";
-        String doubleFormat ="%.3f";
+        String doubleFormat ="%.15f";
         // puts 3 decimals of the calculated entropy
         textPwdQuality.setStyle("-fx-font-size: 21px;");
         textPwdQuality.setUnderline(false);
-        if(entropy <28)
+        if(entropy <64)
         {
             quality= "Very weak";
             textPwdQuality.setFill(Color.RED);
 
         }
-        if(entropy >= 28  )
+        if(entropy >= 64  )
         {
             quality= "Weak";
 
             textPwdQuality.setFill(Color.INDIANRED);
         }
-        if(entropy >= 35  )
+        if(entropy >= 80  )
         {
             quality= "Fair";
             textPwdQuality.setFill(Color.DARKGOLDENROD);
         }
-        if(entropy >= 59  )
-        {
-            quality= "Strong";
-            textPwdQuality.setFill(Color.GREEN);
-
-        }
-        if(entropy >= 127 )
+        if(entropy >= 112  )
         {
             textPwdQuality.setStyle("-fx-font-size: 25px;");
             quality= "AMAZING!";
+            textPwdQuality.setFill(Color.GREEN);
 
         }
 
 
 
-        BRUTEFORCETIMEGPU=Math.pow(2,entropy)/ BRUTEFORCEGPU.doubleValue()/2;
-
-        if (entropy>128)
+        if (entropy>=128)
         {
             textPwdQuality.setFill(Color.GREEN);
             textPwdQuality.setUnderline(true);
@@ -172,21 +164,15 @@ public   class PasswordUtils {
         }
 
         textPwdQuality.setText(quality);
-
+ 
+        BRUTEFORCETIME =Math.pow(2,entropy)/ GUESSAMOUNT.doubleValue()/2;
         textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\n\nYour password quality is: ");
-        textCalcGPU.setText( "Bruteforcing the passwords with 1 GPU takes: "
-                +"\n"+String.format(doubleFormat, BRUTEFORCETIMEGPU)+" seconds"
-                +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIMEGPU/3600)+" hours"+
-                "\nIn days: "+String.format(doubleFormat,BRUTEFORCETIMEGPU/3600/24)+" days"+
-                "\nIn years: "+String.format(doubleFormat,BRUTEFORCETIMEGPU/3600/24/365)+" years");
-
-        BRUTEFORCETIMEGPUCLUSTERS=Math.pow(2,entropy)/ BRUTEFOCEGPUCLUSTERS.doubleValue()/2;
-
-        textCalcGPUClusters.setText("Bruteforcing the passwords with GPU clusters takes: "
-                +"\n"+String.format(doubleFormat ,BRUTEFORCETIMEGPUCLUSTERS)+" seconds"
-                +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIMEGPUCLUSTERS/3600)+" hours" +
-                "\nIn days: "+String.format(doubleFormat ,BRUTEFORCETIMEGPUCLUSTERS/3600/24)+" days"+
-                "\nIn years: "+String.format(doubleFormat , BRUTEFORCETIMEGPUCLUSTERS/3600/24/365)+" years");
+        textBruteForceTime.setText("Assuming the attacker can guess 10 trillion (10,000,000,000,000)" +"\n"
+                + "passwords per second, cracking the password takes: "
+                +"\n"+String.format(doubleFormat , BRUTEFORCETIME)+" seconds"
+                +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIME /3600)+" hours" +
+                "\nIn days: "+String.format(doubleFormat , BRUTEFORCETIME /3600/24)+" days"+
+                "\nIn years: "+String.format(doubleFormat , BRUTEFORCETIME /3600/24/365)+" years");
 
     }
 }

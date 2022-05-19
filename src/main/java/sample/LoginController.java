@@ -7,11 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-import java.io.FileOutputStream;
+import java.io.*;
 import java.nio.file.Paths;
 
 public class LoginController {
@@ -32,10 +31,9 @@ public class LoginController {
     private Menu menuRecent;
 
 
-
     @FXML private  Button  btnYubikey;
-    @FXML private ImageView imgOpen;
     @FXML private ImageView imgLocked;
+    @FXML private ImageView imgUnLocked;
     @FXML
     private AnchorPane anchorPane;
 
@@ -44,7 +42,6 @@ public class LoginController {
 
     @FXML TableView<String> recentFilesTable;
 
-    private ObservableList<String> recentFilesData = FXCollections.observableArrayList();
     @FXML
     void login(ActionEvent event) throws Exception {
 
@@ -52,7 +49,7 @@ public class LoginController {
         if (databaseHandler.loginAuthentication(mpField, ybkSecret, btnSignIn ) == false) {
             return;
         }
-
+        recentFilesTable.getItems().clear();
     }
 
     @FXML
@@ -61,7 +58,7 @@ public class LoginController {
       Global.getLabelEnterPwd().setVisible(false);
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.newDBdialog(btnCreateDB);
-
+        recentFilesTable.getItems().clear();
 
     }
 
@@ -78,17 +75,34 @@ public class LoginController {
         }
 
 
+        @FXML
+    void deleteRow(ActionEvent event) throws  Exception {
+        String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            Global.getRecentFilesData().remove(selectedItem);
+           // SerializedObject //obj = new SerializedObject();
+            SerializedObject.writeRecentFiles(Global.getRecentFilesData(), Paths.get(Global.getPasswordFilePath()));
+        }
+
+    }
+
+
+
     @FXML
     private void initialize() throws Exception {
 
-         recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-         recentFilesData.addAll(Global.getRFCArray());
-         recentFilesTable.setItems(recentFilesData);
+
+       Global.getRecentFilesData().addAll(SerializedObject.readRecentFiles());
+       recentFilesTable.setItems(Global.getRecentFilesData());
+
+       recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+
 
          recentFilesTable.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
-              try{
-                 String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
+           try{
+            String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
+
                  if (selectedItem != null) {
                                 Global.getLabelEnterPwd().setVisible(true);
 
@@ -96,8 +110,9 @@ public class LoginController {
                                Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
 
                             }
-               //   Global.getLabelEnterPwd().setVisible(false);
-                  }
+
+                            }
+
                            catch (Exception E) {
 
                            }     });
@@ -106,22 +121,19 @@ public class LoginController {
         btnYubikey.setStyle(   "-fx-background-radius: 5em; "
         );
         btnYubikey.setOnAction(e-> {
-                    if(!imgOpen.isVisible())
+                    if(!imgLocked.isVisible())
                     {
-                        imgOpen.setVisible(true);
-                        imgLocked.setVisible(false);
+                        imgLocked.setVisible(true);
+                        imgUnLocked.setVisible(false);
                         return;
                     }
-                    imgOpen.setVisible(false);
-                    imgLocked.setVisible(true);
+                    imgLocked.setVisible(false);
+                    imgUnLocked.setVisible(true);
 
         }
 
                 );
 
-         new FileOutputStream( Global.getRecentFilesDir(), true).close();
-
-         Global.setRecentFilesContent(new String(FileUtils.readAllBytes( Global.getRecentFilesDir())));
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
 

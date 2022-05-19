@@ -2,29 +2,30 @@ package sample;
 
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 
 public class DatabaseHandler {
-    private Timeline timer;
+   // private Timeline timer;
+   //private ObservableList<String> recentFilesData = FXCollections.observableArrayList();
     PasswordField masterPasswordField  = new PasswordField();
     PasswordField confirmPasswordField = new PasswordField();
     PasswordField yubikeyPasswordField = new PasswordField();
@@ -41,7 +42,7 @@ public class DatabaseHandler {
         String[] rFCArray = updateRecentFilesContent.split(",");
         boolean contains = Stream.of(rFCArray).anyMatch(x -> x.equals(Global.getPasswordFilePath()));
         if (  contains == true) {
-
+         // makes sure not add the same filepath twice in RecentFiles.txt
             return;
         }
 
@@ -69,7 +70,7 @@ public class DatabaseHandler {
 
         Global.setSelectedDirectoryPath(  file.getAbsoluteFile().getParent() + "\\");
 
-        updateRecentFileString();
+        // updateRecentFileString();
 
       return true;
 }
@@ -83,8 +84,8 @@ public class DatabaseHandler {
 
             Stage stage = (Stage) btnSignIn.getScene().getWindow();
 
-            if (ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())) != null &&
-                    ObjectIOExample.read(Paths.get(Global.getPasswordFilePath())).isEmpty()) {
+            if (SerializedObject.readEntries() != null &&
+                    SerializedObject.readEntries().isEmpty()) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Information Dialog");
@@ -150,7 +151,12 @@ public class DatabaseHandler {
         });
 
         dialog.showAndWait();
-        updateRecentFileString();
+
+        Global.getRecentFilesData().add(Global.getPasswordFilePath());
+        FileUtils.write(Global.getRecentFilesDir(),"".getBytes(StandardCharsets.UTF_8));
+        // empties th file, or generates an empty file if it doesn't exist
+      SerializedObject.writeRecentFiles( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
+
 
     }
 
@@ -185,9 +191,9 @@ public class DatabaseHandler {
     public  void createMenuItems(Menu menuRecent,Label label) throws Exception {
 
 
-        for (int i = 0; i < Global.getRFCArray().length; i++) {
+        for (int i = 0; i < "Global.getRFCArray()".length(); i++) {
 
-            MenuItem menuItems = new MenuItem(Global.getRFCArray()[i]);
+            MenuItem menuItems = new MenuItem();
 
 
                 menuRecent.getItems().addAll(menuItems);
