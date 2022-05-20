@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 public class LoginController {
 
@@ -51,7 +52,15 @@ public class LoginController {
         if (databaseHandler.loginAuthentication(mpField, ybkSecret, btnSignIn ) == false) {
             return;
         }
+
+
         recentFilesTable.getItems().clear();
+
+        keySpecs = SerializedObject.readObject(FileUtils.readAllBytes(KeySpecs.getKeySpecsDir()));
+        System.out.println(keySpecs);
+        System.out.println(SerializedObject.readObject(FileUtils.readAllBytes(KeySpecs.getKeySpecsDir())));
+
+
     }
 
     @FXML
@@ -82,18 +91,24 @@ public class LoginController {
         String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Global.getRecentFilesData().remove(selectedItem);
-            SerializedObject.writeRecentFiles(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+            SerializedObject.writeObject(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
            //updates the recentFile text file, after deleting the selected table item
         }
 
     }
 
+    private   byte[] generatedIV = new byte[64]; //16
 
+    private   byte[] salt = new byte[64]; //32
 
+    private   int iterationCount =75285;
+
+    private   int keylength = 1965652;
+    private ObservableList<KeySpecs> keySpecs = FXCollections.observableArrayList();
     @FXML
     private void initialize() throws Exception {
 
-       Global.getRecentFilesData().addAll(SerializedObject.readRecentFiles());
+       Global.getRecentFilesData().addAll(SerializedObject.readObject(FileUtils.readAllBytes(Global.getRecentFilesDir())));
        recentFilesTable.setItems(Global.getRecentFilesData());
 
        recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));

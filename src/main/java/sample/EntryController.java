@@ -30,7 +30,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import java.util.Optional;
@@ -125,9 +124,6 @@ public class EntryController implements Serializable   {
     private Text textGenePwdQuality;
 
     @FXML
-    private Text textGeneGPUClusters;
-
-    @FXML
     private Text textBruteForceTime;
 
     @FXML
@@ -157,10 +153,7 @@ public class EntryController implements Serializable   {
             tfURL.setText("");
             pfPwdField.setText("");
             tANotes.setText("");
-
-            SerializedObject obj = new SerializedObject();
-          //  obj
-            SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
+        save();
         }
 
         @FXML
@@ -262,11 +255,11 @@ public class EntryController implements Serializable   {
 
                 DatabaseHandler databaseHandler = new DatabaseHandler();
                 databaseHandler.deleteDir(deleteFile);
+                Global.getPasswordFilePath();
+            //    Global.getRecentFilesData().remove(selectedItem);
 
-               // Global.setPasswordFilePath(Global.getRFCArray()[0]);
-                //sets the passwordfilepath to the first path written in RecentFilesDir txt document
-              //  FileUtils.write(Global.getRecentFilesDir(), Global.getRecentFilesData().substring(Global.getRecentFilesData().indexOf(",")
-                  //      + 1).getBytes(StandardCharsets.UTF_8));
+                // find the index of the RecentFiles, delete
+                SerializedObject.writeObject(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
 
             }
 
@@ -429,9 +422,7 @@ void openRecent (ActionEvent event) throws Exception
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             entryData.remove(selectedItem);
-             SerializedObject obj = new SerializedObject();
-          //  obj
-            SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
+           save();
         }
 
     }
@@ -465,9 +456,7 @@ void openRecent (ActionEvent event) throws Exception
 
 
                     showTableView();
-                   SerializedObject obj = new SerializedObject();
-                   // obj
-                    SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
+                    save();
                 } catch (Exception E) {
 
                 }
@@ -477,12 +466,16 @@ void openRecent (ActionEvent event) throws Exception
     }
 
 
+         void save () throws Exception {
 
+    SerializedObject.writeObject(entryData, Paths.get(Global.getPasswordFilePath()));
+    FileProtector fileProtector = new FileProtector();
+    fileProtector.encryption();
+ }
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
-        SerializedObject obj = new SerializedObject();
-       // obj
-        SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
+
+      save();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
@@ -497,11 +490,7 @@ void openRecent (ActionEvent event) throws Exception
     void updateMasterPwd(ActionEvent event) throws Exception {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.updatePasswords();
-        SerializedObject obj = new SerializedObject();
-
-      //  obj
-        SerializedObject.writeEntries(entryData, Paths.get(Global.getPasswordFilePath()));
-
+          save();
     }
 
 
@@ -582,8 +571,9 @@ void openRecent (ActionEvent event) throws Exception
             colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
 
+              DecryptFile decryptFile = new DecryptFile();
 
-            entryData.addAll(SerializedObject.readEntries());
+            entryData.addAll(SerializedObject.readObject(decryptFile.Decryption()));
 
             entryTable.setItems(entryData);
             filter();

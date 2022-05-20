@@ -11,50 +11,12 @@ package sample;
 
 public class SerializedObject {
 
-
-    public static void writeEntries(ObservableList<Entry> entry, Path file) {
-        try {
-
-            // write object to file
-            OutputStream fos = Files.newOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(new ArrayList<>(entry));
-            oos.close();
-            FileProtector fileProtector = new FileProtector();
-            fileProtector.encryption();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static ObservableList<Entry> readEntries() {
-        try {
-            DecryptFile decryptFile = new DecryptFile();
-
-            InputStream in = new ByteArrayInputStream(decryptFile.Decryption());
-
-            ObjectInputStream ois = new ObjectInputStream(in);
-            List<Entry> list = (List<Entry>) ois.readObject() ;
-
-            return FXCollections.observableList(list);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return FXCollections.emptyObservableList();
-    }
-
-    public static void writeRecentFiles(ObservableList<String> recent, Path file) {
+    public static void writeObject(ObservableList  object, Path file) throws  Exception {
         try {
 
             OutputStream fos = Files.newOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(new ArrayList<>(recent));
+            oos.writeObject(new ArrayList<>(object));
             oos.close();
 
         } catch (FileNotFoundException e) {
@@ -65,12 +27,14 @@ public class SerializedObject {
 
     }
 
-    public static ObservableList<String> readRecentFiles() throws  Exception {
+
+    public static ObservableList readObject(byte [] inputBytes) {
         try {
-            InputStream in = new ByteArrayInputStream(FileUtils.readAllBytes(Global.getRecentFilesDir()));
+
+            InputStream in = new ByteArrayInputStream(inputBytes);
 
             ObjectInputStream ois = new ObjectInputStream(in);
-            List<String> list = (List<String>) ois.readObject() ;
+            List  list = (List ) ois.readObject() ;
 
             return FXCollections.observableList(list);
         } catch (ClassNotFoundException e) {
@@ -80,4 +44,5 @@ public class SerializedObject {
         }
         return FXCollections.emptyObservableList();
     }
+
 }

@@ -54,7 +54,7 @@ public final class Global {
     }
 
     public static String getRecentFilesDir() throws Exception{
-        recentFilesDir = getDefaultDir() +"/EncryptionSpecs.txt";
+        recentFilesDir = getDefaultDir() +"/RecentFiles.txt";
         return recentFilesDir;
     }
 

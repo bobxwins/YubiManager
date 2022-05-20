@@ -1,9 +1,6 @@
 package sample;
 
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -18,7 +15,6 @@ import javafx.util.Pair;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
@@ -42,7 +38,7 @@ public class DatabaseHandler {
         String[] rFCArray = updateRecentFilesContent.split(",");
         boolean contains = Stream.of(rFCArray).anyMatch(x -> x.equals(Global.getPasswordFilePath()));
         if (  contains == true) {
-         // makes sure not add the same filepath twice in EncryptionSpecs.txt
+         // makes sure not add the same filepath twice in RecentFiles.txt
             return;
         }
 
@@ -83,9 +79,9 @@ public class DatabaseHandler {
             Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
             Stage stage = (Stage) btnSignIn.getScene().getWindow();
-
-            if (SerializedObject.readEntries() != null &&
-                    SerializedObject.readEntries().isEmpty()) {
+            DecryptFile decryptFile = new DecryptFile();
+            if (SerializedObject.readObject(decryptFile.Decryption()) != null &&
+                    SerializedObject.readObject(decryptFile.Decryption()).isEmpty()) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Information Dialog");
@@ -155,7 +151,7 @@ public class DatabaseHandler {
         Global.getRecentFilesData().add(Global.getPasswordFilePath());
         FileUtils.write(Global.getRecentFilesDir(),"".getBytes(StandardCharsets.UTF_8));
         // empties th file, or generates an empty file if it doesn't exist
-      SerializedObject.writeRecentFiles( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
+      SerializedObject.writeObject( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
 
 
     }

@@ -4,8 +4,12 @@ import javax.crypto.spec.IvParameterSpec;
 
 import javax.crypto.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.nio.file.Paths;
+import java.security.Key;
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKey;
@@ -40,8 +44,9 @@ public class FileProtector {
 
     private static int iterationCount = 5000;
 
-    private static int keylength = 256;
+    private static int keylength = 192;
 
+    private ObservableList<KeySpecs> keySpecs = FXCollections.observableArrayList();
     public void encryption() {
 
         try {
@@ -83,8 +88,10 @@ public class FileProtector {
             FileUtils.write(KeyLengthdir, EncodedKeyLength);
 
             FileUtils.write(IVdir, EncodedIV);
-  // serialize Saltdir,IterationCountdir,KeyLengthdir + ivDir til en enkelt fil
 
+          keySpecs.add(new KeySpecs(generatedIV,salt,iterationCount,keylength));
+          SerializedObject.writeObject( keySpecs, Paths.get(KeySpecs.getKeySpecsDir()));
+            System.out.println(Paths.get(folderDir+"KeySpecs.txt"));
 
         } catch (Exception e) {
 

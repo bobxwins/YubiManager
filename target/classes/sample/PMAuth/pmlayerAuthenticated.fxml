@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1206.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
+<AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
 
 
                <children>
@@ -139,7 +139,7 @@
                   <AnchorPane fx:id="entryPane" layoutX="-135.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
             <AnchorPane fx:id="selectedRowPane" disable="true" layoutX="169.0" layoutY="500.0" prefHeight="219.0" prefWidth="1162.0" />
-                        <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="137.0" prefWidth="1189.0">
+                        <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="445.0" prefWidth="1180.0">
 
                           <columns>
                             <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
@@ -195,9 +195,9 @@
                         </BorderPane>
             <AnchorPane layoutX="134.0" layoutY="550.0" prefHeight="117.0" prefWidth="1195.0">
                <children>
-                  <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="1189.0">
+                  <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="1186.0">
                      <children>
-                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="1184.0">
+                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="1174.0">
                             <placeholder>
                                 <Label text="" />
                             </placeholder>
