@@ -16,7 +16,7 @@ public class KeySpecs implements Serializable {
         this.keyLength=keyInt;
     }
     byte[] generatedIV,salt ;
-    int iterationCount,keyLength;
+    Object iterationCount,keyLength;
     public  byte[] getSalt() {
         return salt;
     }
@@ -25,20 +25,20 @@ public class KeySpecs implements Serializable {
       this.salt = salt;
     }
 
-    public   int getIterationCount() {
+    public   Object getIterationCount() {
 
         return iterationCount;
     }
 
-    public  void setIterationCount(int iterationCount) {
+    public  void setIterationCount(String iterationCount) {
         this.iterationCount = iterationCount;
     }
 
-    public   int getKeyLength() {
+    public Object getKeyLength() {
         return keyLength;
     }
 
-    public   void setKeyLength(int keyLength) {
+    public   void setKeyLength(String keyLength) {
        this. keyLength = keyLength;
     }
 

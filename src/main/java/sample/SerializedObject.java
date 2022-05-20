@@ -13,8 +13,7 @@ public class SerializedObject {
 
     public static void writeObject(ObservableList  object, Path file) throws  Exception {
         try {
-
-            OutputStream fos = Files.newOutputStream(file);
+            FileOutputStream fos = new FileOutputStream(String.valueOf(file));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(new ArrayList<>(object));
             oos.close();

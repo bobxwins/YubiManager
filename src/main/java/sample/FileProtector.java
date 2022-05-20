@@ -89,9 +89,9 @@ public class FileProtector {
 
             FileUtils.write(IVdir, EncodedIV);
 
-          keySpecs.add(new KeySpecs(generatedIV,salt,iterationCount,keylength));
-          SerializedObject.writeObject( keySpecs, Paths.get(KeySpecs.getKeySpecsDir()));
-            System.out.println(Paths.get(folderDir+"KeySpecs.txt"));
+              keySpecs.add(new KeySpecs(generatedIV,salt,iterationCount,keylength));
+             SerializedObject.writeObject( keySpecs, Paths.get(KeySpecs.getKeySpecsDir()));
+            System.out.println(Paths.get(folderDir+"KeySpecs.txt"+"DIOR DIOR"));
 
         } catch (Exception e) {
 

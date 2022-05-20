@@ -40,6 +40,16 @@ public class LoginController {
     @FXML
     private AnchorPane anchorPane;
 
+    private   byte[] generatedIV = new byte[64]; //16
+
+    private   byte[] salt = new byte[64]; //32
+
+    private   int iterationCount =75285;
+
+    private   int keylength = 1965652;
+
+    private static ObservableList<KeySpecs> keySpecs = FXCollections.observableArrayList();
+
     @FXML
     private TableColumn<String,String> recent;
 
@@ -56,10 +66,9 @@ public class LoginController {
 
         recentFilesTable.getItems().clear();
 
-        keySpecs = SerializedObject.readObject(FileUtils.readAllBytes(KeySpecs.getKeySpecsDir()));
-        System.out.println(keySpecs);
-        System.out.println(SerializedObject.readObject(FileUtils.readAllBytes(KeySpecs.getKeySpecsDir())));
-
+        keySpecs.addAll( SerializedObject.readObject(FileUtils.readAllBytes(KeySpecs.getKeySpecsDir())));
+        System.out.println(  keySpecs.get(0));
+        System.out.println(  keySpecs);
 
     }
 
@@ -97,14 +106,8 @@ public class LoginController {
 
     }
 
-    private   byte[] generatedIV = new byte[64]; //16
 
-    private   byte[] salt = new byte[64]; //32
 
-    private   int iterationCount =75285;
-
-    private   int keylength = 1965652;
-    private ObservableList<KeySpecs> keySpecs = FXCollections.observableArrayList();
     @FXML
     private void initialize() throws Exception {
 
