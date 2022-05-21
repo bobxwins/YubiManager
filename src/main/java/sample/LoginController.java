@@ -93,13 +93,18 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
+        recentFilesTable.setItems(Global.getRecentFilesData());
 
-       Global.getRecentFilesData().addAll(SerializedObject.readObservableList(FileUtils.readAllBytes(Global.getRecentFilesDir())));
-       recentFilesTable.setItems(Global.getRecentFilesData());
-       String defaultFile = recentFilesTable.getItems().get(0);
-       // sets the default RecentFile to the first element
-        Global.setPasswordFilePath(defaultFile);
-        Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
+        if((FileUtils.readAllBytes(Global.getRecentFilesDir()).length)!=0)
+        {
+            Global.getRecentFilesData().addAll(SerializedObject.readObservableList(FileUtils.readAllBytes(Global.getRecentFilesDir())));
+
+            String defaultFile = recentFilesTable.getItems().get(0);
+            // sets the default RecentFile to the first element
+            Global.setPasswordFilePath(defaultFile);
+            Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
+        }
+
 
          recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
          recentFilesTable.getSelectionModel().selectedItemProperty()

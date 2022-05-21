@@ -36,11 +36,11 @@ public class SerializedObject {
             List  list = (List ) ois.readObject() ;
 
             return FXCollections.observableList(list);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         return FXCollections.emptyObservableList();
     }
 
