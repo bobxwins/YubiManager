@@ -142,7 +142,7 @@
                         <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="445.0" prefWidth="1180.0">
 
                           <columns>
-                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel1" />
                             <TableColumn fx:id="colUsername" prefWidth="278.0" text="Username" />
                              <TableColumn fx:id="colURL" prefWidth="266.0" text="URL" />
                               <TableColumn fx:id="colNotes" prefWidth="356.0" text="Notes" />

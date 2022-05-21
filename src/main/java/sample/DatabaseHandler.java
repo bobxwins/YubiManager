@@ -80,8 +80,8 @@ public class DatabaseHandler {
 
             Stage stage = (Stage) btnSignIn.getScene().getWindow();
             DecryptFile decryptFile = new DecryptFile();
-            if (SerializedObject.readObject(decryptFile.Decryption()) != null &&
-                    SerializedObject.readObject(decryptFile.Decryption()).isEmpty()) {
+            if (SerializedObject.readObservableList(decryptFile.Decryption()) != null &&
+                    SerializedObject.readObservableList(decryptFile.Decryption()).isEmpty()) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Information Dialog");
@@ -151,7 +151,7 @@ public class DatabaseHandler {
         Global.getRecentFilesData().add(Global.getPasswordFilePath());
         FileUtils.write(Global.getRecentFilesDir(),"".getBytes(StandardCharsets.UTF_8));
         // empties th file, or generates an empty file if it doesn't exist
-      SerializedObject.writeObject( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
+      SerializedObject.writeObservableList( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
 
 
     }
@@ -188,8 +188,8 @@ public class DatabaseHandler {
 
 
         for (int i = 0; i < Global.getRecentFilesData().size(); i++) {
-
-            MenuItem menuItems = new MenuItem();
+            System.out.println("the size is"+Global.getRecentFilesData().size());
+            MenuItem menuItems = new MenuItem(Global.getRecentFilesData().get(i));
 
                 menuRecent.getItems().addAll(menuItems);
 
@@ -296,6 +296,8 @@ static void stageFullScreen(Button btnSignOut) throws Exception
     stage.setWidth(bounds.getWidth());
     stage.setHeight(bounds.getHeight());
     */
+
+
     stage.setScene(new Scene(root));
 
 }

@@ -8,18 +8,18 @@ public class Entry implements Serializable {
     //private static final long serialVersionUID = 1L;
 
     Entry(String titelString, String usernameString, String urlString, String passwordString,String noteString) {
-        this.titel=titelString;
+        this.title=titelString;
         this.username=usernameString;
         this.url=urlString;
           this.password=passwordString;
         this.notes=noteString;
     }
-    String titel, username, url,password,notes;
+    String title, username, url,password,notes;
 
 
-    public String getTitel() {
+    public String getTitle() {
 
-        return titel;
+        return title;
     }
 
     public String getUsername() {
@@ -42,8 +42,8 @@ public class Entry implements Serializable {
 
         return notes;
     }
-    public void setTitel(String titel) {
-        this.titel = titel;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setUsername(String username) {

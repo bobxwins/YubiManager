@@ -1,4 +1,5 @@
 package sample;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -16,14 +17,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 import java.awt.*;
@@ -259,7 +260,7 @@ public class EntryController implements Serializable   {
             //    Global.getRecentFilesData().remove(selectedItem);
 
                 // find the index of the RecentFiles, delete
-                SerializedObject.writeObject(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+                SerializedObject.writeObservableList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
 
             }
 
@@ -434,7 +435,7 @@ void openRecent (ActionEvent event) throws Exception
         if (selectedItem != null) {
             entrySpecs();
 
-            tfTitel.setText(selectedItem.getTitel());
+            tfTitel.setText(selectedItem.getTitle());
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
             pfPwdField.setText(selectedItem.getPassword());
@@ -448,7 +449,7 @@ void openRecent (ActionEvent event) throws Exception
             btnEditOK.setOnAction(e -> {
                 try{
                     entryData.set(entryData.indexOf(selectedItem),selectedItem);
-                    selectedItem.setTitel( tfTitel.getText());
+                    selectedItem.setTitle( tfTitel.getText());
                     selectedItem.setUsername( tfUsername.getText());
                     selectedItem.setURL( tfURL.getText());
                     selectedItem.setPassword( pfPwdField.getText());
@@ -468,7 +469,7 @@ void openRecent (ActionEvent event) throws Exception
 
          void save () throws Exception {
 
-    SerializedObject.writeObject(entryData, Paths.get(Global.getPasswordFilePath()));
+    SerializedObject.writeObservableList(entryData, Paths.get(Global.getPasswordFilePath()));
     FileProtector fileProtector = new FileProtector();
     fileProtector.encryption();
  }
@@ -493,10 +494,34 @@ void openRecent (ActionEvent event) throws Exception
           save();
     }
 
+     private void timer() {
+
+         Duration delay = Duration.seconds(Global.getTimer());
+         PauseTransition transition = new PauseTransition(delay);
+         transition.setOnFinished(evt -> {
+             try {
+                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                 alert.setTitle("Inactivity");
+                 alert.setHeaderText("Connection closed due to inactivity!");
+                 alert.show();
+                 DatabaseHandler.stageFullScreen(btnSignOut);
+                 return;
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         });
+
+         anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
+         transition.play();
+
+     }
+
+
 
     @FXML
    private void initialize() throws Exception  {
-
+        Global.setTimer(5); // the default time
+         timer();
         String image = Main.class.getResource("PMAuth/magnifying-glass.png").toExternalForm();
         tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
                " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;" );
@@ -514,7 +539,7 @@ void openRecent (ActionEvent event) throws Exception
         entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
                         if (selectedItem != null) {
-                            textTitel.setText(selectedItem.getTitel());
+                            textTitel.setText(selectedItem.getTitle());
                             textNotes.setText(selectedItem.getNotes());
                             textUsername.setText(selectedItem.getUsername());
                             hyperLink.setText(selectedItem.getUrl());
@@ -566,16 +591,18 @@ void openRecent (ActionEvent event) throws Exception
                 "-fx-background-radius: 5em; " );
 
 
-            colTitel.setCellValueFactory(new PropertyValueFactory<Entry, String>("titel"));
-            colUsername.setCellValueFactory(new PropertyValueFactory<Entry, String>("username"));
-            colURL.setCellValueFactory(new PropertyValueFactory<Entry, String>("url"));
-            colNotes.setCellValueFactory(new PropertyValueFactory<Entry, String>("Notes"));
+            colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
+            colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+            colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
+            colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
 
               DecryptFile decryptFile = new DecryptFile();
 
-            entryData.addAll(SerializedObject.readObject(decryptFile.Decryption()));
+            entryData.addAll(SerializedObject.readObservableList(decryptFile.Decryption()));
 
             entryTable.setItems(entryData);
+
+
             filter();
             btnEnterMenu.setOnAction(e -> {
                 try {
@@ -602,7 +629,7 @@ void openRecent (ActionEvent event) throws Exception
                 // Compare all columns  of every entry with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (entry.getTitel().toLowerCase().contains(lowerCaseFilter)) {
+                if (entry.getTitle().toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches titel column.
                 } else
 

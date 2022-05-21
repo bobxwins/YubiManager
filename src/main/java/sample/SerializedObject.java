@@ -4,15 +4,15 @@ package sample;
     import javafx.collections.ObservableList;
 
     import java.io.*;
-    import java.nio.file.Files;
     import java.nio.file.Path;
     import java.util.ArrayList;
     import java.util.List;
 
 public class SerializedObject {
 
-    public static void writeObject(ObservableList  object, Path file) throws  Exception {
+    public static void writeObservableList(ObservableList  object, Path file) throws  Exception {
         try {
+
             FileOutputStream fos = new FileOutputStream(String.valueOf(file));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(new ArrayList<>(object));
@@ -27,7 +27,7 @@ public class SerializedObject {
     }
 
 
-    public static ObservableList readObject(byte [] inputBytes) {
+    public static ObservableList readObservableList(byte [] inputBytes) {
         try {
 
             InputStream in = new ByteArrayInputStream(inputBytes);
@@ -42,6 +42,49 @@ public class SerializedObject {
             e.printStackTrace();
         }
         return FXCollections.emptyObservableList();
+    }
+
+    public static void writeObject(KeySpecs  object, Path file) throws  Exception {
+        try {
+            FileOutputStream fos = new FileOutputStream(String.valueOf(file));
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(object);
+            oos.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static KeySpecs readObject() {
+
+        try
+        {
+            String filename = KeySpecs.getKeySpecsDir();
+            FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            KeySpecs  keySpecs = (KeySpecs) in.readObject();
+
+            in.close();
+            file.close();
+
+            return keySpecs;
+        }
+
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+        }
+
+        catch(ClassNotFoundException ex)
+        {
+            System.out.println("ClassNotFoundException is caught");
+        }
+         return  new KeySpecs();
     }
 
 }
