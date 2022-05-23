@@ -7,31 +7,18 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.nio.charset.StandardCharsets;
+
 
 public final class Global {
 
     private static String passwordFilePath;
 
-    static {
-        try {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static int getTimer() {
-        return TIMER;
-    }
-
-    public static void setTimer(int timer) {
-        Global.TIMER = timer;
-    }
-
-    private static int TIMER;
+    private  static int TIMER;
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
 
-    private static  String SELECTEDDIRECTORYPATH;//=  new File(passwordFilePath).getAbsoluteFile().getParent()+"\\";
+    private static  String SELECTEDDIRECTORYPATH;//=
      private static String DEFAULTHPATH;
     private static  String RECENTFILESDIR;
     private static char[] COMBINEDPASSWORD;
@@ -39,6 +26,22 @@ public final class Global {
     private  static Label labelEnterPwd = new Label("Please Enter Passwords!");
     private  static Label labelRecentFile = new Label();
     private Global(){}  // Private constructor to prevent instantiation
+
+    public static  int getTimer() {
+        if ( FileUtils.readAllBytes(SELECTEDDIRECTORYPATH+"timer.txt").length!=0) {
+            String timerString = new String(FileUtils.readAllBytes(SELECTEDDIRECTORYPATH + "timer.txt"));
+            TIMER = Integer.parseInt(timerString);
+            System.out.println("Timer is" + TIMER);
+            return TIMER;
+        }
+        return 15;
+    }
+
+    public static void setTimer(int timer) {
+        Global.TIMER = timer;
+        FileUtils.write(SELECTEDDIRECTORYPATH+"timer.txt",String.valueOf(timer).getBytes(StandardCharsets.UTF_8));
+        // casts timer to a string, then casts the string to byte array. Integer cannot directly be cast to byte array
+    }
 
     public static String getPasswordFilePath() {
         return passwordFilePath;

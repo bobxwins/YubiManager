@@ -26,6 +26,8 @@
                               <Menu fx:id="menuRecent" mnemonicParsing="false" onAction="#openRecent" text="Open Recent" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="menuItemTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
                               <SeparatorMenuItem mnemonicParsing="false" />
@@ -53,12 +55,24 @@
                   </MenuBar>
                   <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1208.0">
                      <items>
-            <Button fx:id="btnEnterMenu" mnemonicParsing="false" onAction="#entryMenu" prefHeight="44.0" prefWidth="40.0" text="+">
-               <font>
-                  <Font size="19.0" />
-               </font>
+            <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#entryMenu" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Row Button">
+               <graphic>
+                  <ImageView fx:id="imgAdd" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@AddRow.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-                        <Button fx:id="btnDeleteRow" mnemonicParsing="false" onAction="#deleteRow" prefHeight="44.0" prefWidth="40.0" text="X" />
+            <Button fx:id="btnDeleteRow" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteRow" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="delete Row Button">
+               <graphic>
+                  <ImageView fx:id="imgEdit2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@DeleteRow.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
                         <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="editEntry">
                            <graphic>
                               <ImageView fx:id="imgEdit" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
@@ -77,8 +91,25 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="btnGenerateMenu" mnemonicParsing="false" onAction="#generatePwd" text="Password Generator" />
-            <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="editEntry">
+            <Button fx:id="btnGenerateMenu" contentDisplay="GRAPHIC_ONLY" layoutX="372.0" layoutY="10.0" mnemonicParsing="false" onAction="#generatePwd" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Password Generator">
+               <graphic>
+                  <ImageView fx:id="imgLock2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@random.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnTimer" contentDisplay="GRAPHIC_ONLY" layoutX="386.0" layoutY="10.0" mnemonicParsing="false" onAction="#timerDialog" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Timer">
+               <graphic>
+                  <ImageView fx:id="imgLock1" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@timer.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Sign Out">
                <graphic>
                   <ImageView fx:id="imgLock" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -142,7 +173,7 @@
                         <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="445.0" prefWidth="1180.0">
 
                           <columns>
-                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel1" />
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
                             <TableColumn fx:id="colUsername" prefWidth="278.0" text="Username" />
                              <TableColumn fx:id="colURL" prefWidth="266.0" text="URL" />
                               <TableColumn fx:id="colNotes" prefWidth="356.0" text="Notes" />
@@ -155,7 +186,8 @@
                                     <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                                     <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
                         <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
-                        <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
+                        <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username..." />
+                        <MenuItem fx:id="ctxSetTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer..." />
                                 </items>
                               </ContextMenu>
                            </contextMenu>

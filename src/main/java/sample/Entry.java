@@ -7,14 +7,16 @@ public class Entry implements Serializable {
 
     //private static final long serialVersionUID = 1L;
 
-    Entry(String titelString, String usernameString, String urlString, String passwordString,String noteString) {
-        this.title=titelString;
-        this.username=usernameString;
-        this.url=urlString;
-          this.password=passwordString;
-        this.notes=noteString;
+    Entry(String titelString, String usernameString, String urlString, String passwordString, String noteString) {
+        this.title = titelString;
+        this.username = usernameString;
+        this.url = urlString;
+        this.password = passwordString;
+        this.notes = noteString;
     }
-    String title, username, url,password,notes;
+
+
+    String title, username, url, password, notes;
 
 
     public String getTitle() {
@@ -32,7 +34,7 @@ public class Entry implements Serializable {
         return url;
     }
 
-     public String getPassword() {
+    public String getPassword() {
 
         return password;
     }
@@ -42,6 +44,8 @@ public class Entry implements Serializable {
 
         return notes;
     }
+
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -61,5 +65,5 @@ public class Entry implements Serializable {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-
 }
+

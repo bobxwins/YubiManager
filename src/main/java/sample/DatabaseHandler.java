@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Platform;
+
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -18,33 +19,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import static java.lang.Integer.parseInt;
+
 
 public class DatabaseHandler {
-   // private Timeline timer;
-   //private ObservableList<String> recentFilesData = FXCollections.observableArrayList();
+
     PasswordField masterPasswordField  = new PasswordField();
     PasswordField confirmPasswordField = new PasswordField();
     PasswordField yubikeyPasswordField = new PasswordField();
     // These are the 3 password fields generated when the user creates a new Database.
 
-    Dialog<Pair<String, String>> dialog = new Dialog<>();
-    GridPane grid = new GridPane();
-
-   void updateRecentFileString() throws  Exception
-
-    {
-        String updateRecentFilesContent = "," + new String(FileUtils.readAllBytes(Global.getRecentFilesDir()));
-
-        String[] rFCArray = updateRecentFilesContent.split(",");
-        boolean contains = Stream.of(rFCArray).anyMatch(x -> x.equals(Global.getPasswordFilePath()));
-        if (  contains == true) {
-         // makes sure not add the same filepath twice in RecentFiles.txt
-            return;
-        }
-
-        String combinedRecentString = Global.getPasswordFilePath() + updateRecentFilesContent;
-        FileUtils.write( Global.getRecentFilesDir(), combinedRecentString.getBytes(StandardCharsets.UTF_8));
-    }
+   public   Dialog<Pair<String, String>> dialog = new Dialog<>();
+   public  GridPane grid = new GridPane();
+   public  CheckBox checkBox;
+   public  Spinner<Integer> timerSpinner;
 
 
     public boolean openDB() throws Exception {
@@ -99,7 +87,7 @@ public class DatabaseHandler {
     void newDBdialog(Button btn) throws Exception {
         dialog.setTitle("Creating new database");
         dialog.getDialogPane().setContent(grid);
-        setGrid();
+        setPwdGrid();
 
         TextField fileNameField = new TextField("");
         fileNameField.setPromptText("File name...");
@@ -188,7 +176,6 @@ public class DatabaseHandler {
 
 
         for (int i = 0; i < Global.getRecentFilesData().size(); i++) {
-            System.out.println("the size is"+Global.getRecentFilesData().size());
             MenuItem menuItems = new MenuItem(Global.getRecentFilesData().get(i));
 
                 menuRecent.getItems().addAll(menuItems);
@@ -215,7 +202,7 @@ public class DatabaseHandler {
         }
         file.delete();
     }
-    void setGrid()
+    void setPwdGrid()
     {
 
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -241,10 +228,36 @@ public class DatabaseHandler {
 
     }
 
+     void timerGrid () {
+
+         dialog.setTitle("Setting timer");
+         dialog.getDialogPane().setContent(grid);
+         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+         grid.setHgap(10);
+         grid.setVgap(10);
+         grid.setPadding(new Insets(0, 10, 0, 10));
+         checkBox = new CheckBox("Seconds of inactivity database will be locked in: ");
+         timerSpinner = (Spinner<Integer>) new Spinner(10, 999, 15);
+         if (FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir()).length!=0)
+         {
+             TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(TimerSpecs.getTimerSpecsDir());
+             checkBox.setSelected(timerSpecs.getSelectedCheckBox());
+           timerSpinner.getValueFactory().setValue(timerSpecs.getTimer());
+         }
+
+         timerSpinner.setPrefSize(75, 25);
+         timerSpinner.setEditable(true);
+         grid.add(checkBox, 0, 1);
+         grid.add(timerSpinner, 1, 1);
+     }
+
+
+
     void updatePasswords() {
     dialog.setTitle("Updating passwords");
     dialog.getDialogPane().setContent(grid);
-    setGrid();
+    setPwdGrid();
     dialog.setResultConverter(dialogButton -> {
         try {
             if (dialogButton == ButtonType.OK) {
@@ -288,19 +301,12 @@ public class DatabaseHandler {
 static void stageFullScreen(Button btnSignOut) throws Exception
 {
     Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
-    Stage stage= (Stage) btnSignOut.getScene().getWindow();
-  /*  Screen screen = Screen.getPrimary();
-    Rectangle2D bounds = screen.getVisualBounds();
-    stage.setX(bounds.getMinX());
-    stage.setY(bounds.getMinY());
-    stage.setWidth(bounds.getWidth());
-    stage.setHeight(bounds.getHeight());
-    */
-
-
+    Stage stage= (Stage)btnSignOut.getScene().getWindow();
     stage.setScene(new Scene(root));
 
 }
+
+
 }
 
 

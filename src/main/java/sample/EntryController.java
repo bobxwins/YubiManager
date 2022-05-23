@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -40,7 +41,7 @@ import static java.lang.Integer.parseInt;
 
 public class EntryController implements Serializable   {
     @FXML
-    private AnchorPane anchorPane;
+    private  AnchorPane anchorPane;
 
     @FXML
     private TableView<Entry> entryTable;
@@ -135,7 +136,7 @@ public class EntryController implements Serializable   {
 
     @FXML
     private ImageView imgPwdNotVisible;
-
+ @FXML private ContextMenu ctxTableMenu;
 
     Slider slider = new Slider(4, 999, 1);
 
@@ -163,8 +164,7 @@ public class EntryController implements Serializable   {
             Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 4);
 
             slider.setBlockIncrement(1);
-            slider.setMin(4);
-            slider.setMax(999);
+        ;
             slider.setValue(4);
             slider.setPrefWidth(570);
             slider.setLayoutY(110);
@@ -416,6 +416,8 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
     void signOut(ActionEvent event) throws Exception {
         DatabaseHandler.stageFullScreen(btnSignOut);
+       //transition.play();
+     // transition.pause();
     }
 
     @FXML
@@ -486,18 +488,28 @@ void openRecent (ActionEvent event) throws Exception
         
     }
 
-
     @FXML
     void updateMasterPwd(ActionEvent event) throws Exception {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.updatePasswords();
           save();
     }
+    static PauseTransition transition ;
+    boolean selectedCheckBox;
+     public  void timer() throws Exception {
+         if (FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir()).length==0)
+         { return;
+         }
 
-     private void timer() {
+         TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(TimerSpecs.getTimerSpecsDir());
+         System.out.println(timerSpecs.getTimer()+ "  "+ timerSpecs.getSelectedCheckBox());
 
-         Duration delay = Duration.seconds(Global.getTimer());
-         PauseTransition transition = new PauseTransition(delay);
+        Duration delay = Duration.seconds(timerSpecs.getTimer());
+
+         if (!timerSpecs.getSelectedCheckBox()) {
+             return;
+         }
+         transition = new PauseTransition(delay);
          transition.setOnFinished(evt -> {
              try {
                  Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -515,13 +527,56 @@ void openRecent (ActionEvent event) throws Exception
          transition.play();
 
      }
+@FXML
+    void timerDialog(ActionEvent event) {
 
+         DatabaseHandler databaseHandler = new DatabaseHandler();
+
+         databaseHandler.timerGrid();
+         databaseHandler.dialog.setResultConverter(dialogButton -> {
+            try {
+                if (dialogButton == ButtonType.OK) {
+                    if (!databaseHandler.checkBox.isSelected()) {
+                        selectedCheckBox = false;
+                        // JavaFX.CheckBox can't be serialized,so I have to serialize a boolean instead
+                        TimerSpecs timerSpecs = new TimerSpecs(databaseHandler.timerSpinner.getValue(),selectedCheckBox);
+                        SerializedObject.writeObject(timerSpecs,Paths.get(TimerSpecs.getTimerSpecsDir()));
+                        return null;
+                    }
+                    selectedCheckBox = true;
+                    TimerSpecs timerSpecs = new TimerSpecs(databaseHandler.timerSpinner.getValue(),selectedCheckBox);
+                    SerializedObject.writeObject(timerSpecs,Paths.get(TimerSpecs.getTimerSpecsDir()));
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Timer set! Database will automaticaly be locked after " +databaseHandler.timerSpinner.getValue() + " seconds of inactivity!");
+
+                    alert.showAndWait();
+
+                   timer();
+
+                    return null;
+                }
+            } catch (Exception E) {
+
+            }
+
+            return null;
+        });
+
+
+        databaseHandler.dialog.showAndWait();
+
+    }
 
 
     @FXML
    private void initialize() throws Exception  {
-        Global.setTimer(5); // the default time
-         timer();
+
+          timer() ;
+       anchorPane.setOnContextMenuRequested(e ->
+              ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
+
         String image = Main.class.getResource("PMAuth/magnifying-glass.png").toExternalForm();
         tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
                " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;" );
@@ -532,8 +587,6 @@ void openRecent (ActionEvent event) throws Exception
             hidePwd='\u2022'+ hidePwd;
             // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
         }
-
-
 
         String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -583,13 +636,6 @@ void openRecent (ActionEvent event) throws Exception
         DatabaseHandler databaseHandler = new DatabaseHandler();
 
         databaseHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());
-
-         btnEnterMenu.setStyle(   "-fx-background-radius: 5em; "
-                 );
-
-        btnDeleteRow.setStyle(
-                "-fx-background-radius: 5em; " );
-
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));

@@ -22,7 +22,7 @@ public class DecryptFile  {
 
         try {
 
-            KeySpecs keySpecs = SerializedObject.readObject();
+            KeySpecs keySpecs = (KeySpecs) SerializedObject.readObject(KeySpecs.getKeySpecsDir());
 
             SecretKeyFactory factory =
                     SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");

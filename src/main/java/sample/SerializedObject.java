@@ -44,7 +44,7 @@ public class SerializedObject {
         return FXCollections.emptyObservableList();
     }
 
-    public static void writeObject(KeySpecs  object, Path file) throws  Exception {
+    public static void writeObject(Object  object, Path file) throws  Exception {
         try {
             FileOutputStream fos = new FileOutputStream(String.valueOf(file));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -59,20 +59,20 @@ public class SerializedObject {
 
     }
 
-    public static KeySpecs readObject() {
+    public static Object readObject(String filename) {
 
         try
         {
-            String filename = KeySpecs.getKeySpecsDir();
+       //     String filename = KeySpecs.getKeySpecsDir();
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            KeySpecs  keySpecs = (KeySpecs) in.readObject();
+            Object  object = in.readObject();
 
             in.close();
             file.close();
 
-            return keySpecs;
+            return object;
         }
 
         catch(IOException ex)
@@ -84,7 +84,7 @@ public class SerializedObject {
         {
             System.out.println("ClassNotFoundException is caught");
         }
-         return  new KeySpecs();
+         return  new Object();
     }
 
 }

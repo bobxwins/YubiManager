@@ -1,6 +1,7 @@
 package sample;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 
 
 public class KeySpecs implements Serializable {
@@ -22,42 +23,25 @@ public class KeySpecs implements Serializable {
 
         return salt;
     }
-/*
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
-    }
-*/
+
     public int getIterationCount() {
 
         return iterationCount;
     }
 
-   /* public void setIterationCount(int iterationCount) {
-        this.iterationCount = iterationCount;
-    }
-*/
     public int getKeyLength() {
 
         return keyLength;
     }
 
-    /*public void setKeyLength(int keyLength) {
-        this.keyLength = keyLength;
-    }
-    */
 
     public byte[] getGeneratedIV() {
         return generatedIV;
     }
 
-  /*  public void setGeneratedIV(byte[] generatedIV) {
-        this.generatedIV = generatedIV;
-    }
-*/
     public static String getKeySpecsDir() {
         String keySpecsDir = Global.getSelectedDirectoryPath() + "KeySpecs.txt";
         return keySpecsDir;
     }
-
 
 }

@@ -49,8 +49,6 @@ public class LoginController {
             return;
         }
 
-        recentFilesTable.getItems().clear();
-
     }
 
     @FXML
@@ -93,8 +91,9 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
-        recentFilesTable.setItems(Global.getRecentFilesData());
 
+        recentFilesTable.setItems(Global.getRecentFilesData());
+        recentFilesTable.getItems().clear();
         if((FileUtils.readAllBytes(Global.getRecentFilesDir()).length)!=0)
         {
             Global.getRecentFilesData().addAll(SerializedObject.readObservableList(FileUtils.readAllBytes(Global.getRecentFilesDir())));
