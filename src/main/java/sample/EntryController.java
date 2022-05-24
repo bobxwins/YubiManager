@@ -502,7 +502,6 @@ void openRecent (ActionEvent event) throws Exception
          }
 
          TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(TimerSpecs.getTimerSpecsDir());
-         System.out.println(timerSpecs.getTimer()+ "  "+ timerSpecs.getSelectedCheckBox());
 
         Duration delay = Duration.seconds(timerSpecs.getTimer());
 

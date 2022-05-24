@@ -10,12 +10,12 @@ package sample;
 
 public class SerializedObject {
 
-    public static void writeObservableList(ObservableList  object, Path file) throws  Exception {
+    public static void writeObservableList(ObservableList  observableList, Path file) throws  Exception {
         try {
 
             FileOutputStream fos = new FileOutputStream(String.valueOf(file));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(new ArrayList<>(object));
+            oos.writeObject(new ArrayList<>(observableList));
             oos.close();
 
         } catch (FileNotFoundException e) {
@@ -47,6 +47,7 @@ public class SerializedObject {
     public static void writeObject(Object  object, Path file) throws  Exception {
         try {
             FileOutputStream fos = new FileOutputStream(String.valueOf(file));
+            // writes an object given as parameter to a path given as parameter
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(object);
             oos.close();
@@ -63,7 +64,7 @@ public class SerializedObject {
 
         try
         {
-       //     String filename = KeySpecs.getKeySpecsDir();
+
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
