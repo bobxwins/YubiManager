@@ -31,27 +31,31 @@ public class FileProtector {
 
     private    int keyLength = 192;
 
+   private String algorithm = "PBKDF2WITHHMACSHA256";
+   private String provider = "BC";
+   private String transformation ="AES/CBC/PKCS5PADDING";
+
     public void encryption() {
 
         try {
-            SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", "BC");
+            SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", provider);
 
             secureRandom.nextBytes(generatedIV);
 
             secureRandom.nextBytes(salt);
 
-            KeySpecs keySpecs = new KeySpecs(generatedIV,salt,iterationCount,keyLength);
+            KeySpecs keySpecs = new KeySpecs(generatedIV,salt,iterationCount,keyLength,algorithm,provider,transformation);
 
             SerializedObject.writeObject(keySpecs,Paths.get(KeySpecs.getKeySpecsDir()));
 
             PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(), salt, iterationCount, keyLength);
 
             SecretKeyFactory factory =
-                    SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");
+                    SecretKeyFactory.getInstance(algorithm, provider);
 
             SecretKey key = factory.generateSecret(keySpec);
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING", "BC");
+            Cipher cipher = Cipher.getInstance(transformation, provider);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(generatedIV));
 
             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());

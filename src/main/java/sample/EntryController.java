@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,8 +19,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
@@ -98,6 +97,8 @@ public class EntryController implements Serializable   {
     @FXML
     private TextField generatedPWDfield;
 
+    @FXML private  TextField tfPwd;
+
     @FXML
     private Text textUsername;
 
@@ -105,6 +106,7 @@ public class EntryController implements Serializable   {
     private Hyperlink hyperLink;
     @FXML
     private Text textPassword;
+
     @FXML
     private Text textNotes;
 
@@ -112,7 +114,7 @@ public class EntryController implements Serializable   {
     private Text textTitel;
 
     @FXML
-    private BorderPane bpEntryMenu;
+    private AnchorPane apEntryMenu;
 
     @FXML
     private AnchorPane apPwdGenerate;
@@ -142,8 +144,36 @@ public class EntryController implements Serializable   {
 
     @FXML
     void togglePasswordVisible(ActionEvent event) {
+/*
+        String hidePwd = "";
+        for (int i = 0; i < 12; i++) {
+            hidePwd = '\u2022' + hidePwd;
+            // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
+        }
 
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+
+            if (!imgPwdVisible.isVisible()) {
+                imgPwdVisible.setVisible(true);
+                imgPwdNotVisible.setVisible(false);
+                pfPwdField.setVisible(false);
+                tfPwd.setVisible(true);
+                tfPwd.setText(pfPwdField.getText());
+                textPassword.setText(selectedItem.getPassword());
+                return;
+            }
+
+            tfPwd.setVisible(false);
+            pfPwdField.setVisible(true);
+            imgPwdVisible.setVisible(false);
+            imgPwdNotVisible.setVisible(true);
+            textPassword.setText(hidePwd);
+        }
+
+ */
     }
+
 
         @FXML
         void createEntry (ActionEvent event) throws Exception {
@@ -161,11 +191,11 @@ public class EntryController implements Serializable   {
         @FXML
         void generatePwd (ActionEvent event) throws Exception {
 
-            Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 4);
+            Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 12);
 
             slider.setBlockIncrement(1);
         ;
-            slider.setValue(4);
+            slider.setValue(pwdLengthSpinner.getValue());
             slider.setPrefWidth(570);
             slider.setLayoutY(110);
             slider.setShowTickLabels(true);
@@ -272,8 +302,8 @@ public class EntryController implements Serializable   {
             entryPane.setVisible(true);
             entryPane.setDisable(false);
 
-            bpEntryMenu.setDisable(true);
-            bpEntryMenu.setVisible(false);
+             apEntryMenu.setDisable(true);
+             apEntryMenu.setVisible(false);
 
             tfSearch.setDisable(false);
 
@@ -286,8 +316,8 @@ public class EntryController implements Serializable   {
         }
 
         void entrySpecs () throws Exception {
-            bpEntryMenu.setVisible(true);
-            bpEntryMenu.setDisable(false);
+            apEntryMenu.setVisible(true);
+            apEntryMenu.setDisable(false);
             tfSearch.setDisable(true);
             btnCreate.setVisible(true);
             btnCreate.setDisable(false);
@@ -416,8 +446,7 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
     void signOut(ActionEvent event) throws Exception {
         DatabaseHandler.stageFullScreen(btnSignOut);
-       //transition.play();
-     // transition.pause();
+
     }
 
     @FXML
@@ -441,6 +470,7 @@ void openRecent (ActionEvent event) throws Exception
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
             pfPwdField.setText(selectedItem.getPassword());
+
             tANotes.setText(selectedItem.getNotes());
           //sets the TextFields and passwordfield to be equal to the fields of the selected row
 
@@ -494,143 +524,69 @@ void openRecent (ActionEvent event) throws Exception
         databaseHandler.updatePasswords();
           save();
     }
-    static PauseTransition transition ;
-    boolean selectedCheckBox;
-     public  void timer() throws Exception {
-         if (FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir()).length==0)
-         { return;
-         }
 
-         TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(TimerSpecs.getTimerSpecsDir());
-
-        Duration delay = Duration.seconds(timerSpecs.getTimer());
-
-         if (!timerSpecs.getSelectedCheckBox()) {
-             return;
-         }
-         transition = new PauseTransition(delay);
-         transition.setOnFinished(evt -> {
-             try {
-                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                 alert.setTitle("Inactivity");
-                 alert.setHeaderText("Connection closed due to inactivity!");
-                 alert.show();
-                 DatabaseHandler.stageFullScreen(btnSignOut);
-                 return;
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
-         });
-
-         anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
-         transition.play();
-
-     }
 @FXML
     void timerDialog(ActionEvent event) {
-
-         DatabaseHandler databaseHandler = new DatabaseHandler();
-
-         databaseHandler.timerGrid();
-         databaseHandler.dialog.setResultConverter(dialogButton -> {
-            try {
-                if (dialogButton == ButtonType.OK) {
-                    if (!databaseHandler.checkBox.isSelected()) {
-                        selectedCheckBox = false;
-                        // JavaFX.CheckBox can't be serialized,so I have to serialize a boolean instead
-                        TimerSpecs timerSpecs = new TimerSpecs(databaseHandler.timerSpinner.getValue(),selectedCheckBox);
-                        SerializedObject.writeObject(timerSpecs,Paths.get(TimerSpecs.getTimerSpecsDir()));
-                        return null;
-                    }
-                    selectedCheckBox = true;
-                    TimerSpecs timerSpecs = new TimerSpecs(databaseHandler.timerSpinner.getValue(),selectedCheckBox);
-                    SerializedObject.writeObject(timerSpecs,Paths.get(TimerSpecs.getTimerSpecsDir()));
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information Dialog");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Timer set! Database will automaticaly be locked after " +databaseHandler.timerSpinner.getValue() + " seconds of inactivity!");
-
-                    alert.showAndWait();
-
-                   timer();
-
-                    return null;
-                }
-            } catch (Exception E) {
-
-            }
-
-            return null;
-        });
-
-
-        databaseHandler.dialog.showAndWait();
-
+    TimerHandler.timerDialog(btnSignOut,anchorPane);
     }
 
 
-    @FXML
-   private void initialize() throws Exception  {
 
-          timer() ;
-       anchorPane.setOnContextMenuRequested(e ->
-              ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
+    @FXML
+   private void initialize() throws Exception {
+
+       TimerHandler.timer(btnSignOut,anchorPane);
+        anchorPane.setOnContextMenuRequested(e ->
+                ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
         String image = Main.class.getResource("PMAuth/magnifying-glass.png").toExternalForm();
         tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
-               " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;" );
+                " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;");
 
 
-        String hidePwd="";
+        String hidePwd = "";
         for (int i = 0; i < 12; i++) {
-            hidePwd='\u2022'+ hidePwd;
+            hidePwd = '\u2022' + hidePwd;
             // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
         }
 
         String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-                        if (selectedItem != null) {
-                            textTitel.setText(selectedItem.getTitle());
-                            textNotes.setText(selectedItem.getNotes());
-                            textUsername.setText(selectedItem.getUsername());
-                            hyperLink.setText(selectedItem.getUrl());
-                            hyperLink.setOnAction(e ->
-                            {
-                                try {
-                                    Desktop.getDesktop().browse(new URI("www."+selectedItem.getUrl()));
-                                    // opens the hyperlink in the user's main browser
-                                 }
-                                catch (Exception E) {
+            if (selectedItem != null) {
+                textTitel.setText(selectedItem.getTitle());
+                textNotes.setText(selectedItem.getNotes());
+                textUsername.setText(selectedItem.getUsername());
+                hyperLink.setText(selectedItem.getUrl());
+                hyperLink.setOnAction(e ->
+                {
+                    try {
+                        Desktop.getDesktop().browse(new URI("www." + selectedItem.getUrl()));
+                        // opens the hyperlink in the user's main browser
+                    } catch (Exception E) {
 
-                                }
-                            textNotes.setText(selectedItem.getNotes());
+                    }
+                    textNotes.setText(selectedItem.getNotes());
 
-                             if (!selectedItem.getPassword().isEmpty()) {
-                                textPassword.setText(finalHidePwd);
-                            } else {
-                                textPassword.setText(selectedItem.getPassword());
-                            }
-                        });
+                    if (!selectedItem.getPassword().isEmpty()) {
+                        textPassword.setText(finalHidePwd);
+                    } else {
+                        textPassword.setText(selectedItem.getPassword());
 
-
-                        toggleButton.setOnAction(e -> {
-                            if (!imgPwdVisible.isVisible() ) {
-                                imgPwdVisible.setVisible(true);
-                                imgPwdNotVisible.setVisible(false);
-                                 textPassword.setText(selectedItem.getPassword());
-                        return;     }
-
-                         imgPwdVisible.setVisible(false);
-                         imgPwdNotVisible.setVisible(true);
-                         textPassword.setText(finalHidePwd);
-                        });
-                             imgPwdVisible.setVisible(false);
-                            imgPwdNotVisible.setVisible(true);
-                            textPassword.setText(finalHidePwd);
-
-    }
+                    }
                 });
+
+                PasswordHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
+                        selectedItem.getPassword(),   finalHidePwd);
+                tfPwd.setVisible(false);
+                imgPwdVisible.setVisible(false);
+                imgPwdNotVisible.setVisible(true);
+                textPassword.setText(finalHidePwd);
+
+
+
+            }
+        });
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
 

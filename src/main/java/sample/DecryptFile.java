@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Security;
 
 public class DecryptFile  {
+
     static {
         Security.removeProvider("BC");
         Security.addProvider(new BouncyCastleProvider());
@@ -25,14 +26,14 @@ public class DecryptFile  {
             KeySpecs keySpecs = (KeySpecs) SerializedObject.readObject(KeySpecs.getKeySpecsDir());
 
             SecretKeyFactory factory =
-                    SecretKeyFactory.getInstance("PBKDF2WITHHMACSHA256", "BC");
+                    SecretKeyFactory.getInstance(keySpecs.getAlgorithm(), keySpecs.getProvider());
 
             PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(),
                     keySpecs.getSalt(), keySpecs.getIterationCount(),keySpecs.getKeyLength());
 
             SecretKey key = factory.generateSecret(keySpec);
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING", "BC");
+            Cipher cipher = Cipher.getInstance(keySpecs.getTransformation(), keySpecs.getProvider());
 
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(keySpecs.getGeneratedIV()));
 

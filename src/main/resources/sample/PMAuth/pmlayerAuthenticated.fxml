@@ -93,7 +93,7 @@
                         </Button>
             <Button fx:id="btnGenerateMenu" contentDisplay="GRAPHIC_ONLY" layoutX="372.0" layoutY="10.0" mnemonicParsing="false" onAction="#generatePwd" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Password Generator">
                <graphic>
-                  <ImageView fx:id="imgLock2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgRandomPwd" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@random.png" />
                      </image>
@@ -192,39 +192,75 @@
                               </ContextMenu>
                            </contextMenu>
                         </TableView>
-                        <BorderPane fx:id="bpEntryMenu" disable="true" layoutX="400.0" layoutY="40.0" prefHeight="421.0" prefWidth="653.0" visible="false">
-                           <left>
-                              <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="apEntryMenu" disable="true" layoutX="400.0" layoutY="40.0" visible="false">
+               <children>
+                              <BorderPane fx:id="bpEntryMenu" prefHeight="421.0" prefWidth="653.0">
+                                 <left>
+                                    <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="lblTitel" prefHeight="16.0" prefWidth="63.0" text=" Titel" />
+                                          <Label fx:id="lblUsername" text="Username" />
+                                          <Label fx:id="lblURL" prefHeight="0.0" prefWidth="63.0" text="URL" />
+                                          <Label fx:id="lblPwd" text="Password" />
+                                          <Label fx:id="lblNotes" text="Notes" />
+                                       </children>
+                                    </VBox>
+                                 </left>
+                                 <center>
+                                    <VBox fx:id="vBoxTf" prefHeight="257.0" prefWidth="702.0" spacing="7.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
+                                          <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
+                                          <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
+                              <AnchorPane minHeight="31.0">
                                  <children>
-                                    <Label fx:id="lblTitel" prefHeight="16.0" prefWidth="63.0" text=" Titel" />
-                                    <Label fx:id="lblUsername" text="Username" />
-                                    <Label fx:id="lblURL" prefHeight="0.0" prefWidth="63.0" text="URL" />
-                                    <Label fx:id="lblPwd" text="Password" />
-                                    <Label fx:id="lblNotes" text="Notes" />
-                                 </children>
-                              </VBox>
-                           </left>
-                           <center>
-                              <VBox fx:id="vBoxTf" prefHeight="257.0" prefWidth="702.0" spacing="7.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <TextField fx:id="tfTitel" prefHeight="31.0" prefWidth="206.0" />
-                                    <TextField fx:id="tfUsername" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="206.0" />
-                                    <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
-                                    <PasswordField fx:id="pfPwdField" />
-                                    <TextArea fx:id="tANotes" prefHeight="255.0" prefWidth="600.0" />
-                                 </children>
-                              </VBox>
-                           </center>
-                           <bottom>
-                              <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
-                                    <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
-                                    <Button fx:id="btnEditOK" disable="true" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" visible="false" />
+                                                <PasswordField fx:id="pfPwdField" minWidth="626.0" />
+                                    <TextField fx:id="tfPwd" minHeight="20.0" prefHeight="31.0" prefWidth="626.0" />
+                                    <Button fx:id="btnRandomPwd" contentDisplay="GRAPHIC_ONLY" layoutX="540.0" layoutY="-12.0" mnemonicParsing="false" onAction="#generatePwd" prefHeight="49.0" prefWidth="38.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" style="-fx-background-color: transparent;" text="Password Generator">
+                                       <graphic>
+                                          <ImageView fx:id="imgRandom" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@random.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <ToggleButton fx:id="togBtnPwd" layoutX="580.0" layoutY="-6.0" mnemonicParsing="false" onAction="#togglePasswordVisible" prefHeight="31.0" prefWidth="46.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <ImageView fx:id="imgNotVisible" fitHeight="31.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@notvisible.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fx:id="imgVisible" fitHeight="31.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" visible="false">
+                                                   <image>
+                                                      <Image url="@visible.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </ToggleButton>
                                  </children>
                               </AnchorPane>
-                           </bottom>
-                        </BorderPane>
+                                          <TextArea fx:id="tANotes" prefHeight="255.0" prefWidth="600.0" />
+                                       </children>
+                                    </VBox>
+                                 </center>
+                                 <bottom>
+                                    <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
+                                          <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                                          <Button fx:id="btnEditOK" disable="true" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" visible="false" />
+                                       </children>
+                                    </AnchorPane>
+                                 </bottom>
+                              </BorderPane>
+               </children>
+            </AnchorPane>
             <AnchorPane layoutX="134.0" layoutY="550.0" prefHeight="117.0" prefWidth="1195.0">
                <children>
                   <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="1186.0">
