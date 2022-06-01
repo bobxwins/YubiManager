@@ -1,5 +1,4 @@
 package sample;
-import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -20,11 +19,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 
-import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
 import java.awt.*;
@@ -93,17 +90,18 @@ public class EntryController implements Serializable   {
 
     @FXML
     private ToggleButton toggleButton;
+    @FXML private ToggleButton togBtnPwd;
 
     @FXML
     private TextField generatedPWDfield;
 
-    @FXML private  TextField tfPwd;
+     @FXML private  TextField tfPwd;
 
     @FXML
     private Text textUsername;
 
     @FXML
-    private Hyperlink hyperLink;
+    private Hyperlink hyperLinkURL;
     @FXML
     private Text textPassword;
 
@@ -137,6 +135,12 @@ public class EntryController implements Serializable   {
      private ImageView imgPwdVisible;
 
     @FXML
+    private ImageView imgVisible;
+
+    @FXML
+    private ImageView imgNotVisible;
+
+    @FXML
     private ImageView imgPwdNotVisible;
  @FXML private ContextMenu ctxTableMenu;
 
@@ -144,42 +148,10 @@ public class EntryController implements Serializable   {
 
     @FXML void menuRandomPwd (ActionEvent event)
     {
-
-        pfPwdField.setText(PasswordUtils.getPassword(14));
+        pfPwdField.setText(PasswordUtils.getPassword(22));
         System.out.println(pfPwdField.getText());
     }
 
-    @FXML
-    void togglePasswordVisible(ActionEvent event) {
-/*
-        String hidePwd = "";
-        for (int i = 0; i < 12; i++) {
-            hidePwd = '\u2022' + hidePwd;
-            // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
-        }
-
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-
-            if (!imgPwdVisible.isVisible()) {
-                imgPwdVisible.setVisible(true);
-                imgPwdNotVisible.setVisible(false);
-                pfPwdField.setVisible(false);
-                tfPwd.setVisible(true);
-                tfPwd.setText(pfPwdField.getText());
-                textPassword.setText(selectedItem.getPassword());
-                return;
-            }
-
-            tfPwd.setVisible(false);
-            pfPwdField.setVisible(true);
-            imgPwdVisible.setVisible(false);
-            imgPwdNotVisible.setVisible(true);
-            textPassword.setText(hidePwd);
-        }
-
- */
-    }
 
 
         @FXML
@@ -466,10 +438,10 @@ void openRecent (ActionEvent event) throws Exception
 
     }
 
-
+    static Entry selectedItem ;
     @FXML void editEntry (ActionEvent event) throws  Exception {
+         selectedItem = entryTable.getSelectionModel().getSelectedItem();
 
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             entrySpecs();
 
@@ -477,9 +449,9 @@ void openRecent (ActionEvent event) throws Exception
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
             pfPwdField.setText(selectedItem.getPassword());
-
             tANotes.setText(selectedItem.getNotes());
-          //sets the TextFields and passwordfield to be equal to the fields of the selected row
+          //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
+            // otherwise the values in the fieds from the selected entry would be empty
 
             btnEditOK.setDisable(false);
             btnEditOK.setVisible(true);
@@ -493,8 +465,8 @@ void openRecent (ActionEvent event) throws Exception
                     selectedItem.setURL( tfURL.getText());
                     selectedItem.setPassword( pfPwdField.getText());
                     selectedItem.setNotes(tANotes.getText());
-
-
+                    // updates the value of both the tableview at the top and bottom of the page,
+                    // with the newly added values, after clicking the OK button
                     showTableView();
                     save();
                 } catch (Exception E) {
@@ -511,6 +483,15 @@ void openRecent (ActionEvent event) throws Exception
     SerializedObject.writeObservableList(entryData, Paths.get(Global.getPasswordFilePath()));
     FileProtector fileProtector = new FileProtector();
     fileProtector.encryption();
+    textTitel.setText(tfTitel.getText());
+    textUsername.setText(tfUsername.getText());
+    PasswordHandler.setSelectedPassword(pfPwdField.getText());
+   togBtnPwd.setSelected(false);
+   toggleButton.setSelected(false);
+
+    hyperLinkURL.setText(tfURL.getText());
+    textNotes.setText(tANotes.getText());
+
  }
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
@@ -538,7 +519,7 @@ void openRecent (ActionEvent event) throws Exception
     }
 
 
-
+   static String hidePwd = "";
     @FXML
    private void initialize() throws Exception {
 
@@ -551,7 +532,7 @@ void openRecent (ActionEvent event) throws Exception
                 " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;");
 
 
-        String hidePwd = "";
+
         for (int i = 0; i < 12; i++) {
             hidePwd = '\u2022' + hidePwd;
             // Putting password string as 12 bullets, to hide the content and length of the user's passwords.
@@ -559,13 +540,13 @@ void openRecent (ActionEvent event) throws Exception
 
         String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+              Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 textTitel.setText(selectedItem.getTitle());
                 textNotes.setText(selectedItem.getNotes());
                 textUsername.setText(selectedItem.getUsername());
-                hyperLink.setText(selectedItem.getUrl());
-                hyperLink.setOnAction(e ->
+                hyperLinkURL.setText(selectedItem.getUrl());
+                hyperLinkURL.setOnAction(e ->
                 {
                     try {
                         Desktop.getDesktop().browse(new URI("www." + selectedItem.getUrl()));
@@ -575,22 +556,14 @@ void openRecent (ActionEvent event) throws Exception
                     }
                     textNotes.setText(selectedItem.getNotes());
 
-                    if (!selectedItem.getPassword().isEmpty()) {
-                        textPassword.setText(finalHidePwd);
-                    } else {
-                        textPassword.setText(selectedItem.getPassword());
-
-                    }
                 });
 
-                PasswordHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
+           PasswordHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
                         selectedItem.getPassword(),   finalHidePwd);
-                tfPwd.setVisible(false);
-                imgPwdVisible.setVisible(false);
-                imgPwdNotVisible.setVisible(true);
+
+                PasswordHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
+
                 textPassword.setText(finalHidePwd);
-
-
 
             }
         });

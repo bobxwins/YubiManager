@@ -214,8 +214,8 @@
                                           <TextField fx:id="tfURL" layoutX="10.0" layoutY="41.0" prefHeight="31.0" prefWidth="206.0" />
                               <AnchorPane minHeight="31.0">
                                  <children>
+                                    <TextField fx:id="tfPwd" minWidth="626.0" />
                                                 <PasswordField fx:id="pfPwdField" minWidth="626.0" />
-                                    <TextField fx:id="tfPwd" minHeight="20.0" prefHeight="31.0" prefWidth="626.0" />
                                     <Button fx:id="btnRandomPwd" contentDisplay="GRAPHIC_ONLY" layoutX="540.0" layoutY="-12.0" mnemonicParsing="false" onAction="#menuRandomPwd" prefHeight="49.0" prefWidth="38.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" style="-fx-background-color: transparent;" text="Password Generator">
                                        <graphic>
                                           <ImageView fx:id="imgRandom" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
@@ -225,7 +225,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ToggleButton fx:id="togBtnPwd" layoutX="580.0" layoutY="-6.0" mnemonicParsing="false" onAction="#togglePasswordVisible" prefHeight="31.0" prefWidth="46.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5">
+                                    <ToggleButton fx:id="togBtnPwd" layoutX="580.0" layoutY="-6.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5">
                                        <graphic>
                                           <AnchorPane>
                                              <children>
@@ -300,7 +300,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Text>
-                  <Hyperlink fx:id="hyperLink" layoutX="430.0" layoutY="11.0" text="Hyperlink" underline="true">
+                  <Hyperlink fx:id="hyperLinkURL" layoutX="430.0" layoutY="11.0" text="Hyperlink" underline="true">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -335,7 +335,7 @@
                         <Font size="28.0" />
                      </font>
                   </Text>
-                  <ToggleButton fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" onAction="#togglePasswordVisible" prefHeight="31.0" prefWidth="46.0">
+                  <ToggleButton fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0">
                      <graphic>
                         <AnchorPane>
                            <children>
