@@ -30,32 +30,32 @@ public class FileProtector {
     private    int iterationCount = 5000;
 
     private    int keyLength = 192;
-
-   private String algorithm = "PBKDF2WITHHMACSHA256";
+   private String secureRandomAlgorithm = "DEFAULT";
+   private String secretKeyalgorithm = "PBKDF2WITHHMACSHA256";
    private String provider = "BC";
-   private String transformation ="AES/CBC/PKCS5PADDING";
+   private String algorithmModePadding ="AES/CBC/PKCS5PADDING";
 
     public void encryption() {
 
         try {
-            SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT", provider);
+            SecureRandom secureRandom = SecureRandom.getInstance(secureRandomAlgorithm, provider);
 
             secureRandom.nextBytes(generatedIV);
 
             secureRandom.nextBytes(salt);
 
-            KeySpecs keySpecs = new KeySpecs(generatedIV,salt,iterationCount,keyLength,algorithm,provider,transformation);
+            KeySpecs keySpecs = new KeySpecs(generatedIV,salt,iterationCount,keyLength, secretKeyalgorithm,provider, algorithmModePadding);
 
             SerializedObject.writeObject(keySpecs,Paths.get(KeySpecs.getKeySpecsDir()));
 
             PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(), salt, iterationCount, keyLength);
 
             SecretKeyFactory factory =
-                    SecretKeyFactory.getInstance(algorithm, provider);
+                    SecretKeyFactory.getInstance(secretKeyalgorithm, provider);
 
             SecretKey key = factory.generateSecret(keySpec);
 
-            Cipher cipher = Cipher.getInstance(transformation, provider);
+            Cipher cipher = Cipher.getInstance(algorithmModePadding, provider);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(generatedIV));
 
             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());

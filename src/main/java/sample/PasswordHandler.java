@@ -24,6 +24,9 @@ public class PasswordHandler {
         });
 
     }
+    void passwordVisbility () {
+
+    }
 
 
 }

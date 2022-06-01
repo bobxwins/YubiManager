@@ -1,7 +1,6 @@
 package sample;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 
 public class KeySpecs implements Serializable {
@@ -11,16 +10,16 @@ public class KeySpecs implements Serializable {
 
 
 
-    String algorithm,provider,transformation;
+    String secureRandomAlgorithm,provider, algorithmModePadding;
 
-    KeySpecs(byte[] IVByte, byte[] saltByte, int iterationInt, int keyInt, String algorithmString, String providerString, String transformationString) {
+    KeySpecs(byte[] IVByte, byte[] saltByte, int iterationInt, int keyInt, String sRAString, String providerString, String algoModePadString) {
         this.generatedIV = IVByte;
         this.salt = saltByte;
         this.iterationCount = iterationInt;
         this.keyLength = keyInt;
-        this.algorithm = algorithmString;
+        this.secureRandomAlgorithm = sRAString;
         this.provider = providerString;
-        this.transformation= transformationString;
+        this.algorithmModePadding = algoModePadString;
     }
     KeySpecs() {
     }
@@ -46,16 +45,16 @@ public class KeySpecs implements Serializable {
         return generatedIV;
     }
 
-    public String getAlgorithm() {
-        return algorithm;
+    public String getSecureRandomAlgorithm() {
+        return secureRandomAlgorithm;
     }
 
     public String getProvider() {
         return provider;
     }
 
-    public String getTransformation() {
-        return transformation;
+    public String getAlgorithmModePadding() {
+        return algorithmModePadding;
     }
 
 

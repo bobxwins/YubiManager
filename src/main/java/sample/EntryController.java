@@ -142,6 +142,13 @@ public class EntryController implements Serializable   {
 
     Slider slider = new Slider(4, 999, 1);
 
+    @FXML void menuRandomPwd (ActionEvent event)
+    {
+
+        pfPwdField.setText(PasswordUtils.getPassword(14));
+        System.out.println(pfPwdField.getText());
+    }
+
     @FXML
     void togglePasswordVisible(ActionEvent event) {
 /*
