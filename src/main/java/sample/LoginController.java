@@ -28,7 +28,8 @@ public class LoginController {
     private Menu menuRecent;
 
 
-    @FXML private  Button  btnYubikey;
+    @FXML private  Button btnLogo;
+    @FXML private  Button  btnYbkPwd;
     @FXML private ImageView imgLocked;
     @FXML private ImageView imgUnLocked;
     @FXML
@@ -58,6 +59,12 @@ public class LoginController {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         databaseHandler.newDBdialog(btnCreateDB);
         recentFilesTable.getItems().clear();
+
+    }
+
+    @FXML void newYbkPwd(ActionEvent event) throws Exception {
+     PasswordHandler.generateYbkPassword();
+
 
     }
 
@@ -126,9 +133,9 @@ public class LoginController {
                            }     });
 
         anchorPane.getChildren().addAll(Global.getLabelEnterPwd());
-        btnYubikey.setStyle(   "-fx-background-radius: 5em; "
+        btnLogo.setStyle(   "-fx-background-radius: 5em; "
         );
-        btnYubikey.setOnAction(e-> {
+        btnLogo.setOnAction(e-> {
                     if(!imgLocked.isVisible())
                     {
                         imgLocked.setVisible(true);

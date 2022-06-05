@@ -1,80 +1,34 @@
 package sample;
+import javafx.scene.control.Alert;
 
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
+import java.io.*;
 
-import java.nio.charset.StandardCharsets;
 
 public class PasswordHandler {
+ //ykman.exe --log-level DEBUG --log-file ~C:/Users\bob-w/Documents/YubiManager/src/main/tools/ykman.txt
 
-    private static  String selectedPassword;
+    static String ykManPath =System.getProperty("user.dir")+"\\tools\\YubiKeyManager\\";
+    static String generatePwdCommand= "ykman otp static 1 --generate --length 32 --force --keyboard-layout US";
+    // Using the command prompt, the command opens the YubiKey Manager, and generates a 32 character long random password, with the keyboard being the  US layout
+    public static void generateYbkPassword()  {
 
-    public static void setSelectedPassword(String selectedP) {
-        PasswordHandler.selectedPassword = selectedP;
+        try {
+            Process process =
+                Runtime
+                    .getRuntime()
+                    .exec("cmd /c cmd.exe /K \""+"cd "+ykManPath+"&&"+generatePwdCommand);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("A new YubiKey password has been generated succesfully!");
+            alert.showAndWait();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+}
 
-    public static String getSelectedPassword() {
-        return selectedPassword;
-    }
-
-    public static void toggleVisbility (ToggleButton toggleButton, ImageView imgPwdVisible, ImageView imgPwdNotVisible, Text textPassword,
-                                  String showPwd, String hidePwd)
-    {
-
-        toggleButton.setOnAction(e -> {
-            if (toggleButton.isSelected() ) {
-                imgPwdVisible.setVisible(true);
-                imgPwdNotVisible.setVisible(false);
-                textPassword.setText(showPwd);
-                return;     }
-
-            imgPwdVisible.setVisible(false);
-            imgPwdNotVisible.setVisible(true);
-            textPassword.setText(hidePwd);
-
-        });
-        imgPwdVisible.setVisible(false);
-        imgPwdNotVisible.setVisible(true);
-        textPassword.setText(hidePwd);
-    }
-   public static  void toggleVisbility (ToggleButton tBtn,ImageView imgPwdVisible, ImageView imgPwdNotVisible,TextField tf, PasswordField pf) {
-
-      pf.textProperty().addListener((observable, oldValue,    newValue) -> {
-           tf.setText(newValue);
-
-       });
-        tBtn.setOnAction(e -> {
-            if (tBtn.isSelected() ) {
-
-              tf.textProperty().addListener((observable, oldValue, newValue) -> {
-                  pf.setText(newValue);
-
-                });
-
-                imgPwdVisible.setVisible(true);
-                imgPwdNotVisible.setVisible(false);
-                System.out.println("IT IS VISIBLE!");
-                tf.setVisible(true);
-                pf.setVisible(false);
-
-      return;      }
-            imgPwdVisible.setVisible(false);
-            imgPwdNotVisible.setVisible(true);
-            tf.setVisible(false);
-            pf.setVisible(true);
-            System.out.println("IT IS NOT VISIBLE");
-        });
-                imgPwdVisible.setVisible(false);
-                imgPwdNotVisible.setVisible(true);
-                tf.setVisible(false);
-                pf.setVisible(true);
-                System.out.println("IT IS NOT VISIBLE");
-
-
-    }
-
-   }
 

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 
 <AnchorPane fx:id="anchorPane" minWidth="-Infinity" prefHeight="765.0" prefWidth="1207.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
 
@@ -76,7 +74,7 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="btnYubikey" layoutX="510.0" layoutY="89.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7" style="-fx-background-color: transparent;">
+      <Button fx:id="btnLogo" layoutX="510.0" layoutY="89.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fx:id="imgViewLogo" fitHeight="97.0" fitWidth="228.0">
                <image>
@@ -95,9 +93,9 @@
             <Image url="@open.png" />
          </image>
       </ImageView>
-      <TableView fx:id="recentFilesTable" layoutX="300.0" layoutY="587.0" prefHeight="128.0" prefWidth="665.0">
+      <TableView fx:id="recentFilesTable" layoutX="303.0" layoutY="587.0" prefHeight="128.0" prefWidth="697.0">
         <columns>
-          <TableColumn fx:id="recent" minWidth="0.0" prefWidth="664.0" text="Recent Databases" />
+          <TableColumn fx:id="recent" minWidth="0.0" prefWidth="699.0" text="Recent Databases" />
         </columns>
          <contextMenu>
             <ContextMenu>
@@ -107,6 +105,6 @@
             </ContextMenu>
          </contextMenu>
       </TableView>
-      <Button fx:id="btnYubikey11" layoutX="98.0" layoutY="100.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" rotate="180.0" style="-fx-background-color: transparent;" />
+      <Button fx:id="btnYbkPwd" layoutX="585.0" layoutY="539.0" mnemonicParsing="false" onAction="#newYbkPwd" text="Generate YubiKey Password" />
                </children>
             </AnchorPane>

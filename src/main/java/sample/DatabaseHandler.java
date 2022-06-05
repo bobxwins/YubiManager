@@ -17,9 +17,6 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
-
-import static java.lang.Integer.parseInt;
 
 
 public class DatabaseHandler {
@@ -63,10 +60,6 @@ public class DatabaseHandler {
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
             Global.setCombinedPasswords(mpField,ybkSecret);
-
-            Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
-
-            Stage stage = (Stage) btnSignIn.getScene().getWindow();
             DecryptFile decryptFile = new DecryptFile();
             if (SerializedObject.readObservableList(decryptFile.Decryption()) != null &&
                     SerializedObject.readObservableList(decryptFile.Decryption()).isEmpty()) {
@@ -78,7 +71,9 @@ public class DatabaseHandler {
                 alert.showAndWait();
                 return false;
             }
+        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
+        Stage stage = (Stage) btnSignIn.getScene().getWindow();
             stage.setScene(new Scene(root));
             return true;
 

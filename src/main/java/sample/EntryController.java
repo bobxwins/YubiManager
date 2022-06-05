@@ -485,7 +485,7 @@ void openRecent (ActionEvent event) throws Exception
     fileProtector.encryption();
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
-    PasswordHandler.setSelectedPassword(pfPwdField.getText());
+    VisbilityHandler.setSelectedPassword(pfPwdField.getText());
    togBtnPwd.setSelected(false);
    toggleButton.setSelected(false);
 
@@ -558,10 +558,10 @@ void openRecent (ActionEvent event) throws Exception
 
                 });
 
-           PasswordHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
+                VisbilityHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
                         selectedItem.getPassword(),   finalHidePwd);
 
-                PasswordHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
+                VisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
 
                 textPassword.setText(finalHidePwd);
 
