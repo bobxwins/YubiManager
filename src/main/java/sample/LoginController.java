@@ -18,6 +18,9 @@ public class LoginController {
     @FXML
     private Button btnCreateDB;
 
+    @FXML private  Button btnLogo;
+    @FXML private  Button btnGenYbkPwd;
+
     @FXML
     private PasswordField mpField;
 
@@ -27,8 +30,6 @@ public class LoginController {
     @FXML
     private Menu menuRecent;
 
-
-    @FXML private  Button btnLogo;
     @FXML private  Button  btnYbkPwd;
     @FXML private ImageView imgLocked;
     @FXML private ImageView imgUnLocked;
@@ -65,6 +66,11 @@ public class LoginController {
     @FXML void newYbkPwd(ActionEvent event) throws Exception {
      PasswordHandler.generateYbkPassword();
 
+
+    }
+
+    @FXML void setYbkPwd(ActionEvent event) throws Exception {
+         PasswordHandler.manualYbkPwd();
 
     }
 

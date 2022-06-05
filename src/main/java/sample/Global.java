@@ -23,9 +23,20 @@ public final class Global {
     private static  String RECENTFILESDIR;
     private static char[] COMBINEDPASSWORD;
 
+
+    private static String MANUALYBKPWD;
+
     private  static Label labelEnterPwd = new Label("Please Enter Passwords!");
     private  static Label labelRecentFile = new Label();
     private Global(){}  // Private constructor to prevent instantiation
+
+    public static String getManualYbkPwd() {
+        return MANUALYBKPWD;
+    }
+
+    public static void setManualYbkPwd(String manualYbkPwd) {
+        Global.MANUALYBKPWD = manualYbkPwd;
+    }
 
     public static  int getTimer() {
         if ( FileUtils.readAllBytes(SELECTEDDIRECTORYPATH+"timer.txt").length!=0) {
