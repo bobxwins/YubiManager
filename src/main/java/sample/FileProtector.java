@@ -22,7 +22,6 @@ public class FileProtector {
 
         Security.addProvider(new BouncyCastleProvider());
     }
-    private String folderDir = Global.getSelectedDirectoryPath();
 
     private    byte[] generatedIV = new byte[16];
 
@@ -35,7 +34,7 @@ public class FileProtector {
    private String provider = "BC";
    private String algorithmModePadding ="AES/CBC/PKCS5PADDING";
 
-    public void encryption() {
+    public void encryption(byte[] input) {
 
         try {
             SecureRandom secureRandom = SecureRandom.getInstance(secureRandomAlgorithm, provider);
@@ -58,10 +57,9 @@ public class FileProtector {
             Cipher cipher = Cipher.getInstance(algorithmModePadding, provider);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(generatedIV));
 
-            byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
             byte[] output = cipher.doFinal(input);
 
-            FileUtils.write(Global.getPasswordFilePath(), output);
+           FileUtils.write(Global.getPasswordFilePath(), output);
 
         } catch (Exception e) {
 

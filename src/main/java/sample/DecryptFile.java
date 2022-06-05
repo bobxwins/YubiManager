@@ -20,7 +20,7 @@ public class DecryptFile  {
     }
 
 
-    public byte[] Decryption() {
+    public byte[] Decryption(byte[] input) {
 
         try {
 
@@ -38,7 +38,6 @@ public class DecryptFile  {
 
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(keySpecs.getGeneratedIV()));
 
-            byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
             byte[] output = cipher.doFinal(input);
 
             return output;

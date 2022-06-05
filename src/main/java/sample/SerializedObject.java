@@ -10,6 +10,25 @@ package sample;
 
 public class SerializedObject {
 
+    public static byte[] getObservableList(ObservableList  observableList) throws  Exception {
+        try {
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(new ArrayList<>(observableList));
+            byte[] bytes = bos.toByteArray();
+            oos.close();
+            return bytes;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public static void writeObservableList(ObservableList  observableList, Path file) throws  Exception {
         try {
 
@@ -17,13 +36,14 @@ public class SerializedObject {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(new ArrayList<>(observableList));
             oos.close();
+            return;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+    return;
     }
 
 

@@ -60,9 +60,11 @@ public class DatabaseHandler {
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
             Global.setCombinedPasswords(mpField,ybkSecret);
+            byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
             DecryptFile decryptFile = new DecryptFile();
-            if (SerializedObject.readObservableList(decryptFile.Decryption()) != null &&
-                    SerializedObject.readObservableList(decryptFile.Decryption()).isEmpty()) {
+
+            if (SerializedObject.readObservableList(decryptFile.Decryption(input)) != null &&
+                    SerializedObject.readObservableList(decryptFile.Decryption(input)).isEmpty()) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Information Dialog");
@@ -152,7 +154,7 @@ public class DatabaseHandler {
             Global.setSelectedDirectoryPath(selectedDirectory.getAbsolutePath()+"\\"+Global.getPasswordFilePath()+"\\");
 
             new File( Global.getSelectedDirectoryPath()).mkdir();
-            Global.setPasswordFilePath(   Global.getSelectedDirectoryPath()+Global.getPasswordFilePath()+".aes");
+            Global.setPasswordFilePath( Global.getSelectedDirectoryPath()+Global.getPasswordFilePath()+".aes");
             FileUtils.write( Global.getPasswordFilePath(),"".getBytes(StandardCharsets.UTF_8));
 
         }

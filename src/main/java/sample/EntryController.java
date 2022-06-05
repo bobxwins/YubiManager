@@ -28,6 +28,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import java.util.Optional;
@@ -480,9 +481,11 @@ void openRecent (ActionEvent event) throws Exception
 
          void save () throws Exception {
 
-    SerializedObject.writeObservableList(entryData, Paths.get(Global.getPasswordFilePath()));
+
+    byte [] input = SerializedObject.getObservableList(entryData);
+
     FileProtector fileProtector = new FileProtector();
-    fileProtector.encryption();
+    fileProtector.encryption(input);
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
     VisbilityHandler.setSelectedPassword(pfPwdField.getText());
@@ -578,8 +581,9 @@ void openRecent (ActionEvent event) throws Exception
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
 
               DecryptFile decryptFile = new DecryptFile();
+             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
 
-            entryData.addAll(SerializedObject.readObservableList(decryptFile.Decryption()));
+            entryData.addAll(SerializedObject.readObservableList(decryptFile.Decryption(input)));
 
             entryTable.setItems(entryData);
 
