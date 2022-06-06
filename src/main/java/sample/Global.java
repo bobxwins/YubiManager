@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public final class Global {
 
     private static String passwordFilePath;
-
+    private static ObservableList OBSERVABLELIST;
 
     private  static int TIMER;
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
@@ -108,5 +108,12 @@ public final class Global {
         sb.append(masterPassword);
         sb.append(ybkPassword);
         COMBINEDPASSWORD = sb.toString().toCharArray();
+    }
+    static void setEntryData (ObservableList observableList) {
+        Global.OBSERVABLELIST =observableList;
+    }
+    static ObservableList<Entry> getEntryData () {
+
+        return OBSERVABLELIST;
     }
 }

@@ -8,8 +8,6 @@ public class KeySpecs implements Serializable {
     byte[] generatedIV, salt;
     int iterationCount, keyLength;
 
-
-
     String secureRandomAlgorithm,provider, algorithmModePadding;
 
     KeySpecs(byte[] IVByte, byte[] saltByte, int iterationInt, int keyInt, String sRAString, String providerString, String algoModePadString) {

@@ -7,22 +7,22 @@ package sample;
     import java.nio.file.Path;
     import java.util.ArrayList;
     import java.util.List;
+    import java.util.Timer;
 
 public class SerializedObject {
 
-    public static byte[] getObservableList(ObservableList  observableList) throws  Exception {
+    public static byte[] serializeObservableList(ObservableList  observableList) throws  Exception {
         try {
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(new ArrayList<>(observableList));
-            byte[] bytes = bos.toByteArray();
+            byte[] listBytes = bos.toByteArray();
             oos.close();
-            return bytes;
+            bos.close();
+            return listBytes;
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -36,14 +36,13 @@ public class SerializedObject {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(new ArrayList<>(observableList));
             oos.close();
-            return;
+            fos.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    return;
+
     }
 
 
@@ -54,7 +53,8 @@ public class SerializedObject {
 
             ObjectInputStream ois = new ObjectInputStream(in);
             List  list = (List ) ois.readObject() ;
-
+            in.close();
+            ois.close();
             return FXCollections.observableList(list);
 
         } catch (Exception e) {
@@ -70,42 +70,76 @@ public class SerializedObject {
             // writes an object given as parameter to a path given as parameter
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(object);
+            fos.close();
             oos.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public static Object readObject(String filename) {
+    public static Object readObject(byte [] inputBytes) {
 
         try
         {
+            InputStream in = new ByteArrayInputStream(inputBytes);
+            ObjectInputStream ois = new ObjectInputStream(in);
 
-            FileInputStream file = new FileInputStream(filename);
-            ObjectInputStream in = new ObjectInputStream(file);
+            Object  object = ois.readObject();
 
-            Object  object = in.readObject();
-
+            ois.close();
             in.close();
-            file.close();
 
             return object;
         }
 
-        catch(IOException ex)
+        catch(Exception e)
         {
-            System.out.println("IOException is caught");
+            e.printStackTrace();
         }
 
-        catch(ClassNotFoundException ex)
-        {
-            System.out.println("ClassNotFoundException is caught");
-        }
          return  new Object();
+    }
+
+    public static TimerSpecs readObject2(byte [] inputBytes) {
+
+        try
+        {
+            InputStream in = new ByteArrayInputStream(inputBytes);
+            ObjectInputStream ois = new ObjectInputStream(in);
+
+            TimerSpecs  object = (TimerSpecs) ois.readObject();
+
+            ois.close();
+            in.close();
+
+            return object;
+        }
+
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return  new TimerSpecs();
+    }
+
+    public static byte[] serializeObject(Object  object) throws  Exception {
+        try {
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(object);
+            byte[] listBytes = bos.toByteArray();
+            oos.close();
+            bos.close();
+            return listBytes;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

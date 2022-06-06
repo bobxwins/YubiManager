@@ -4,8 +4,11 @@ import javax.crypto.spec.IvParameterSpec;
 
 import javax.crypto.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;
@@ -15,7 +18,6 @@ import java.security.Security;
 
 
 public class FileProtector {
-
 
      static {
         Security.removeProvider("BC");
@@ -28,13 +30,13 @@ public class FileProtector {
     private    byte[] salt = new byte[32];
     private    int iterationCount = 5000;
 
-    private    int keyLength = 192;
+    private int keyLength = 192;
    private String secureRandomAlgorithm = "DEFAULT";
    private String secretKeyalgorithm = "PBKDF2WITHHMACSHA256";
    private String provider = "BC";
    private String algorithmModePadding ="AES/CBC/PKCS5PADDING";
 
-    public void encryption(byte[] input) {
+    public void encryption(ObservableList observableList,Object object) {
 
         try {
             SecureRandom secureRandom = SecureRandom.getInstance(secureRandomAlgorithm, provider);
@@ -47,6 +49,7 @@ public class FileProtector {
 
             SerializedObject.writeObject(keySpecs,Paths.get(KeySpecs.getKeySpecsDir()));
 
+
             PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(), salt, iterationCount, keyLength);
 
             SecretKeyFactory factory =
@@ -57,9 +60,15 @@ public class FileProtector {
             Cipher cipher = Cipher.getInstance(algorithmModePadding, provider);
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(generatedIV));
 
-            byte[] output = cipher.doFinal(input);
+           byte[] inputTimerSpec = SerializedObject.serializeObject(object);
 
-           FileUtils.write(Global.getPasswordFilePath(), output);
+           byte[] outputTimerSpecs = cipher.doFinal(inputTimerSpec);
+
+           FileUtils.write(TimerSpecs.getTimerSpecsDir(), outputTimerSpecs);
+
+           byte[] inputEntry = SerializedObject.serializeObservableList(observableList);
+           byte[] outputEntry = cipher.doFinal(inputEntry);
+           FileUtils.write(Global.getPasswordFilePath(), outputEntry);
 
         } catch (Exception e) {
 

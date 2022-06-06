@@ -1,12 +1,7 @@
 package sample;
 
-import javafx.scene.control.CheckBox;
-
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.Timer;
-
 
 public class TimerSpecs implements Serializable {
     private   int timer;
@@ -27,7 +22,19 @@ public class TimerSpecs implements Serializable {
     }
 
     public static String getTimerSpecsDir() {
-        String timerSpecsDir = Global.getSelectedDirectoryPath() + "Timer.txt";
+        String timerSpecsDir = Global.getSelectedDirectoryPath() + "Timer.aes";
         return timerSpecsDir;
     }
+
+
+
+    public static TimerSpecs getTimerSpecs ()
+    {
+        byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
+        DecryptFile decryptFile = new DecryptFile();
+        byte [] output = decryptFile.Decryption(input);
+        TimerSpecs timerSpecs = SerializedObject.readObject2(output);
+      return timerSpecs;
+    }
+
 }

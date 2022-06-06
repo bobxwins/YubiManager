@@ -26,10 +26,10 @@ public class DatabaseHandler {
     PasswordField yubikeyPasswordField = new PasswordField();
     // These are the 3 password fields generated when the user creates a new Database.
 
-   public   Dialog<Pair<String, String>> dialog = new Dialog<>();
-   public  GridPane grid = new GridPane();
-   public  CheckBox checkBox;
-   public  Spinner<Integer> timerSpinner;
+    public   Dialog<Pair<String, String>> dialog = new Dialog<>();
+    public  GridPane grid = new GridPane();
+    public  CheckBox checkBox;
+    public  Spinner<Integer> timerSpinner;
 
 
     public boolean openDB() throws Exception {
@@ -53,31 +53,31 @@ public class DatabaseHandler {
 
         // updateRecentFileString();
 
-      return true;
-}
+        return true;
+    }
 
 
     boolean loginAuthentication (PasswordField mpField, PasswordField ybkSecret,Button btnSignIn ) throws  Exception {
 
-            Global.setCombinedPasswords(mpField,ybkSecret);
-            byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-            DecryptFile decryptFile = new DecryptFile();
+        Global.setCombinedPasswords(mpField,ybkSecret);
+        byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+        DecryptFile decryptFile = new DecryptFile();
 
-            if (SerializedObject.readObservableList(decryptFile.Decryption(input)) != null &&
-                    SerializedObject.readObservableList(decryptFile.Decryption(input)).isEmpty()) {
+        if (SerializedObject.readObservableList(decryptFile.Decryption(input)) != null &&
+                SerializedObject.readObservableList(decryptFile.Decryption(input)).isEmpty()) {
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText("Login failed! Wrong Password!");
-                alert.showAndWait();
-                return false;
-            }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Login failed! Wrong Password!");
+            alert.showAndWait();
+            return false;
+        }
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
         Stage stage = (Stage) btnSignIn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            return true;
+        stage.setScene(new Scene(root));
+        return true;
 
     }
 
@@ -92,7 +92,7 @@ public class DatabaseHandler {
         Label fileLabel = new Label("Enter new File name:");
 
         grid.addRow(0, fileLabel,fileNameField);
-       // grid.addRow()
+        // grid.addRow()
         Platform.runLater(() -> fileNameField.requestFocus());
 
         dialog.setResultConverter(dialogButton -> {
@@ -136,7 +136,7 @@ public class DatabaseHandler {
         Global.getRecentFilesData().add(Global.getPasswordFilePath());
         FileUtils.write(Global.getRecentFilesDir(),"".getBytes(StandardCharsets.UTF_8));
         // empties th file, or generates an empty file if it doesn't exist
-      SerializedObject.writeObservableList( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
+        SerializedObject.writeObservableList( Global.getRecentFilesData(),Paths.get(Global.getRecentFilesDir()));
 
 
     }
@@ -164,7 +164,7 @@ public class DatabaseHandler {
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
-       //  entryWindow.setMaximized(true);
+        //  entryWindow.setMaximized(true);
         entryWindow.setScene(new Scene(root));
 
         return true;
@@ -175,19 +175,19 @@ public class DatabaseHandler {
         for (int i = 0; i < Global.getRecentFilesData().size(); i++) {
             MenuItem menuItems = new MenuItem(Global.getRecentFilesData().get(i));
 
-                menuRecent.getItems().addAll(menuItems);
+            menuRecent.getItems().addAll(menuItems);
 
-                menuItems.setOnAction(e ->
-                {
-                    Global.setPasswordFilePath( menuItems.getText());
-                   Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
+            menuItems.setOnAction(e ->
+            {
+                Global.setPasswordFilePath( menuItems.getText());
+                Global.setSelectedDirectoryPath( Paths.get(Global.getPasswordFilePath()).getParent()+"\\");
 
-                    label.setVisible(true);
+                label.setVisible(true);
 
-                });
-            }
-
+            });
         }
+
+    }
     void deleteDir(File file) {
         File[] contents = file.listFiles();
         if (contents != null) {
@@ -225,56 +225,30 @@ public class DatabaseHandler {
 
     }
 
-     void timerGrid () {
-
-         dialog.setTitle("Setting timer");
-         dialog.getDialogPane().setContent(grid);
-         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-         grid.setHgap(10);
-         grid.setVgap(10);
-         grid.setPadding(new Insets(0, 10, 0, 10));
-         checkBox = new CheckBox("Seconds of inactivity database will be locked in: ");
-         timerSpinner = (Spinner<Integer>) new Spinner(10, 999, 15);
-         if (FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir()).length!=0)
-         {
-             TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(TimerSpecs.getTimerSpecsDir());
-             checkBox.setSelected(timerSpecs.getSelectedCheckBox());
-           timerSpinner.getValueFactory().setValue(timerSpecs.getTimer());
-         }
-
-         timerSpinner.setPrefSize(75, 25);
-         timerSpinner.setEditable(true);
-         grid.add(checkBox, 0, 1);
-         grid.add(timerSpinner, 1, 1);
-     }
-
-
-
     void updatePasswords() {
-    dialog.setTitle("Updating passwords");
-    dialog.getDialogPane().setContent(grid);
-    setPwdGrid();
-    dialog.setResultConverter(dialogButton -> {
-        try {
-            if (dialogButton == ButtonType.OK) {
-                if (!masterPasswordField.getText().equals(confirmPasswordField.getText())) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Information Dialog");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Update failed! Password did not match!");
-                    alert.showAndWait();
+        dialog.setTitle("Updating passwords");
+        dialog.getDialogPane().setContent(grid);
+        setPwdGrid();
+        dialog.setResultConverter(dialogButton -> {
+            try {
+                if (dialogButton == ButtonType.OK) {
+                    if (!masterPasswordField.getText().equals(confirmPasswordField.getText())) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Update failed! Password did not match!");
+                        alert.showAndWait();
 
-                    return null;
-                }
-                if (masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0 || yubikeyPasswordField.getText().length() == 0) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Information Dialog");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill all fields!");
-                    alert.showAndWait();
-                   return null;
-                }
+                        return null;
+                    }
+                    if (masterPasswordField.getText().length() == 0 || confirmPasswordField.getText().length() == 0 || yubikeyPasswordField.getText().length() == 0) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Please fill all fields!");
+                        alert.showAndWait();
+                        return null;
+                    }
 
                     Global.setCombinedPasswords(masterPasswordField,yubikeyPasswordField);
 
@@ -284,27 +258,26 @@ public class DatabaseHandler {
                     alert.setHeaderText(null);
                     alert.setContentText("Passwords succesfully updated!");
                     alert.showAndWait();
-                     }
-        } catch (Exception E) {
+                }
+            } catch (Exception E) {
 
 
-        }
-        return null;
-    });
+            }
+            return null;
+        });
 
-    dialog.showAndWait();
+        dialog.showAndWait();
+
+    }
+    static void stageFullScreen(Button btnSignOut) throws Exception
+    {
+        Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
+        Stage stage= (Stage)btnSignOut.getScene().getWindow();
+        stage.setScene(new Scene(root));
+
+    }
+
 
 }
-static void stageFullScreen(Button btnSignOut) throws Exception
-{
-    Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
-    Stage stage= (Stage)btnSignOut.getScene().getWindow();
-    stage.setScene(new Scene(root));
-
-}
-
-
-}
-
 
 

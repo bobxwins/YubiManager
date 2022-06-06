@@ -1,4 +1,5 @@
 package sample;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -145,6 +146,23 @@ public class EntryController implements Serializable   {
     private ImageView imgPwdNotVisible;
  @FXML private ContextMenu ctxTableMenu;
 
+
+ public   ObservableList<Entry> getEntryData2 ()
+ {
+     for (int i = 0; i <Global.getEntryData().size() ; i++) {
+         System.out.println("Titel is: "+ Global.getEntryData().get(i).getTitle());
+         System.out.println("Username is: "+ Global.getEntryData().get(i).getUsername());
+         System.out.println("URL is: "+ Global.getEntryData().get(i).getUrl());
+         System.out.println("password is: "+ Global.getEntryData().get(i).getPassword());
+         System.out.println("notes is: "+ Global.getEntryData().get(i).getNotes());
+     }
+     System.out.println("the size of entry in getEntryDat is"+ Global.getEntryData().size());
+
+     Global.setEntryData(entryData);
+     return entryData;
+ }
+
+
     Slider slider = new Slider(4, 999, 1);
 
     @FXML void menuRandomPwd (ActionEvent event)
@@ -152,8 +170,6 @@ public class EntryController implements Serializable   {
         pfPwdField.setText(PasswordUtils.getPassword(22));
         System.out.println(pfPwdField.getText());
     }
-
-
 
         @FXML
         void createEntry (ActionEvent event) throws Exception {
@@ -480,12 +496,13 @@ void openRecent (ActionEvent event) throws Exception
 
 
          void save () throws Exception {
-
-
-    byte [] input = SerializedObject.getObservableList(entryData);
+    Global.setEntryData(entryData);
+   // byte [] input = SerializedObject.getObservableList(entryData);
 
     FileProtector fileProtector = new FileProtector();
-    fileProtector.encryption(input);
+
+    fileProtector.encryption(entryData,TimerSpecs.getTimerSpecs());
+
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
     VisbilityHandler.setSelectedPassword(pfPwdField.getText());
@@ -494,7 +511,7 @@ void openRecent (ActionEvent event) throws Exception
 
     hyperLinkURL.setText(tfURL.getText());
     textNotes.setText(tANotes.getText());
-
+    System.out.println("the size of entry in SAVE is"+ entryData.size());
  }
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
@@ -518,7 +535,15 @@ void openRecent (ActionEvent event) throws Exception
 
 @FXML
     void timerDialog(ActionEvent event) {
-    TimerHandler.timerDialog(btnSignOut,anchorPane);
+   TimerHandler.timerDialog(btnSignOut,anchorPane,entryData);
+    }
+
+    @FXML
+    void duration(ActionEvent event) {
+        TimerHandler.transition  = new PauseTransition( TimerHandler.delay);
+        System.out.println("the transition duration is "+ TimerHandler.delay.toSeconds());
+
+
     }
 
 
@@ -526,7 +551,7 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
    private void initialize() throws Exception {
 
-       TimerHandler.timer(btnSignOut,anchorPane);
+       TimerHandler.timerSignOut(btnSignOut,anchorPane);
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 

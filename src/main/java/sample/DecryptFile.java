@@ -16,7 +16,7 @@ public class DecryptFile  {
     static {
         Security.removeProvider("BC");
         Security.addProvider(new BouncyCastleProvider());
-        // a glitch requires me to do this for all classes that uses bouncy castle
+
     }
 
 
@@ -24,7 +24,9 @@ public class DecryptFile  {
 
         try {
 
-            KeySpecs keySpecs = (KeySpecs) SerializedObject.readObject(KeySpecs.getKeySpecsDir());
+            byte[] keyspecBytes = FileUtils.readAllBytes(KeySpecs.getKeySpecsDir());
+
+            KeySpecs keySpecs = (KeySpecs) SerializedObject.readObject(keyspecBytes);
 
             SecretKeyFactory factory =
                     SecretKeyFactory.getInstance(keySpecs.getSecureRandomAlgorithm(), keySpecs.getProvider());
