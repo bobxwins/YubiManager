@@ -20,29 +20,19 @@ public class TimerHandler {
     public  GridPane grid = new GridPane();
     public  CheckBox checkBox;
     public  Spinner<Integer> timerSpinner;
-    static  TimerSpecs timerSpecs; // = TimerSpecs.getTimerSpecs();
+    static  TimerSpecs timerSpecs;
     static  boolean selectedCheckBox;
     static  PauseTransition transition ;
-   // static  boolean selectedCheckBox;
-    public  static void timerCountDown(Button btnSignOut, AnchorPane anchorPane) throws Exception {
+
+    public  static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
 
         timerSpecs = TimerSpecs.getTimerSpecs();
-
-   /*     timerSpecs..selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                chk2.setSelected(!newValue);
-            }
-        });
-        */
-
-        System.out.println("we are false=???");
-        if (!selectedCheckBox)
-        { return;
-        }
-        System.out.println("we are printing");
-
+        System.out.println("not print");
         transition  = new PauseTransition(Duration.seconds(timerSpecs.getTimer()));
+        if (!selectedCheckBox)
+        {   
+            return;    }
+        System.out.println("printing yes yes");
         transition.setOnFinished(evt -> {
             try {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -55,27 +45,27 @@ public class TimerHandler {
                 e.printStackTrace();
             }
         });
-
-
             anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
             transition.play();
 
     }
-  //  static TimerHandler timerHandler = new TimerHandler();
+
     static void timerDialog(ObservableList observableList,Button btnSignOut, AnchorPane anchorPane) {
         TimerHandler timerHandler = new TimerHandler();
         timerHandler.timerGrid();
         timerHandler.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    //timerCountDown(btnSignOut,anchorPane);
                         if (!timerHandler.checkBox.isSelected()) {
                             selectedCheckBox = false;
-                            
-                            // JavaFX.CheckBox can't be serialized,so I have to serialize a boolean instead
+                            // timerHandler() is a local object, which state can't be accesed outside of the scope of
+                      //      timerDialog(), so the global boolean selectedCheckBox is used
+                            //      to check the state oof the CheckBox JavaFX Object, in timerCountDown()
+
                             TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
                             FileProtector fileProtector = new FileProtector();
                             fileProtector.encryption(observableList,timerSpecs);
+                            // the TimerSpecs gets encrypted and stored as a file
                             transition.pause();
                             transition.stop();
                              return null;
