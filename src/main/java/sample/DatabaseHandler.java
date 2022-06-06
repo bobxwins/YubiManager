@@ -28,9 +28,6 @@ public class DatabaseHandler {
 
     public   Dialog<Pair<String, String>> dialog = new Dialog<>();
     public  GridPane grid = new GridPane();
-    public  CheckBox checkBox;
-    public  Spinner<Integer> timerSpinner;
-
 
     public boolean openDB() throws Exception {
         FileChooser fileChooser = new FileChooser();

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Timer;
 
 public class TimerSpecs implements Serializable {
+
     private   int timer;
-    private  boolean selectedCheckBox;
+   // private  Boolean selectedCheckBox1 ;
+    public  boolean selectedCheckBox ;
     TimerSpecs (int timerInt,  boolean selectedCheckBoxBool)
     {
         this.timer  =timerInt;
@@ -18,8 +20,10 @@ public class TimerSpecs implements Serializable {
     }
 
     public boolean getSelectedCheckBox() {
+        System.out.println("the boolean is:"+selectedCheckBox);
         return selectedCheckBox;
     }
+
 
     public static String getTimerSpecsDir() {
         String timerSpecsDir = Global.getSelectedDirectoryPath() + "Timer.aes";
@@ -30,10 +34,15 @@ public class TimerSpecs implements Serializable {
 
     public static TimerSpecs getTimerSpecs ()
     {
-        byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
+      /*  byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
         DecryptFile decryptFile = new DecryptFile();
         byte [] output = decryptFile.Decryption(input);
         TimerSpecs timerSpecs = SerializedObject.readObject2(output);
+
+        */
+        byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
+        DecryptFile decryptFile = new DecryptFile();
+        TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(decryptFile.Decryption(input));
       return timerSpecs;
     }
 

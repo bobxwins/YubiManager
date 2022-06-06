@@ -12,19 +12,20 @@ import java.nio.charset.StandardCharsets;
 
 public final class Global {
 
-    private static String passwordFilePath;
+
     private static ObservableList OBSERVABLELIST;
-
-    private  static int TIMER;
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
-
-    private static  String SELECTEDDIRECTORYPATH;//=
-     private static String DEFAULTHPATH;
-    private static  String RECENTFILESDIR;
-    private static char[] COMBINEDPASSWORD;
+    private static int TIMER;
 
 
+    private static Boolean selectedCheckBox;
+
+    private static String passwordFilePath;
+    private static String SELECTEDDIRECTORYPATH;//=
+    private static String DEFAULTHPATH;
+    private static String RECENTFILESDIR;
     private static String MANUALYBKPWD;
+    private static char[] COMBINEDPASSWORD;
 
     private  static Label labelEnterPwd = new Label("Please Enter Passwords!");
     private  static Label labelRecentFile = new Label();
@@ -112,8 +113,13 @@ public final class Global {
     static void setEntryData (ObservableList observableList) {
         Global.OBSERVABLELIST =observableList;
     }
-    static ObservableList<Entry> getEntryData () {
 
-        return OBSERVABLELIST;
+
+    public static Boolean getSelectedCheckBox1() {
+        return selectedCheckBox;
+    }
+
+    public static void setSelectedCheckBox1(Boolean selectedCheckBox) {
+        Global.selectedCheckBox = selectedCheckBox;
     }
 }

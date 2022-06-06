@@ -53,7 +53,7 @@ public class EntryController implements Serializable   {
 
     @FXML
     private TableColumn<Entry, String> colNotes;
-
+       @FXML Button btnStop;
     @FXML
     private TextField tfSearch;
     @FXML
@@ -146,21 +146,6 @@ public class EntryController implements Serializable   {
     private ImageView imgPwdNotVisible;
  @FXML private ContextMenu ctxTableMenu;
 
-
- public   ObservableList<Entry> getEntryData2 ()
- {
-     for (int i = 0; i <Global.getEntryData().size() ; i++) {
-         System.out.println("Titel is: "+ Global.getEntryData().get(i).getTitle());
-         System.out.println("Username is: "+ Global.getEntryData().get(i).getUsername());
-         System.out.println("URL is: "+ Global.getEntryData().get(i).getUrl());
-         System.out.println("password is: "+ Global.getEntryData().get(i).getPassword());
-         System.out.println("notes is: "+ Global.getEntryData().get(i).getNotes());
-     }
-     System.out.println("the size of entry in getEntryDat is"+ Global.getEntryData().size());
-
-     Global.setEntryData(entryData);
-     return entryData;
- }
 
 
     Slider slider = new Slider(4, 999, 1);
@@ -534,16 +519,15 @@ void openRecent (ActionEvent event) throws Exception
     }
 
 @FXML
-    void timerDialog(ActionEvent event) {
-   TimerHandler.timerDialog(btnSignOut,anchorPane,entryData);
+    void timerDialog(ActionEvent event) throws Exception {
+   TimerHandler.timerDialog(entryData,btnSignOut,anchorPane);
+   TimerHandler.timerCountDown(btnSignOut,anchorPane);
     }
 
     @FXML
     void duration(ActionEvent event) {
-        TimerHandler.transition  = new PauseTransition( TimerHandler.delay);
-        System.out.println("the transition duration is "+ TimerHandler.delay.toSeconds());
 
-
+       TimerHandler.transition.stop();
     }
 
 
@@ -551,7 +535,7 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
    private void initialize() throws Exception {
 
-       TimerHandler.timerSignOut(btnSignOut,anchorPane);
+       TimerHandler.timerCountDown(btnSignOut,anchorPane);
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 

@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.animation.PauseTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -18,23 +20,29 @@ public class TimerHandler {
     public  GridPane grid = new GridPane();
     public  CheckBox checkBox;
     public  Spinner<Integer> timerSpinner;
-    static  TimerSpecs timerSpecs; //= TimerSpecs.getTimerSpecs();
-    static  Duration delay ;// = Duration.seconds(timerSpecs.getTimer());
-    static  PauseTransition transition  ;//= new PauseTransition(delay);
+    static  TimerSpecs timerSpecs; // = TimerSpecs.getTimerSpecs();
     static  boolean selectedCheckBox;
-    public  static void timerSignOut(Button btnSignOut, AnchorPane anchorPane) throws Exception {
+    static  PauseTransition transition ;
+   // static  boolean selectedCheckBox;
+    public  static void timerCountDown(Button btnSignOut, AnchorPane anchorPane) throws Exception {
 
         timerSpecs = TimerSpecs.getTimerSpecs();
 
-         delay = Duration.seconds(timerSpecs.getTimer());
+   /*     timerSpecs..selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                chk2.setSelected(!newValue);
+            }
+        });
+        */
 
-        if (!timerSpecs.getSelectedCheckBox()) {
-            return;
+        System.out.println("we are false=???");
+        if (!selectedCheckBox)
+        { return;
         }
-        transition  = new PauseTransition(delay);
-        System.out.println("the transition delay is "+transition.getDelay());
-        System.out.println("the transition duration is:"+ transition.getDuration());
+        System.out.println("we are printing");
 
+        transition  = new PauseTransition(Duration.seconds(timerSpecs.getTimer()));
         transition.setOnFinished(evt -> {
             try {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -48,44 +56,45 @@ public class TimerHandler {
             }
         });
 
-        anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
-        transition.play();
+
+            anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
+            transition.play();
 
     }
-
-    static void timerDialog(Button btnSignOut, AnchorPane anchorPane, ObservableList observableList) {
+  //  static TimerHandler timerHandler = new TimerHandler();
+    static void timerDialog(ObservableList observableList,Button btnSignOut, AnchorPane anchorPane) {
         TimerHandler timerHandler = new TimerHandler();
         timerHandler.timerGrid();
         timerHandler.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    if (!timerHandler.checkBox.isSelected()) {
-                        selectedCheckBox = false;
-                        // JavaFX.CheckBox can't be serialized,so I have to serialize a boolean instead
-                        TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(), selectedCheckBox);
+                    //timerCountDown(btnSignOut,anchorPane);
+                        if (!timerHandler.checkBox.isSelected()) {
+                            selectedCheckBox = false;
+                            
+                            // JavaFX.CheckBox can't be serialized,so I have to serialize a boolean instead
+                            TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                            FileProtector fileProtector = new FileProtector();
+                            fileProtector.encryption(observableList,timerSpecs);
+                            transition.pause();
+                            transition.stop();
+                             return null;
+                        }
+                        selectedCheckBox = true;
+
+
+                        TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
                         FileProtector fileProtector = new FileProtector();
                         fileProtector.encryption(observableList,timerSpecs);
-                        transition.playFromStart();
-                        transition.pause();
-                        transition.stop();
-                        System.out.println(5);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Timer set! Database will automaticaly be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
+                        alert.showAndWait();
+
                         return null;
-                    }
 
-                    selectedCheckBox = true;
-                    TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(), selectedCheckBox);
-                    FileProtector fileProtector = new FileProtector();
-                    fileProtector.encryption(observableList,timerSpecs);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information Dialog");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Timer set! Database will automaticaly be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
 
-                    alert.showAndWait();
-
-                    TimerHandler.timerSignOut(btnSignOut, anchorPane);
-                    System.out.println(12);
-                    return null;
                 }
             } catch (Exception E) {
 
@@ -112,8 +121,9 @@ public class TimerHandler {
 
         if(Files.exists(Paths.get(TimerSpecs.getTimerSpecsDir()))) {
             byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
-            DecryptFile decryptFile = new DecryptFile();
-            TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(decryptFile.Decryption(input));
+           DecryptFile decryptFile = new DecryptFile();
+           TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(decryptFile.Decryption(input));
+
             checkBox.setSelected(timerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(timerSpecs.getTimer());
         }
