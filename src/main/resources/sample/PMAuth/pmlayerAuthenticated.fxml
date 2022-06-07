@@ -355,7 +355,6 @@
                   </ToggleButton>
                </children>
             </AnchorPane>
-            <Button layoutX="456.0" layoutY="485.0" mnemonicParsing="false" onAction="#duration" text="Button" />
                      </children>
                   </AnchorPane>
       <ToolBar layoutX="452.0" layoutY="39.0" prefHeight="20.0" prefWidth="756.0" visible="false" />

@@ -109,7 +109,7 @@ public class LoginController {
         recentFilesTable.getItems().clear();
         if((FileUtils.readAllBytes(Global.getRecentFilesDir()).length)!=0)
         {
-            Global.getRecentFilesData().addAll(SerializedObject.readObservableList(FileUtils.readAllBytes(Global.getRecentFilesDir())));
+            Global.getRecentFilesData().addAll(SerializedObject.readFileObservableList(FileUtils.readAllBytes(Global.getRecentFilesDir())));
 
             String defaultFile = recentFilesTable.getItems().get(0);
             // sets the default RecentFile to the first element

@@ -11,7 +11,7 @@ package sample;
 
 public class SerializedObject {
 
-    public static byte[] serializeObservableList(ObservableList  observableList) throws  Exception {
+    public static byte[] readMemoryObservableList(ObservableList  observableList) throws  Exception {
         try {
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -46,7 +46,7 @@ public class SerializedObject {
     }
 
 
-    public static ObservableList readObservableList(byte [] inputBytes) {
+    public static ObservableList readFileObservableList(byte [] inputBytes) {
         try {
 
             InputStream in = new ByteArrayInputStream(inputBytes);
@@ -79,19 +79,19 @@ public class SerializedObject {
 
     }
 
-    public static Object readObject(byte [] inputBytes) {
+    public static KeySpecs readObject(byte [] inputBytes) {
 
         try
         {
             InputStream in = new ByteArrayInputStream(inputBytes);
             ObjectInputStream ois = new ObjectInputStream(in);
 
-            Object  object = ois.readObject();
+            KeySpecs  keySpecs = (KeySpecs) ois.readObject();
 
             ois.close();
             in.close();
 
-            return object;
+            return keySpecs;
         }
 
         catch(Exception e)
@@ -99,7 +99,7 @@ public class SerializedObject {
             e.printStackTrace();
         }
 
-         return  new Object();
+         return  new KeySpecs();
     }
 
     public static TimerSpecs readTimerSpecs(byte [] inputBytes) {
@@ -109,12 +109,12 @@ public class SerializedObject {
             InputStream in = new ByteArrayInputStream(inputBytes);
             ObjectInputStream ois = new ObjectInputStream(in);
 
-            TimerSpecs  object = (TimerSpecs) ois.readObject();
+            TimerSpecs  timerSpecs = (TimerSpecs) ois.readObject();
 
             ois.close();
             in.close();
 
-            return object;
+            return timerSpecs;
         }
 
         catch(Exception e)

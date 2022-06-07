@@ -67,7 +67,7 @@ public class FileProtector {
 
            FileUtils.write(TimerSpecs.getTimerSpecsDir(), outputTimerSpecs);
 
-           byte[] inputEntry = SerializedObject.serializeObservableList(observableList);
+           byte[] inputEntry = SerializedObject.readMemoryObservableList(observableList);
            byte[] outputEntry = cipher.doFinal(inputEntry);
            FileUtils.write(Global.getPasswordFilePath(), outputEntry);
         } catch (Exception e) {

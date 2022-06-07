@@ -60,8 +60,8 @@ public class DatabaseHandler {
         byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
         DecryptFile decryptFile = new DecryptFile();
 
-        if (SerializedObject.readObservableList(decryptFile.Decryption(input)) != null &&
-                SerializedObject.readObservableList(decryptFile.Decryption(input)).isEmpty()) {
+        if (SerializedObject.readFileObservableList(decryptFile.Decryption(input)) != null &&
+                SerializedObject.readFileObservableList(decryptFile.Decryption(input)).isEmpty()) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Information Dialog");

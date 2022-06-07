@@ -53,7 +53,7 @@ public class EntryController implements Serializable   {
 
     @FXML
     private TableColumn<Entry, String> colNotes;
-       @FXML Button btnStop;
+
     @FXML
     private TextField tfSearch;
     @FXML
@@ -82,8 +82,7 @@ public class EntryController implements Serializable   {
     private Button btnEnterMenu;
     @FXML
     private Button btnEditOK;
-    @FXML
-    private Button btnDeleteRow;
+
     @FXML
     private Button btnCreate;
 
@@ -524,13 +523,6 @@ void openRecent (ActionEvent event) throws Exception
    TimerHandler.timerCountDown(btnSignOut,anchorPane);
     }
 
-    @FXML
-    void duration(ActionEvent event) {
-
-       TimerHandler.transition.stop();
-    }
-
-
    static String hidePwd = "";
     @FXML
    private void initialize() throws Exception {
@@ -592,7 +584,7 @@ void openRecent (ActionEvent event) throws Exception
               DecryptFile decryptFile = new DecryptFile();
              byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
 
-            entryData.addAll(SerializedObject.readObservableList(decryptFile.Decryption(input)));
+            entryData.addAll(SerializedObject.readFileObservableList(decryptFile.Decryption(input)));
 
             entryTable.setItems(entryData);
 
