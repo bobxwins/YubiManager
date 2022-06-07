@@ -27,12 +27,10 @@ public class TimerHandler {
     public  static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
 
         timerSpecs = TimerSpecs.getTimerSpecs();
-        System.out.println("not print");
         transition  = new PauseTransition(Duration.seconds(timerSpecs.getTimer()));
         if (!selectedCheckBox)
-        {   
+        {
             return;    }
-        System.out.println("printing yes yes");
         transition.setOnFinished(evt -> {
             try {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -45,8 +43,8 @@ public class TimerHandler {
                 e.printStackTrace();
             }
         });
-            anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
-            transition.play();
+        anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
+        transition.play();
 
     }
 
@@ -56,33 +54,33 @@ public class TimerHandler {
         timerHandler.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                        if (!timerHandler.checkBox.isSelected()) {
-                            selectedCheckBox = false;
-                            // timerHandler() is a local object, which state can't be accesed outside of the scope of
-                      //      timerDialog(), so the global boolean selectedCheckBox is used
-                            //      to check the state oof the CheckBox JavaFX Object, in timerCountDown()
-
-                            TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
-                            FileProtector fileProtector = new FileProtector();
-                            fileProtector.encryption(observableList,timerSpecs);
-                            // the TimerSpecs gets encrypted and stored as a file
-                            transition.pause();
-                            transition.stop();
-                             return null;
-                        }
-                        selectedCheckBox = true;
-
+                    if (!timerHandler.checkBox.isSelected()) {
+                        selectedCheckBox = false;
+                        // timerHandler() is a local object, which state can't be accesed outside of the scope of
+                        //      timerDialog(), so the global boolean selectedCheckBox is used
+                        //      to check the state oof the CheckBox JavaFX Object, in timerCountDown()
 
                         TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
                         FileProtector fileProtector = new FileProtector();
                         fileProtector.encryption(observableList,timerSpecs);
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Timer set! Database will automaticaly be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
-                        alert.showAndWait();
-
+                        // the TimerSpecs gets encrypted and stored as a file
+                        transition.pause();
+                        transition.stop();
                         return null;
+                    }
+                    selectedCheckBox = true;
+
+
+                    TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                    FileProtector fileProtector = new FileProtector();
+                    fileProtector.encryption(observableList,timerSpecs);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Timer set! Database will automaticaly be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
+                    alert.showAndWait();
+
+                    return null;
 
 
                 }
@@ -111,8 +109,8 @@ public class TimerHandler {
 
         if(Files.exists(Paths.get(TimerSpecs.getTimerSpecsDir()))) {
             byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
-           DecryptFile decryptFile = new DecryptFile();
-           TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(decryptFile.Decryption(input));
+            DecryptFile decryptFile = new DecryptFile();
+            TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(decryptFile.Decryption(input));
 
             checkBox.setSelected(timerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(timerSpecs.getTimer());

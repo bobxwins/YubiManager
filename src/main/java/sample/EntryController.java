@@ -166,7 +166,7 @@ public class EntryController implements Serializable   {
             tfURL.setText("");
             pfPwdField.setText("");
             tANotes.setText("");
-        save();
+            save();
         }
 
         @FXML
@@ -481,8 +481,8 @@ void openRecent (ActionEvent event) throws Exception
 
 
          void save () throws Exception {
+
     Global.setEntryData(entryData);
-   // byte [] input = SerializedObject.getObservableList(entryData);
 
     FileProtector fileProtector = new FileProtector();
 

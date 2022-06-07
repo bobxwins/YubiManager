@@ -6,6 +6,7 @@ import javax.crypto.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.bouncycastle.crypto.io.SignerOutputStream;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.nio.charset.StandardCharsets;
@@ -69,7 +70,7 @@ public class FileProtector {
            byte[] inputEntry = SerializedObject.serializeObservableList(observableList);
            byte[] outputEntry = cipher.doFinal(inputEntry);
            FileUtils.write(Global.getPasswordFilePath(), outputEntry);
-
+            System.out.println("encrypption end");
         } catch (Exception e) {
 
         }
