@@ -110,7 +110,7 @@ public class TimerHandler {
         if(Files.exists(Paths.get(TimerSpecs.getTimerSpecsDir()))) {
             byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
             DecryptFile decryptFile = new DecryptFile();
-            TimerSpecs timerSpecs = (TimerSpecs) SerializedObject.readObject(decryptFile.Decryption(input));
+            TimerSpecs timerSpecs = SerializedObject.readTimerSpecs(decryptFile.Decryption(input));
 
             checkBox.setSelected(timerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(timerSpecs.getTimer());

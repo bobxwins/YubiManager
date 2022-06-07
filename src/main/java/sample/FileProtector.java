@@ -70,7 +70,6 @@ public class FileProtector {
            byte[] inputEntry = SerializedObject.serializeObservableList(observableList);
            byte[] outputEntry = cipher.doFinal(inputEntry);
            FileUtils.write(Global.getPasswordFilePath(), outputEntry);
-            System.out.println("encrypption end");
         } catch (Exception e) {
 
         }

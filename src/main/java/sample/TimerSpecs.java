@@ -33,7 +33,7 @@ public class TimerSpecs implements Serializable {
     public static TimerSpecs getTimerSpecs () {
         byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
         DecryptFile decryptFile = new DecryptFile();
-        TimerSpecs timerSpecs =  SerializedObject.readObject2(decryptFile.Decryption(input));
+        TimerSpecs timerSpecs =  SerializedObject.readTimerSpecs(decryptFile.Decryption(input));
         return timerSpecs;
     }
 }

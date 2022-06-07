@@ -102,7 +102,7 @@ public class SerializedObject {
          return  new Object();
     }
 
-    public static TimerSpecs readObject2(byte [] inputBytes) {
+    public static TimerSpecs readTimerSpecs(byte [] inputBytes) {
 
         try
         {
