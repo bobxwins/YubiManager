@@ -7,7 +7,6 @@ package sample;
     import java.nio.file.Path;
     import java.util.ArrayList;
     import java.util.List;
-    import java.util.Timer;
 
 public class SerializedObject {
 
@@ -79,19 +78,19 @@ public class SerializedObject {
 
     }
 
-    public static KeySpecs readObject(byte [] inputBytes) {
+    public static NonSecrets readObject(byte [] inputBytes) {
 
         try
         {
             InputStream in = new ByteArrayInputStream(inputBytes);
             ObjectInputStream ois = new ObjectInputStream(in);
 
-            KeySpecs  keySpecs = (KeySpecs) ois.readObject();
+            NonSecrets nonSecrets = (NonSecrets) ois.readObject();
 
             ois.close();
             in.close();
 
-            return keySpecs;
+            return nonSecrets;
         }
 
         catch(Exception e)
@@ -99,7 +98,7 @@ public class SerializedObject {
             e.printStackTrace();
         }
 
-         return  new KeySpecs();
+         return  new NonSecrets();
     }
 
     public static TimerSpecs readTimerSpecs(byte [] inputBytes) {

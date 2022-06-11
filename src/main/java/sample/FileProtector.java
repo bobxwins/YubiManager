@@ -4,18 +4,14 @@ import javax.crypto.spec.IvParameterSpec;
 
 import javax.crypto.*;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.bouncycastle.crypto.io.SignerOutputStream;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.security.SecureRandom;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.SecretKey;
 
+import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Base64;
 
 
 public class FileProtector {
@@ -25,41 +21,28 @@ public class FileProtector {
 
         Security.addProvider(new BouncyCastleProvider());
     }
-
-    private    byte[] generatedIV = new byte[16];
-
-    private    byte[] salt = new byte[32];
-    private    int iterationCount = 5000;
-
-    private int keyLength = 192;
-   private String secureRandomAlgorithm = "DEFAULT";
-   private String secretKeyalgorithm = "PBKDF2WITHHMACSHA256";
-   private String provider = "BC";
-   private String algorithmModePadding ="AES/CBC/PKCS5PADDING";
+  static  String secureRandomAlgorithm = "DEFAULT";
+  static  String secretKeyAlgorithm = "PBKDF2WITHHMACSHA256";
+  static  String transformationAlgorithm ="AES/CBC/PKCS5PADDING";
+    // The secret key algoirthm
+  static  String provider = "BC";
+    static byte[] salt = new byte[32]; // Salt is always at least 128 bits
+    static int iterationCount = 100000;
+    static int keyLength = 256;
+    static byte [] generatedIV;
 
     public void encryption(ObservableList observableList,Object object) {
 
         try {
-            SecureRandom secureRandom = SecureRandom.getInstance(secureRandomAlgorithm, provider);
-
+            generatedIV = new byte[16]; // IV is always 128 bits
+            SecureRandom secureRandom = SecureRandom.getInstance (secureRandomAlgorithm,provider);
             secureRandom.nextBytes(generatedIV);
-
             secureRandom.nextBytes(salt);
 
-            KeySpecs keySpecs = new KeySpecs(generatedIV,salt,iterationCount,keyLength, secretKeyalgorithm,provider, algorithmModePadding);
-
-            SerializedObject.writeObject(keySpecs,Paths.get(KeySpecs.getKeySpecsDir()));
-
-
-            PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(), salt, iterationCount, keyLength);
-
-            SecretKeyFactory factory =
-                    SecretKeyFactory.getInstance(secretKeyalgorithm, provider);
-
-            SecretKey key = factory.generateSecret(keySpec);
-
-            Cipher cipher = Cipher.getInstance(algorithmModePadding, provider);
-            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(generatedIV));
+            Cipher cipher = Cipher.getInstance(transformationAlgorithm, provider);
+            SymmetricKey.setSecretKey(Global.getCombinedPasswords(),salt,iterationCount,keyLength,
+                    secretKeyAlgorithm,provider);
+            cipher.init(Cipher.ENCRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(generatedIV));
 
            byte[] inputTimerSpec = SerializedObject.serializeObject(object);
 
@@ -70,10 +53,16 @@ public class FileProtector {
            byte[] inputEntry = SerializedObject.readMemoryObservableList(observableList);
            byte[] outputEntry = cipher.doFinal(inputEntry);
            FileUtils.write(Global.getPasswordFilePath(), outputEntry);
+          storeNonSecrets();
+
         } catch (Exception e) {
 
         }
 
     }
+    public static void storeNonSecrets () throws Exception {
 
+        NonSecrets nonSecrets = new NonSecrets(generatedIV,salt,iterationCount,keyLength,secureRandomAlgorithm, secretKeyAlgorithm,provider, transformationAlgorithm);
+        SerializedObject.writeObject(nonSecrets,Paths.get(NonSecrets.getStoredNonSecrets()));
+    }
 }

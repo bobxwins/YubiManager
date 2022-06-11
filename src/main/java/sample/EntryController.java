@@ -264,8 +264,8 @@ public class EntryController implements Serializable   {
 
                 File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
 
-                DatabaseHandler databaseHandler = new DatabaseHandler();
-                databaseHandler.deleteDir(deleteFile);
+                PMGUI pmgui = new PMGUI();
+                pmgui.deleteDir(deleteFile);
                 Global.getPasswordFilePath();
             //    Global.getRecentFilesData().remove(selectedItem);
 
@@ -373,8 +373,8 @@ public class EntryController implements Serializable   {
 
     @FXML
     void newDB(ActionEvent event) throws  Exception {
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.newDBdialog(btnReturn);
+        SceneHandler sceneHandler = new SceneHandler();
+        sceneHandler.newDBdialog(btnReturn);
 
     }
 
@@ -382,8 +382,8 @@ public class EntryController implements Serializable   {
     @FXML
     void openDB(ActionEvent event) throws Exception {
 
-      DatabaseHandler databaseHandler = new DatabaseHandler();
-       if (!databaseHandler.openDB()==true)
+      SceneHandler sceneHandler = new SceneHandler();
+       if (!sceneHandler.openDB()==true)
         {
             return;
         }
@@ -425,7 +425,7 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
     void signOut(ActionEvent event) throws Exception {
-        DatabaseHandler.stageFullScreen(btnSignOut);
+        SceneHandler.stageFullScreen(btnSignOut);
 
     }
 
@@ -495,7 +495,6 @@ void openRecent (ActionEvent event) throws Exception
 
     hyperLinkURL.setText(tfURL.getText());
     textNotes.setText(tANotes.getText());
-    System.out.println("the size of entry in SAVE is"+ entryData.size());
  }
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
@@ -512,14 +511,14 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
     void updateMasterPwd(ActionEvent event) throws Exception {
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.updatePasswords();
+        PMGUI pmgui  = new PMGUI();
+        pmgui.updatePasswords();
           save();
     }
 
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
-   TimerHandler.timerDialog(entryData,btnSignOut,anchorPane);
+   TimerHandler.timerDialog(entryData);
    TimerHandler.timerCountDown(btnSignOut,anchorPane);
     }
 
@@ -572,9 +571,9 @@ void openRecent (ActionEvent event) throws Exception
             }
         });
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
+        SceneHandler sceneHandler = new SceneHandler();
 
-        databaseHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());
+        sceneHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));

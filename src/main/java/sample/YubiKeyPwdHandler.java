@@ -1,12 +1,14 @@
 package sample;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 
-import java.io.*;
+import java.util.Optional;
 
 
-public class PasswordHandler {
+public class YubiKeyPwdHandler {
 
-    static String ykManPath =System.getProperty("user.dir")+"\\tools\\YubiKeyManager\\";
+    static String ykManPath  = "C:/Program Files/Yubico/YubiKey Manager";
+    // Folder path to the application YubiKey Manager, by YubiCo.
     static String generatePwdCommand= "ykman otp static 1 --generate --length 32 --force --keyboard-layout US";
     static String manualCommand= "ykman otp static 1 " ;
     static String textGeneratedYbk = " A new YubiKey password has been generated succesfully!";
@@ -46,9 +48,7 @@ public class PasswordHandler {
     public static void manualYbkPwd ()
     {
         try {
-
-            LoginHandler loginHandler = new LoginHandler();
-            loginHandler.dialogManualYbk(textManualYbk);
+        dialogManualYbk();
             if (Global.getManualYbkPwd().length()==0)
             {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -66,6 +66,16 @@ public class PasswordHandler {
             e.printStackTrace();
         }
 
+    }
+    public static void dialogManualYbk ()
+    {
+        TextInputDialog textDialog = new TextInputDialog();
+        textDialog.setTitle("YubiKey manager");
+        textDialog.setHeaderText("Manually set the YubiKey Password");
+        textDialog.setContentText("Please manually enter the YubiKey password:");
+
+        Optional<String> result = textDialog.showAndWait();
+        Global.setManualYbkPwd(result.get());
     }
 
 }

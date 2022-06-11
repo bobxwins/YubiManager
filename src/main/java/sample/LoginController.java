@@ -45,8 +45,8 @@ public class LoginController {
     @FXML
     void login(ActionEvent event) throws Exception {
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        if (databaseHandler.loginAuthentication(mpField, ybkSecret, btnSignIn ) == false) {
+        SceneHandler sceneHandler = new SceneHandler();
+        if (sceneHandler.loginAuthentication(mpField, ybkSecret, btnSignIn ) == false) {
 
             return;
         }
@@ -56,29 +56,29 @@ public class LoginController {
     @FXML
     void newDB(ActionEvent event) throws Exception {
 
-      Global.getLabelEnterPwd().setVisible(false);
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.newDBdialog(btnCreateDB);
+        Global.getLabelEnterPwd().setVisible(false);
+        SceneHandler sceneHandler = new SceneHandler();
+        sceneHandler.newDBdialog(btnCreateDB);
         recentFilesTable.getItems().clear();
 
     }
 
     @FXML void newYbkPwd(ActionEvent event) throws Exception {
-     PasswordHandler.generateYbkPassword();
+     YubiKeyPwdHandler.generateYbkPassword();
 
 
     }
 
     @FXML void setYbkPwd(ActionEvent event) throws Exception {
-         PasswordHandler.manualYbkPwd();
+         YubiKeyPwdHandler.manualYbkPwd();
 
     }
 
     @FXML
     void openDB(ActionEvent event) throws Exception {
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        if (databaseHandler.openDB()==false)
+        SceneHandler sceneHandler = new SceneHandler();
+        if (sceneHandler.openDB()==false)
         {
             return;
         }
@@ -156,9 +156,9 @@ public class LoginController {
                 );
 
 
-        DatabaseHandler databaseHandler = new DatabaseHandler();
+        SceneHandler sceneHandler = new SceneHandler();
 
-        databaseHandler.createMenuItems(menuRecent, Global.getLabelEnterPwd());
+        sceneHandler.createMenuItems(menuRecent, Global.getLabelEnterPwd());
 
     }
 

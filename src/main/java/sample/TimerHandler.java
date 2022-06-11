@@ -37,18 +37,19 @@ public class TimerHandler {
                 alert.setTitle("Inactivity");
                 alert.setHeaderText("Connection closed due to inactivity!");
                 alert.show();
-                DatabaseHandler.stageFullScreen(btnSignOut);
+
+                SceneHandler.stageFullScreen(btnSignOut);
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         anchorPane.addEventFilter(InputEvent.ANY, evt -> transition.playFromStart());
-        transition.play();
+      //  transition.play();
 
     }
 
-    static void timerDialog(ObservableList observableList,Button btnSignOut, AnchorPane anchorPane) {
+    static void timerDialog(ObservableList observableList) {
         TimerHandler timerHandler = new TimerHandler();
         timerHandler.timerGrid();
         timerHandler.dialog.setResultConverter(dialogButton -> {
@@ -56,15 +57,15 @@ public class TimerHandler {
                 if (dialogButton == ButtonType.OK) {
                     if (!timerHandler.checkBox.isSelected()) {
                         selectedCheckBox = false;
-                        // timerHandler() is a local object, which state can't be accesed outside of the scope of
-                        //      timerDialog(), so the global boolean selectedCheckBox is used
-                        //      to check the state oof the CheckBox JavaFX Object, in timerCountDown()
+                        // timerHandler.checkBox is a local object, which can't be accessed outside the scope of
+                        //      timerDialog(), so the global boolean "selectedCheckBox" is set in timerDialog()
+                        //     so it's state can be accessed in timerCountDown()
 
                         TimerSpecs timerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
                         FileProtector fileProtector = new FileProtector();
                         fileProtector.encryption(observableList,timerSpecs);
-                        // the TimerSpecs gets encrypted and stored as a file
-                        transition.pause();
+                        // the TimerSpecs gets encrypted then stored as a file
+                      //  transition.pause();
                         transition.stop();
                         return null;
                     }

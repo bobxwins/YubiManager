@@ -1,1 +1,0 @@
-/storage/emulated/0/Android/data/com.example.biom/files/myfile.txt: 1 file pulled, 0 skipped. 0.0 MB/s (15 bytes in 0.006s)

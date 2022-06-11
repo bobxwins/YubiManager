@@ -5,11 +5,10 @@ import javax.crypto.*;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.SecretKey;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
+import java.util.Base64;
 
 public class DecryptFile  {
 
@@ -23,22 +22,17 @@ public class DecryptFile  {
     public byte[] Decryption(byte[] input) {
 
         try {
+            byte[] nonSecretsBytes = FileUtils.readAllBytes(NonSecrets.getStoredNonSecrets());
 
-            byte[] keyspecBytes = FileUtils.readAllBytes(KeySpecs.getKeySpecsDir());
+            NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
 
-            KeySpecs keySpecs = (KeySpecs) SerializedObject.readObject(keyspecBytes);
+            SymmetricKey.setSecretKey(Global.getCombinedPasswords(),nonSecrets.getStoredSalt()
+                    ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
+                    nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
 
-            SecretKeyFactory factory =
-                    SecretKeyFactory.getInstance(keySpecs.getSecureRandomAlgorithm(), keySpecs.getProvider());
+            Cipher cipher = Cipher.getInstance(nonSecrets.getStoredAlgorithmModePadding(), nonSecrets.getStoredProvider());
 
-            PBEKeySpec keySpec = new PBEKeySpec(Global.getCombinedPasswords(),
-                    keySpecs.getSalt(), keySpecs.getIterationCount(),keySpecs.getKeyLength());
-
-            SecretKey key = factory.generateSecret(keySpec);
-
-            Cipher cipher = Cipher.getInstance(keySpecs.getAlgorithmModePadding(), keySpecs.getProvider());
-
-            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(keySpecs.getGeneratedIV()));
+            cipher.init(Cipher.DECRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(nonSecrets.getStoredGeneratedIV()));
 
             byte[] output = cipher.doFinal(input);
 
