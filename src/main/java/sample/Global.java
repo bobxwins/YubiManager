@@ -17,14 +17,11 @@ public final class Global {
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
     private static int TIMER;
 
-
-    private static Boolean selectedCheckBox;
-
     private static String passwordFilePath;
     private static String SELECTEDDIRECTORYPATH;//=
     private static String DEFAULTHPATH;
     private static String RECENTFILESDIR;
-    private static String MANUALYBKPWD;
+    private static String MANUALSKEYPWD;
     private static char[] COMBINEDPASSWORD;
 
     private  static Label labelEnterPwd = new Label("Please Enter Passwords!");
@@ -32,11 +29,11 @@ public final class Global {
     private Global(){}  // Private constructor to prevent instantiation
 
     public static String getManualYbkPwd() {
-        return MANUALYBKPWD;
+        return MANUALSKEYPWD;
     }
 
-    public static void setManualYbkPwd(String manualYbkPwd) {
-        Global.MANUALYBKPWD = manualYbkPwd;
+    public static void setManualYbkPwd(String manualSkeyPwd) {
+        Global.MANUALSKEYPWD = manualSkeyPwd;
     }
 
     public static  int getTimer() {
@@ -100,26 +97,18 @@ public final class Global {
     public static char[] getCombinedPasswords () throws Exception{
         return COMBINEDPASSWORD;
     }
-    public static void setCombinedPasswords(PasswordField mpField, PasswordField ybkSecret) throws Exception{
+    public static void setCombinedPasswords(PasswordField mpField, PasswordField sKeyField) throws Exception{
 
-        char[] masterPassword = mpField.getText().toCharArray();
-        char[] ybkPassword = ybkSecret.getText().toCharArray();
+        char[] manualPassword = mpField.getText().toCharArray();
+        char[] sKeyPassword = sKeyField.getText().toCharArray();
 
         StringBuilder sb = new StringBuilder(128);
-        sb.append(masterPassword);
-        sb.append(ybkPassword);
+        sb.append(manualPassword);
+        sb.append(sKeyPassword);
         COMBINEDPASSWORD = sb.toString().toCharArray();
     }
     static void setEntryData (ObservableList observableList) {
         Global.OBSERVABLELIST =observableList;
     }
 
-
-    public static Boolean getSelectedCheckBox1() {
-        return selectedCheckBox;
-    }
-
-    public static void setSelectedCheckBox1(Boolean selectedCheckBox) {
-        Global.selectedCheckBox = selectedCheckBox;
-    }
 }

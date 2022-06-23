@@ -2,6 +2,8 @@ package sample;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Optional;
 
 
@@ -9,32 +11,31 @@ public class YubiKeyPwdHandler {
 
     static String ykManPath  = "C:/Program Files/Yubico/YubiKey Manager";
     // Folder path to the application YubiKey Manager, by YubiCo.
-    static String generatePwdCommand= "ykman otp static 1 --generate --length 32 --force --keyboard-layout US";
-    static String manualCommand= "ykman otp static 1 " ;
     static String textGeneratedYbk = " A new YubiKey password has been generated succesfully!";
     static String textManualYbk = " YubiKey password has been set succesfully!";
-    // Using the command prompt, the command opens the YubiKey Manager, and generates a 32 character long random password, with the keyboard being the  US layout
+    // Using the command prompt, the command opens the YubiKey Manager, and generates a 38 character long random password, with the keyboard being the  US layout
 
     public static void cmdProcess(String command, String contentText)  {
 
         try {
             Process process =
-                    Runtime.getRuntime().exec("cmd /c cmd.exe /K \""+"cd "+ykManPath+"&&"+command);
+                    Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + command + "&&" + "y");
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText(contentText);
-            alert.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText(contentText);
+                alert.showAndWait();
 
         }
+
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void generateYbkPassword()  {
-
+        String generatePwdCommand= "ykman otp static 1 --generate --length 38 --force --keyboard-layout US";
         try {
             cmdProcess(generatePwdCommand,textGeneratedYbk);
 
@@ -47,6 +48,7 @@ public class YubiKeyPwdHandler {
 
     public static void manualYbkPwd ()
     {
+
         try {
         dialogManualYbk();
             if (Global.getManualYbkPwd().length()==0)
@@ -58,8 +60,8 @@ public class YubiKeyPwdHandler {
                 alert.showAndWait();
                 return;
             }
-
-          cmdProcess(manualCommand+Global.getManualYbkPwd(),textManualYbk);
+            String manualCommand= "ykman otp static 1 --generate "+Global.getManualYbkPwd()+" --force --keyboard-layout US";
+          cmdProcess(manualCommand,textManualYbk);
 
         }
         catch (Exception e) {

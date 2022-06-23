@@ -44,7 +44,7 @@ public class SceneHandler {
                         return null;
                     }
                     if (fileNameField.getText().length() == 0 ||  pmgui.manualPwdDialog.getText().length() == 0
-                            ||  pmgui.confirmPwdDialog.getText().length() == 0 ||  pmgui.ybKeyPwdDialog.getText().length() == 0) {
+                            ||  pmgui.confirmPwdDialog.getText().length() == 0 ||  pmgui.sKeyPwdDialog.getText().length() == 0) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
@@ -54,11 +54,9 @@ public class SceneHandler {
                         return null;
                     }
 
-                    Global.setCombinedPasswords( pmgui.manualPwdDialog, pmgui.ybKeyPwdDialog);
-               //     SymmetricKey.setSecretKey(Global.getCombinedPasswords());
-
+                    Global.setCombinedPasswords( pmgui.manualPwdDialog, pmgui.sKeyPwdDialog);
                     Global.setPasswordFilePath(fileNameField.getText());
-
+                    FileProtector.createKey(Global.getCombinedPasswords());
                     newScene(btn);
                 }
             }

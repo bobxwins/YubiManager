@@ -14,10 +14,10 @@ public   class PasswordUtils {
 
    private static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyzæøå".toCharArray();
     private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ".toCharArray();
-    private static char[] UPPERCASE2 = "".toCharArray();
+
   private  static char[] NUMBERS = "0123456789".toCharArray();
    private static char[] ALL_CHARS ;
-  private  final static BigInteger GUESSAMOUNT = new BigInteger ("10000000000000"); // 10 trillion password guesses pr second
+  private  final static BigInteger GUESSAMOUNT = new BigInteger ("1000000000000"); // 10^12
  // private   static double BRUTEFORCETIMEGPU;
   private  static double BRUTEFORCETIME;
 
@@ -74,7 +74,7 @@ public   class PasswordUtils {
         int cardinality =0;
 
 
-        boolean atleastOneLower = password.matches(".*[abcdefghijklmnopqrstuvwxyzæøå]+.*");
+        boolean atleastOneLower = password.matches(".*[abcdefghijklmnopqrstuvwxyz]+.*");
 
         if (atleastOneLower)
         {
@@ -83,7 +83,7 @@ public   class PasswordUtils {
 
 
         }
-        boolean atleastOneUpper = password.matches(".*[ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ]+.*");
+        boolean atleastOneUpper = password.matches(".*[ABCDEFGHIJKLMNOPQRSTUVWXYZ]+.*");
 
         if (atleastOneUpper)
         {
@@ -101,7 +101,7 @@ public   class PasswordUtils {
             cardinality=cardinality+NUMBERS.length;
 
         }
-        boolean atleastOneSymbol = password.matches(".*[^A-Åa-å0-9]+.*");
+        boolean atleastOneSymbol = password.matches(".*[^A-Za-z0-9]+.*");
        // boolean atleastOneSymbol = password.matches(".*[+¤§$^$*.-\\[-\\]{}()?-\\\\\"!@#%&/\\,><':;|_~`]]+.*");
         if (atleastOneSymbol)
 
@@ -167,7 +167,7 @@ public   class PasswordUtils {
  
         BRUTEFORCETIME =Math.pow(2,entropy)/ GUESSAMOUNT.doubleValue()/2;
         textCalcEntropy.setText("The calculated entropy is: "+(entropy)+" bits"+"\n\nYour password quality is: ");
-        textBruteForceTime.setText("Assuming the attacker can guess 10 trillion (10,000,000,000,000)" +"\n"
+        textBruteForceTime.setText("Assuming the attacker can guess 1 trillion (1,000,000,000,000)" +"\n"
                 + "passwords per second, cracking the password takes: "
                 +"\n"+String.format(doubleFormat , BRUTEFORCETIME)+" seconds"
                 +"\nIn hours: "+String.format(doubleFormat, BRUTEFORCETIME /3600)+" hours" +

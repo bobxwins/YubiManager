@@ -13,7 +13,7 @@ public class PMGUI {
 
      public   PasswordField manualPwdDialog = new PasswordField();
      public    PasswordField confirmPwdDialog = new PasswordField();
-     public    PasswordField ybKeyPwdDialog = new PasswordField();
+     public    PasswordField sKeyPwdDialog = new PasswordField();
     // These are the 3 password fields generated when the user creates a new Database.
 
    public    Dialog<Pair<String, String>> dialog = new Dialog<>();
@@ -35,7 +35,7 @@ public class PMGUI {
 
                         return null;
                     }
-                    if (manualPwdDialog.getText().length() == 0 || confirmPwdDialog.getText().length() == 0 || ybKeyPwdDialog.getText().length() == 0) {
+                    if (manualPwdDialog.getText().length() == 0 || confirmPwdDialog.getText().length() == 0 || sKeyPwdDialog.getText().length() == 0) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
@@ -47,8 +47,7 @@ public class PMGUI {
 
                     NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
 
-                    Global.setCombinedPasswords(manualPwdDialog, ybKeyPwdDialog);
-
+                    Global.setCombinedPasswords(manualPwdDialog, sKeyPwdDialog);
 
                     SecureRandom secureRandom = SecureRandom.getInstance (nonSecrets.getStoredSecureRandomAlgorithm(),
                             nonSecrets.getStoredProvider());
@@ -57,7 +56,6 @@ public class PMGUI {
                     SymmetricKey.setSecretKey(Global.getCombinedPasswords(),nonSecrets.getStoredSalt()
                     ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
                    nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
-
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");
@@ -84,20 +82,20 @@ public class PMGUI {
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 10, 0, 10));
 
-        manualPwdDialog.setPromptText("Master Password");
+        manualPwdDialog.setPromptText("Manual Password");
 
-        confirmPwdDialog.setPromptText("Confirm Master Password");
+        confirmPwdDialog.setPromptText("Confirm manual Password");
 
-        ybKeyPwdDialog.setPromptText("Yubikey Static Password");
+        sKeyPwdDialog.setPromptText("Security Key Password");
 
-        grid.add(new Label("Master Password:"), 0, 1);
+        grid.add(new Label("Manual Password:"), 0, 1);
         grid.add(manualPwdDialog, 1, 1);
 
-        grid.add(new Label("Confirm Password:"), 0, 2);
+        grid.add(new Label("Confirm manual Password:"), 0, 2);
         grid.add(confirmPwdDialog, 1, 2);
 
-        grid.add(new Label("Yubikey Password:"), 0, 3);
-        grid.add(ybKeyPwdDialog, 1, 3);
+        grid.add(new Label("Security Key Password:"), 0, 3);
+        grid.add(sKeyPwdDialog, 1, 3);
         return grid;
 
     }

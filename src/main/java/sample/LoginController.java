@@ -12,49 +12,39 @@ import java.nio.file.Paths;
 
 public class LoginController {
 
-    @FXML
-    private Button btnSignIn;
+    @FXML private Button btnSignIn;
 
-    @FXML
-    private Button btnCreateDB;
+    @FXML private Button btnCreateDB;
 
     @FXML private  Button btnLogo;
-    @FXML private  Button btnGenYbkPwd;
+
+    @FXML private PasswordField mpField;
 
     @FXML
-    private PasswordField mpField;
+    private PasswordField sKeyField;
 
-    @FXML
-    private PasswordField ybkSecret;
+    @FXML private Menu menuRecent;
 
-    @FXML
-    private Menu menuRecent;
-
-    @FXML private  Button  btnYbkPwd;
     @FXML private ImageView imgLocked;
     @FXML private ImageView imgUnLocked;
-    @FXML
-    private AnchorPane anchorPane;
+    @FXML private AnchorPane anchorPane;
 
 
-    @FXML
-    private TableColumn<String,String> recent;
+    @FXML private TableColumn<String,String> recent;
 
     @FXML private TableView<String> recentFilesTable;
 
-    @FXML
-    void login(ActionEvent event) throws Exception {
+    @FXML void login(ActionEvent event) throws Exception {
 
         SceneHandler sceneHandler = new SceneHandler();
-        if (sceneHandler.loginAuthentication(mpField, ybkSecret, btnSignIn ) == false) {
+        if (sceneHandler.loginAuthentication(mpField, sKeyField, btnSignIn ) == false) {
 
             return;
         }
 
     }
 
-    @FXML
-    void newDB(ActionEvent event) throws Exception {
+    @FXML void newDB(ActionEvent event) throws Exception {
 
         Global.getLabelEnterPwd().setVisible(false);
         SceneHandler sceneHandler = new SceneHandler();
