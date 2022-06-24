@@ -55,7 +55,7 @@
                   </MenuBar>
                   <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1208.0">
                      <items>
-            <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#entryMenu" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Row Button">
+            <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#entryMenu" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Entry Button">
                <graphic>
                   <ImageView fx:id="imgAdd" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -64,7 +64,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnDeleteRow" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteRow" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="delete Row Button">
+            <Button fx:id="btnDeleteRow" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteRow" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Delete Entry Button">
                <graphic>
                   <ImageView fx:id="imgEdit2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -73,7 +73,7 @@
                   </ImageView>
                </graphic>
             </Button>
-                        <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="editEntry">
+                        <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Edit Entr yButton">
                            <graphic>
                               <ImageView fx:id="imgEdit" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -82,7 +82,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="saveEntryMenu" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveEntry" prefHeight="49.0" prefWidth="37.0" style="-fx-background-color: transparent;" text="saveEntry">
+                        <Button fx:id="saveEntryMenu" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveEntry" prefHeight="49.0" prefWidth="37.0" style="-fx-background-color: transparent;" text="Save Entry Button">
                            <graphic>
                               <ImageView fx:id="imgEdit1" fitHeight="39.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -109,11 +109,14 @@
                   </ImageView>
                </graphic>
             </Button>
-            <ImageView fx:id="imgLock2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@resetPWD.jpg" />
-               </image>
-            </ImageView>
+            <Button fx:id="btnReset" contentDisplay="GRAPHIC_ONLY" layoutX="394.0" layoutY="10.0" mnemonicParsing="false" onAction="#updateMasterPwd" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Reset">
+               <graphic>
+                  <ImageView fx:id="imgLock2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@resetPWD.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
             <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Sign Out">
                <graphic>
                   <ImageView fx:id="imgLock" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
@@ -123,7 +126,6 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnReset" contentDisplay="GRAPHIC_ONLY" layoutX="394.0" layoutY="10.0" mnemonicParsing="false" onAction="#updateMasterPwd" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Reset" />
                         <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="729.0" promptText="Search..." style="-fx-background-image: url(PMAuth/magnifying-glass.png);" />
                      </items>
                      <opaqueInsets>

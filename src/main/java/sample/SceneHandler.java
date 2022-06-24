@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 public class SceneHandler {
 
@@ -54,6 +55,25 @@ public class SceneHandler {
                         return null;
                     }
 
+                    if (pmgui.manualPwdDialog.getText().length() +pmgui.sKeyPwdDialog.getText().length() < 12  ) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Master password must be at least 12 characters!");
+                        alert.showAndWait();
+                        return null;
+                    }
+                  /*  if (! Pattern.matches("[a-zA-Z.0-9_]*",new String(Global.getCombinedPasswords()))
+                            || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Global.getCombinedPasswords()))  ) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Master password must digits, contain uppercase, lowercase and special characters!");
+                        alert.showAndWait();
+
+                        return null;
+                    }
+*/
                     Global.setCombinedPasswords( pmgui.manualPwdDialog, pmgui.sKeyPwdDialog);
                     Global.setPasswordFilePath(fileNameField.getText());
                     FileProtector.createKey(Global.getCombinedPasswords());

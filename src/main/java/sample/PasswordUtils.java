@@ -69,10 +69,10 @@ public   class PasswordUtils {
 
         return new String(password);
     }
+
     private static int cardinality( String password)
     {
         int cardinality =0;
-
 
         boolean atleastOneLower = password.matches(".*[abcdefghijklmnopqrstuvwxyz]+.*");
 

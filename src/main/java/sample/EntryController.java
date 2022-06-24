@@ -151,21 +151,22 @@ public class EntryController implements Serializable   {
 
     @FXML void menuRandomPwd (ActionEvent event)
     {
-        pfPwdField.setText(PasswordUtils.getPassword(22));
+        pfPwdField.setText(PasswordUtils.getPassword(32));
         System.out.println(pfPwdField.getText());
     }
 
         @FXML
         void createEntry (ActionEvent event) throws Exception {
 
-            showTableView();
             entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+            showTableView();
             tfTitel.setText("");
             tfUsername.setText("");
             tfURL.setText("");
             pfPwdField.setText("");
             tANotes.setText("");
             save();
+
         }
 
         @FXML
@@ -314,6 +315,13 @@ public class EntryController implements Serializable   {
         apPwdGenerate.setDisable(true);
         apPwdGenerate.setVisible(false);
         apPwdGenerate.getChildren().remove(slider);
+        // Empties the edited entry after clicking the cancel button,so the values
+        // of the previously edited entry doesn't get transferred to the entry about to be created
+        tfTitel.setText("");
+        tfUsername.setText("");
+        tfURL.setText("");
+        pfPwdField.setText("");
+        tANotes.setText("");
     }
 
     @FXML
@@ -470,6 +478,7 @@ void openRecent (ActionEvent event) throws Exception
                     // with the newly added values, after clicking the OK button
                     showTableView();
                     save();
+
                 } catch (Exception E) {
 
                 }
@@ -492,9 +501,14 @@ void openRecent (ActionEvent event) throws Exception
     VisbilityHandler.setSelectedPassword(pfPwdField.getText());
    togBtnPwd.setSelected(false);
    toggleButton.setSelected(false);
-
-    hyperLinkURL.setText(tfURL.getText());
+   hyperLinkURL.setText(tfURL.getText());
     textNotes.setText(tANotes.getText());
+
+             tfTitel.setText("");
+             tfUsername.setText("");
+             tfURL.setText("");
+             pfPwdField.setText("");
+             tANotes.setText("");
  }
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
@@ -564,13 +578,11 @@ void openRecent (ActionEvent event) throws Exception
                 VisbilityHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
                         selectedItem.getPassword(),   finalHidePwd);
 
-                VisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
-
                 textPassword.setText(finalHidePwd);
 
             }
         });
-
+        VisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
         SceneHandler sceneHandler = new SceneHandler();
 
         sceneHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());

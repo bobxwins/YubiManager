@@ -14,6 +14,7 @@ public class VisbilityHandler {
 
     public static void toggleVisbility (ToggleButton toggleButton, ImageView imgPwdVisible, ImageView imgPwdNotVisible, Text textPassword,
                                         String showPwd, String hidePwd)
+            //Toggles the visibilty of the password shown in the tableview at the bottom of the application
     {
 
         toggleButton.setOnAction(e -> {
@@ -33,16 +34,19 @@ public class VisbilityHandler {
         textPassword.setText(hidePwd);
     }
     public static  void toggleVisbility (ToggleButton tBtn, ImageView imgPwdVisible, ImageView imgPwdNotVisible, TextField tf, PasswordField pf) {
+      /// toggles the visibility of the password in the create/edit entry menu
 
         pf.textProperty().addListener((observable, oldValue,    newValue) -> {
             tf.setText(newValue);
 
+
         });
         tBtn.setOnAction(e -> {
-            if (tBtn.isSelected() ) {
 
+            if (tBtn.isSelected() ) {
                 tf.textProperty().addListener((observable, oldValue, newValue) -> {
                     pf.setText(newValue);
+
 
                 });
 

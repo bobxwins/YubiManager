@@ -8,6 +8,7 @@ import javafx.util.Pair;
 import java.io.File;
 import java.nio.file.Files;
 import java.security.SecureRandom;
+import java.util.regex.Pattern;
 
 public class PMGUI {
 
@@ -43,6 +44,25 @@ public class PMGUI {
                         alert.showAndWait();
                         return null;
                     }
+                    if (manualPwdDialog.getText().length() + sKeyPwdDialog.getText().length()  < 12  ) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Master password must be at least 12 characters!");
+                        alert.showAndWait();
+                        return null;
+                    }
+                    if (Global.getCombinedPasswords().length < 12 || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Global.getCombinedPasswords()))
+                            || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Global.getCombinedPasswords()))  ) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Master password must digits, contain uppercase, lowercase and special characters!");
+                        alert.showAndWait();
+
+                        return null;
+                    }
+
                     byte[] nonSecretsBytes = FileUtils.readAllBytes(NonSecrets.getStoredNonSecrets());
 
                     NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
