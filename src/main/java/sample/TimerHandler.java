@@ -91,7 +91,7 @@ public class TimerHandler {
                     alert.setHeaderText(null);
                     alert.setContentText("Timer set! Database will automaticaly be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
                     alert.showAndWait();
-                    timerHandler.timerCountDown(btnSignOut,anchorPane);
+                     timerHandler.timerCountDown(btnSignOut,anchorPane);
                     return null;
 
 
