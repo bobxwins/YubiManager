@@ -40,6 +40,7 @@ import static java.lang.Integer.parseInt;
 public class EntryController implements Serializable   {
     @FXML
     private  AnchorPane anchorPane;
+    @FXML private AnchorPane  apBottomTable;
 
     @FXML
     private TableView<Entry> entryTable;
@@ -157,7 +158,6 @@ public class EntryController implements Serializable   {
 
         @FXML
         void createEntry (ActionEvent event) throws Exception {
-
             entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
             showTableView();
             tfTitel.setText("");
@@ -192,6 +192,7 @@ public class EntryController implements Serializable   {
             entryPane.setVisible(false);
             btnEditOK.setDisable(true);
             btnEditOK.setVisible(false);
+            apBottomTable.setVisible(false);
 
             Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -293,6 +294,8 @@ public class EntryController implements Serializable   {
 
             btnEditOK.setDisable(true);
             btnEditOK.setVisible(false);
+            apBottomTable.setDisable(false);
+            apBottomTable.setVisible(true);
 
         }
 
@@ -304,6 +307,8 @@ public class EntryController implements Serializable   {
             btnCreate.setDisable(false);
             entryTable.setVisible(false);
             entryTable.setDisable(true);
+            apBottomTable.setDisable(true);
+            apBottomTable.setVisible(false);
         }
 
 
@@ -410,7 +415,7 @@ public class EntryController implements Serializable   {
            stage.setTitle("New Window");
            stage.setScene(scene);
            stage.show();
-           Global.getLabelEnterPwd().setVisible(true);
+         //  Global.getLabelEnterPwd().setVisible(true);
         Global.setPasswordFilePath( pwdFPNewValue);
         Global.setSelectedDirectoryPath(  directoryNewValue);
     }
@@ -452,8 +457,8 @@ void openRecent (ActionEvent event) throws Exception
          selectedItem = entryTable.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
-            entrySpecs();
 
+            entrySpecs();
             tfTitel.setText(selectedItem.getTitle());
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
@@ -461,7 +466,8 @@ void openRecent (ActionEvent event) throws Exception
             tANotes.setText(selectedItem.getNotes());
           //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
             // otherwise the values in the fieds from the selected entry would be empty
-
+            apBottomTable.setDisable(true);
+            apBottomTable.setVisible(false);
             btnEditOK.setDisable(false);
             btnEditOK.setVisible(true);
             btnCreate.setVisible(false);
@@ -529,18 +535,20 @@ void openRecent (ActionEvent event) throws Exception
         pmgui.updatePasswords();
           save();
     }
-
+  //  TimerHandler timerHandler = new TimerHandler();
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
-   TimerHandler.timerDialog(entryData);
-   TimerHandler.timerCountDown(btnSignOut,anchorPane);
+   //TimerHandler.TRANSITION.pause();
+   TimerHandler.timerDialog(entryData,btnSignOut,anchorPane);
+
+ //  TimerHandler.timerCountDown(btnSignOut,anchorPane);
     }
 
    static String hidePwd = "";
     @FXML
    private void initialize() throws Exception {
 
-       TimerHandler.timerCountDown(btnSignOut,anchorPane);
+        TimerHandler.timerCountDown(btnSignOut,anchorPane);
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
@@ -585,7 +593,7 @@ void openRecent (ActionEvent event) throws Exception
         VisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
         SceneHandler sceneHandler = new SceneHandler();
 
-        sceneHandler.createMenuItems(menuRecent,Global.getLabelEnterPwd());
+        sceneHandler.createMenuItems(menuRecent);
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));

@@ -6,30 +6,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorPane" minWidth="-Infinity" prefHeight="765.0" prefWidth="1207.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
+<AnchorPane fx:id="anchorPane" layoutX="-100.0" layoutY="-260.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1002.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
 
 
                <children>
-                  <Button fx:id="btnSignIn" layoutX="863.0" layoutY="539.0" mnemonicParsing="false" onAction="#login" prefWidth="97.0" text="Sign in" />
-                  <PasswordField fx:id="mpField" layoutX="485.0" layoutY="425.0" prefHeight="24.0" prefWidth="389.0" />
-                  <PasswordField fx:id="sKeyField" layoutX="485.0" layoutY="488.0" prefHeight="24.0" prefWidth="389.0" />
-                  <Label layoutX="570.0" layoutY="330.0" text="Login">
-                     <font>
-                        <Font size="51.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="btnCreateDB" layoutX="345.0" layoutY="539.0" mnemonicParsing="false" onAction="#newDB" text="Create New Database" />
-                  <Label layoutX="333.0" layoutY="491.0" text="Security Key Password" textFill="#000000f2">
-                     <font>
-                        <Font name="System Bold Italic" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="360.0" layoutY="430.0" text="Manual Password">
-                     <font>
-                        <Font name="System Bold Italic" size="13.0" />
-                     </font>
-                  </Label>
-                  <MenuBar prefHeight="39.0" prefWidth="1207.0">
+                  <Button fx:id="btnSignIn" disable="true" layoutX="863.0" layoutY="539.0" mnemonicParsing="false" onAction="#login" prefWidth="97.0" text="Sign in" visible="false" />
+                  <PasswordField fx:id="mpField" disable="true" layoutX="485.0" layoutY="425.0" prefHeight="24.0" prefWidth="389.0" visible="false" />
+                  <PasswordField fx:id="sKeyField" disable="true" layoutX="485.0" layoutY="488.0" prefHeight="24.0" prefWidth="389.0" visible="false" />
+                  <Button fx:id="btnCreateDB" layoutX="269.0" layoutY="425.0" mnemonicParsing="false" onAction="#newDB" prefHeight="31.0" prefWidth="606.0" text="Create New Database" />
+                  <MenuBar layoutX="100.0" layoutY="260.0" prefHeight="39.0" prefWidth="1135.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                            <items>
@@ -59,22 +44,17 @@
                         <Font name="Bell MT" size="27.0" />
                      </font>
                   </Label>
-                  <Label layoutX="77.0" layoutY="39.0" prefHeight="38.0" prefWidth="1333.0" text="Newest file added:" textFill="#153136" visible="false">
-                     <font>
-                        <Font name="Bell MT" size="27.0" />
-                     </font>
-                  </Label>
-      <Label layoutX="350.0" layoutY="108.0" text="KeyBine" textFill="#652626">
+      <Label layoutX="322.0" layoutY="309.0" text="KeyBine" textFill="#652626">
          <font>
             <Font name="Calibri Bold Italic" size="59.0" />
          </font>
       </Label>
-      <Label layoutX="110.0" layoutY="250.0" text="Sign in or create a new database now to securely store your passwords!">
+      <Label layoutX="145.0" layoutY="381.0" text="Sign in or create a new database now to securely store your passwords!">
          <font>
-            <Font size="27.0" />
+            <Font size="23.0" />
          </font>
       </Label>
-      <Button fx:id="btnLogo" layoutX="510.0" layoutY="89.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7" style="-fx-background-color: transparent;">
+      <Button fx:id="btnLogo" layoutX="482.0" layoutY="289.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="183.0" scaleX="0.7" scaleY="0.7" scaleZ="0.7" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fx:id="imgViewLogo" fitHeight="97.0" fitWidth="228.0">
                <image>
@@ -83,19 +63,19 @@
             </ImageView>
          </graphic>
       </Button>
-      <ImageView fx:id="imgLocked" fitHeight="68.0" fitWidth="104.0" layoutX="960.0" layoutY="225.0">
+      <ImageView fx:id="imgLocked" fitHeight="68.0" fitWidth="104.0" layoutX="888.0" layoutY="346.0">
          <image>
             <Image url="@locked.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="imgUnLocked" fitHeight="68.0" fitWidth="104.0" layoutX="947.0" layoutY="225.0" visible="false">
+      <ImageView fx:id="imgUnLocked" fitHeight="68.0" fitWidth="104.0" layoutX="875.0" layoutY="346.0" visible="false">
          <image>
             <Image url="@open.png" />
          </image>
       </ImageView>
-      <TableView fx:id="recentFilesTable" layoutX="303.0" layoutY="587.0" prefHeight="128.0" prefWidth="697.0">
+      <TableView fx:id="recentFilesTable" layoutX="269.0" layoutY="547.0" prefHeight="128.0" prefWidth="606.0">
         <columns>
-          <TableColumn fx:id="recent" minWidth="0.0" prefWidth="699.0" text="Recent Databases" />
+          <TableColumn fx:id="recent" minWidth="0.0" prefWidth="605.0" text="Recent Databases" />
         </columns>
          <contextMenu>
             <ContextMenu>
@@ -105,22 +85,8 @@
             </ContextMenu>
          </contextMenu>
       </TableView>
-      <Button fx:id="btnsetYbkPwd" layoutX="733.0" layoutY="524.0" mnemonicParsing="false" onAction="#setYbkPwd" prefHeight="62.0" prefWidth="35.0" rotate="90.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="52.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@configure.jpg" />
-               </image>
-            </ImageView>
-         </graphic></Button>
-      <Button fx:id="btnGenYbkPwd" layoutX="565.0" layoutY="524.0" mnemonicParsing="false" onAction="#newYbkPwd" prefHeight="62.0" prefWidth="35.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="52.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../PMAuth/random.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      <Button fx:id="btnRecentDB" layoutX="269.0" layoutY="465.0" mnemonicParsing="false" onAction="#openDB" prefHeight="31.0" prefWidth="606.0" text="Open Existing Database" />
+      <Button fx:id="btnGenYbkPwd" layoutX="269.0" layoutY="507.0" mnemonicParsing="false" onAction="#newYbkPwd" prefHeight="31.0" prefWidth="296.0" text="Generate YubiKey password " />
+      <Button fx:id="btnsetYbkPwd" layoutX="570.0" layoutY="507.0" mnemonicParsing="false" onAction="#setYbkPwd" prefHeight="31.0" prefWidth="304.0" text="Configure YubiKey password " />
                </children>
             </AnchorPane>

@@ -51,7 +51,7 @@ public class YubiKeyPwdHandler {
 
         try {
         dialogManualYbk();
-            if (Global.getManualYbkPwd().length()==0)
+            if (Secrets.getManualYbkPwd().length()==0)
             {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Information Dialog");
@@ -60,7 +60,7 @@ public class YubiKeyPwdHandler {
                 alert.showAndWait();
                 return;
             }
-            String manualCommand= "ykman otp static 1 --generate "+Global.getManualYbkPwd()+" --force --keyboard-layout US";
+            String manualCommand= "ykman otp static 1 --generate "+Secrets.getManualYbkPwd()+" --force --keyboard-layout US";
           cmdProcess(manualCommand,textManualYbk);
 
         }
@@ -77,7 +77,7 @@ public class YubiKeyPwdHandler {
         textDialog.setContentText("Please manually enter the YubiKey password:");
 
         Optional<String> result = textDialog.showAndWait();
-        Global.setManualYbkPwd(result.get());
+        Secrets.setManualYbkPwd(result.get());
     }
 
 }

@@ -34,7 +34,7 @@ public class VisbilityHandler {
         textPassword.setText(hidePwd);
     }
     public static  void toggleVisbility (ToggleButton tBtn, ImageView imgPwdVisible, ImageView imgPwdNotVisible, TextField tf, PasswordField pf) {
-      /// toggles the visibility of the password in the create/edit entry menu
+      /// toggles the visibility of the password, when editing or creating a new entry
 
         pf.textProperty().addListener((observable, oldValue,    newValue) -> {
             tf.setText(newValue);

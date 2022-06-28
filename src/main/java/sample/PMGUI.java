@@ -52,28 +52,29 @@ public class PMGUI {
                         alert.showAndWait();
                         return null;
                     }
-                    if (Global.getCombinedPasswords().length < 12 || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Global.getCombinedPasswords()))
-                            || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Global.getCombinedPasswords()))  ) {
+                /*    if ( !Pattern.matches(".*[^A-Za-z0-9]+.*",new String(Secrets.getCombinedPasswords()))
+                            || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Secrets.getCombinedPasswords()))  ) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
-                        alert.setContentText("Master password must digits, contain uppercase, lowercase and special characters!");
+                        alert.setContentText("Master password must contain digits, uppercase, lowercase and special characters!");
                         alert.showAndWait();
 
                         return null;
                     }
+                    */
 
                     byte[] nonSecretsBytes = FileUtils.readAllBytes(NonSecrets.getStoredNonSecrets());
 
                     NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
 
-                    Global.setCombinedPasswords(manualPwdDialog, sKeyPwdDialog);
+                    Secrets.setCombinedPasswords(manualPwdDialog, sKeyPwdDialog);
 
                     SecureRandom secureRandom = SecureRandom.getInstance (nonSecrets.getStoredSecureRandomAlgorithm(),
                             nonSecrets.getStoredProvider());
                     secureRandom.nextBytes(nonSecrets.getStoredSalt());
 
-                    SymmetricKey.setSecretKey(Global.getCombinedPasswords(),nonSecrets.getStoredSalt()
+                    SymmetricKey.setSecretKey(Secrets.getCombinedPasswords(),nonSecrets.getStoredSalt()
                     ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
                    nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
 
@@ -130,6 +131,35 @@ public class PMGUI {
             }
         }
         file.delete();
+    }
+
+    void loginPasswords() {
+        dialog.setTitle("Updating passwords");
+        dialog.getDialogPane().setContent(grid);
+        setPwdGrid();
+        dialog.setResultConverter(dialogButton -> {
+            try {
+                if (dialogButton == ButtonType.OK) {
+                    if (!manualPwdDialog.getText().equals(confirmPwdDialog.getText())) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Password is incorrect!");
+                        alert.showAndWait();
+
+                        return null;
+                    }
+
+                }
+            } catch (Exception E) {
+
+
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+
     }
 
 

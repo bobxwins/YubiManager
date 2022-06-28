@@ -21,20 +21,13 @@ public final class Global {
     private static String SELECTEDDIRECTORYPATH;//=
     private static String DEFAULTHPATH;
     private static String RECENTFILESDIR;
-    private static String MANUALSKEYPWD;
-    private static char[] COMBINEDPASSWORD;
+
 
     private  static Label labelEnterPwd = new Label("Please Enter Passwords!");
     private  static Label labelRecentFile = new Label();
     private Global(){}  // Private constructor to prevent instantiation
 
-    public static String getManualYbkPwd() {
-        return MANUALSKEYPWD;
-    }
 
-    public static void setManualYbkPwd(String manualSkeyPwd) {
-        Global.MANUALSKEYPWD = manualSkeyPwd;
-    }
 
     public static  int getTimer() {
         if ( FileUtils.readAllBytes(SELECTEDDIRECTORYPATH+"timer.txt").length!=0) {
@@ -83,7 +76,7 @@ public final class Global {
         return DEFAULTHPATH;
     }
 
-    public static Label getLabelEnterPwd() throws Exception{
+  /*  public static Label getLabelEnterPwd() throws Exception{
         labelEnterPwd.setVisible(false);
         labelEnterPwd.setLayoutX(449);
         labelEnterPwd.setLayoutY(290);
@@ -92,21 +85,8 @@ public final class Global {
         labelEnterPwd.setStyle("-fx-font-weight: bold;");
         return labelEnterPwd;
     }
+    */
 
-
-    public static char[] getCombinedPasswords () throws Exception{
-        return COMBINEDPASSWORD;
-    }
-    public static void setCombinedPasswords(PasswordField mpField, PasswordField sKeyField) throws Exception{
-
-        char[] manualPassword = mpField.getText().toCharArray();
-        char[] sKeyPassword = sKeyField.getText().toCharArray();
-
-        StringBuilder sb = new StringBuilder(128);
-        sb.append(manualPassword);
-        sb.append(sKeyPassword);
-        COMBINEDPASSWORD = sb.toString().toCharArray();
-    }
     static void setEntryData (ObservableList observableList) {
         Global.OBSERVABLELIST =observableList;
     }

@@ -26,7 +26,7 @@ public class DecryptFile  {
 
             NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
 
-            SymmetricKey.setSecretKey(Global.getCombinedPasswords(),nonSecrets.getStoredSalt()
+            SymmetricKey.setSecretKey(Secrets.getCombinedPasswords(),nonSecrets.getStoredSalt()
                     ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
                     nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
 

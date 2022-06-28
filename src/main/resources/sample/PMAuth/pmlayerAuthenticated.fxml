@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="765.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
 
 
                <children>
@@ -17,7 +17,7 @@
           <Button mnemonicParsing="false" text="Button" />
         </items>
       </ToolBar>
-                  <MenuBar prefHeight="39.0" prefWidth="1207.0">
+                  <MenuBar prefHeight="39.0" prefWidth="1135.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                            <items>
@@ -53,7 +53,7 @@
                         </Menu>
                      </menus>
                   </MenuBar>
-                  <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1208.0">
+                  <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1148.0">
                      <items>
             <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#entryMenu" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Entry Button">
                <graphic>
@@ -126,13 +126,13 @@
                   </ImageView>
                </graphic>
             </Button>
-                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="729.0" promptText="Search..." style="-fx-background-image: url(PMAuth/magnifying-glass.png);" />
+                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="339.0" promptText="Search..." style="-fx-background-image: url(PMAuth/magnifying-glass.png);" />
                      </items>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </ToolBar>
-                  <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="348.0" layoutY="180.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="148.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
                         <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
                            <children>
@@ -157,13 +157,13 @@
                               </Button>
                            </children>
                         </HBox>
-                        <Button fx:id="btnReturn" layoutY="490.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="OK" />
+                        <Button fx:id="btnReturn" layoutY="400.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="OK" />
                         <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
                               <Font name="Arial Bold" size="21.0" />
                            </font>
                         </Text>
-                        <Text fx:id="textBruteForceTime" fontSmoothingType="LCD" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                        <Text fx:id="textBruteForceTime" fontSmoothingType="LCD" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
                            <font>
                               <Font name="Arial" size="21.0" />
                            </font>
@@ -178,13 +178,13 @@
                   <AnchorPane fx:id="entryPane" layoutX="-135.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
             <AnchorPane fx:id="selectedRowPane" disable="true" layoutX="169.0" layoutY="500.0" prefHeight="219.0" prefWidth="1162.0" />
-                        <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="445.0" prefWidth="1180.0">
+                        <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="183.0" prefWidth="819.0">
 
                           <columns>
-                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="306.0" text="Titel" />
-                            <TableColumn fx:id="colUsername" prefWidth="278.0" text="Username" />
-                             <TableColumn fx:id="colURL" prefWidth="266.0" text="URL" />
-                              <TableColumn fx:id="colNotes" prefWidth="356.0" text="Notes" />
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="165.0" text="Titel" />
+                            <TableColumn fx:id="colUsername" prefWidth="216.0" text="Username" />
+                             <TableColumn fx:id="colURL" prefWidth="204.0" text="URL" />
+                              <TableColumn fx:id="colNotes" prefWidth="238.0" text="Notes" />
                           </columns>
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
@@ -200,7 +200,7 @@
                               </ContextMenu>
                            </contextMenu>
                         </TableView>
-            <AnchorPane fx:id="apEntryMenu" disable="true" layoutX="400.0" layoutY="40.0" visible="false">
+            <AnchorPane fx:id="apEntryMenu" disable="true" layoutX="250.0" layoutY="40.0" visible="false">
                <children>
                               <BorderPane fx:id="bpEntryMenu" prefHeight="421.0" prefWidth="653.0">
                                  <left>
@@ -269,11 +269,11 @@
                               </BorderPane>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="134.0" layoutY="550.0" prefHeight="117.0" prefWidth="1195.0">
+            <AnchorPane fx:id="apBottomTable" layoutX="134.0" layoutY="273.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="260.0" prefWidth="1105.0">
                <children>
-                  <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="1186.0">
+                  <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="819.0">
                      <children>
-                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="1174.0">
+                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="1103.0">
                             <placeholder>
                                 <Label text="" />
                             </placeholder>
