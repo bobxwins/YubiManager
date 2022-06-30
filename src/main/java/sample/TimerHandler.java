@@ -1,18 +1,23 @@
 package sample;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import org.bouncycastle.asn1.cms.Time;
 
+import javax.xml.stream.EventFilter;
+import javax.xml.stream.events.XMLEvent;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,23 +30,23 @@ public class TimerHandler {
     static  TimerSpecs timerSpecs;
     private static  boolean selectedCheckBox;
    public static PauseTransition TRANSITION  = new PauseTransition();
-
+   static final EventHandler<InputEvent> filter = event -> TRANSITION.playFromStart();
 
     public static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
 
       if(!Files.exists(Paths.get(TimerSpecs.getTimerSpecsDir())))
         {
-            System.out.println("THE FILE DOES NOT EXIST!!");
             return;    }
 
         timerSpecs = TimerSpecs.getTimerSpecs();
-         if (!timerSpecs.getSelectedCheckBox())
+
+        if (!timerSpecs.getSelectedCheckBox())
         {
-            System.out.println("it is NOT SELECTED!!!");
+            anchorPane.removeEventFilter(InputEvent.ANY, filter);
             return;    }
 
          TRANSITION.setDuration(Duration.seconds(timerSpecs.getTimer()));
-        System.out.println("897d89v7d89v7");
+         anchorPane.addEventFilter(InputEvent.ANY, filter);
          TRANSITION.setOnFinished(evt -> {
             try {
                 SceneHandler.stageFullScreen(btnSignOut);
@@ -55,8 +60,6 @@ public class TimerHandler {
                 e.printStackTrace();
             }
         });
-        anchorPane.addEventFilter(InputEvent.ANY, evt ->  TRANSITION.playFromStart());
-        System.out.println("doewefwefwef it work?");
     }
 
     static void timerDialog(ObservableList observableList,Button btnSignOut, AnchorPane anchorPane) {
@@ -71,19 +74,13 @@ public class TimerHandler {
                         //      timerDialog(), so the global boolean "selectedCheckBox" is set in timerDialog()
                         //     so it's state can be accessed in timerCountDown()
                         TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
-                        System.out.println("the value of spinner  is :"+updateTimerSpecs.getTimer()) ;
-                        System.out.println("the value of SELECTED CHECKBOX false is :"+updateTimerSpecs.getSelectedCheckBox());
                         FileProtector fileProtector = new FileProtector();
                         fileProtector.encryption(observableList,updateTimerSpecs);
                         // the TimerSpecs gets encrypted then stored as a file
-
                         return null;
                     }
                     selectedCheckBox = true;
                     TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
-
-                    System.out.println("the value of spinner TRUE is :"+updateTimerSpecs.getTimer());
-                    System.out.println("the value of SELECTED CHECKBOX TRUE is :"+updateTimerSpecs.getSelectedCheckBox());
                     FileProtector fileProtector = new FileProtector();
                     fileProtector.encryption(observableList,updateTimerSpecs);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -91,10 +88,7 @@ public class TimerHandler {
                     alert.setHeaderText(null);
                     alert.setContentText("Timer set! Database will automaticaly be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
                     alert.showAndWait();
-                     timerHandler.timerCountDown(btnSignOut,anchorPane);
                     return null;
-
-
                 }
             } catch (Exception E) {
 
@@ -105,7 +99,7 @@ public class TimerHandler {
 
 
         timerHandler.dialog.showAndWait();
-
+      //  timerHandler.timerCountDown(btnSignOut,anchorPane);
     }
     void timerGrid () {
 
@@ -124,8 +118,6 @@ public class TimerHandler {
             checkBox.setSelected(readTimerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(readTimerSpecs.getTimer());
         }
-
-
         timerSpinner.setPrefSize(75, 25);
         timerSpinner.setEditable(true);
         grid.add(checkBox, 0, 1);

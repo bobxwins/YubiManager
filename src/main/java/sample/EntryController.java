@@ -539,7 +539,7 @@ void openRecent (ActionEvent event) throws Exception
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
    TimerHandler.timerDialog(entryData,btnSignOut,anchorPane);
-  // TimerHandler.timerCountDown(btnSignOut,anchorPane);
+   TimerHandler.timerCountDown(btnSignOut,anchorPane);
     }
 
    static String hidePwd = "";
