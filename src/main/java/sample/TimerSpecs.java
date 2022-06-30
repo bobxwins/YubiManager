@@ -40,16 +40,6 @@ public class TimerSpecs implements Serializable {
     }
 
 
-    public static  int getTimerS() {
-        if ( FileUtils.readAllBytes(Global.getSelectedDirectoryPath()+"timer.txt").length!=0) {
-            String timerString = new String(FileUtils.readAllBytes(Global.getSelectedDirectoryPath() + "timer.txt"));
-            TIMER = Integer.parseInt(timerString);
-            System.out.println("Timer is" + TIMER);
-            return TIMER;
-        }
-        return 15;
-    }
-
     public static void setTimer(int timer) {
         TimerSpecs.TIMER = timer;
         FileUtils.write(Global.getSelectedDirectoryPath()+"timer.txt",String.valueOf(timer).getBytes(StandardCharsets.UTF_8));

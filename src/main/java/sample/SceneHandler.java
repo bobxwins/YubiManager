@@ -199,7 +199,7 @@ public class SceneHandler {
         Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
         Stage stage = (Stage) btnSignOut.getScene().getWindow();
         stage.setScene(new Scene(root));
-
+        TimerHandler.TRANSITION.stop();
     }
 
     public boolean openDB() throws Exception {

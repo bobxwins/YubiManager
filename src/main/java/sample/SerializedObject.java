@@ -107,12 +107,8 @@ public class SerializedObject {
         {
             InputStream in = new ByteArrayInputStream(inputBytes);
             ObjectInputStream ois = new ObjectInputStream(in);
-
             TimerSpecs  timerSpecs = (TimerSpecs) ois.readObject();
-
-            ois.close();
             in.close();
-
             return timerSpecs;
         }
 

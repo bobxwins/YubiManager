@@ -310,9 +310,6 @@ public class EntryController implements Serializable   {
             apBottomTable.setDisable(true);
             apBottomTable.setVisible(false);
         }
-
-
-
     @FXML
     void returnTableView(ActionEvent event) throws Exception
     {
@@ -499,8 +496,8 @@ void openRecent (ActionEvent event) throws Exception
     Global.setEntryData(entryData);
 
     FileProtector fileProtector = new FileProtector();
-
-    fileProtector.encryption(entryData,TimerSpecs.getTimerSpecs());
+   TimerSpecs stored =  TimerSpecs.getTimerSpecs();
+  fileProtector.encryption(entryData,stored);
 
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
@@ -538,7 +535,7 @@ void openRecent (ActionEvent event) throws Exception
   //  TimerHandler timerHandler = new TimerHandler();
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
-   TimerHandler.timerDialog(entryData,btnSignOut,anchorPane);
+   TimerHandler.timerDialog(entryData);
    TimerHandler.timerCountDown(btnSignOut,anchorPane);
     }
 
