@@ -1,11 +1,11 @@
 package sample;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,12 +13,11 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.security.SecureRandom;
-import java.util.regex.Pattern;
 
 public class SceneHandler {
 
     PMGUI pmgui = new PMGUI();
+    TextField fileNameField = new TextField("");
 
     void newDBdialog(Button btn) throws Exception {
 
@@ -26,8 +25,7 @@ public class SceneHandler {
         pmgui.dialog.setTitle("Creating new database");
 
         pmgui.dialog.getDialogPane().setContent(pmgui.grid);
-
-        TextField fileNameField = new TextField("");
+        
         fileNameField.setPromptText("File name...");
 
         Label fileLabel = new Label("Enter new File name:");
@@ -35,18 +33,12 @@ public class SceneHandler {
         pmgui.grid.addRow(0, fileLabel, fileNameField);
 
         Platform.runLater(() -> fileNameField.requestFocus());
+        final Button btnOk = (Button) pmgui.dialog.getDialogPane().lookupButton(ButtonType.OK);
+        btnOk.addEventFilter(
+                ActionEvent.ACTION,
+                event -> {
+                    // Checks if conditions are fulfilled
 
-        pmgui.dialog.setResultConverter(dialogButton -> {
-            try {
-                if (dialogButton == ButtonType.OK) {
-                    if (!pmgui.manualPwdDialog.getText().equals(pmgui.confirmPwdDialog.getText())) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The manually entered passwords do not match!");
-                        alert.showAndWait();
-                        return null;
-                    }
                     if (fileNameField.getText().length() == 0 || pmgui.manualPwdDialog.getText().length() == 0
                             || pmgui.confirmPwdDialog.getText().length() == 0 || pmgui.sKeyPwdDialog.getText().length() == 0) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -54,34 +46,28 @@ public class SceneHandler {
                         alert.setHeaderText(null);
                         alert.setContentText("Please fill all fields!");
                         alert.showAndWait();
-
-                        return null;
+                        event.consume();
+                        return ;
                     }
+                       if (!validate(pmgui.manualPwdDialog.getText(),pmgui.confirmPwdDialog.getText(),pmgui.sKeyPwdDialog.getText())) {
+                    // If the conditions are not fulfilled, the event is consumed
+                    // to prevent the dialog from closing when clicking OK
+                    event.consume();
+                    return ;
+                     }
+             }
+        );
 
-                    if (pmgui.manualPwdDialog.getText().length() + pmgui.sKeyPwdDialog.getText().length() < 12) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The Master password must be at least 12 characters!");
-                        alert.showAndWait();
-                        return null;
-                    }
-
-               /*   if (! Pattern.matches(".*[^A-Za-z0-9]+.*",(pmgui.manualPwdDialog.getText() +pmgui.sKeyPwdDialog.getText()))
-                   ||  ! Pattern.matches("[a-zA-Z.0-9_]*",(pmgui.manualPwdDialog.getText() +pmgui.sKeyPwdDialog.getText())))
-                 {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The Master password must contain digits,uppercase,lowercase and special characters!");
-                        alert.showAndWait();
-
-                        return null;
-                    }
-*/
+        pmgui.dialog.setResultConverter(dialogButton -> {
+            try {
+               if (dialogButton == ButtonType.OK) {
+           /*        if (!validate()) {
+                       return null;
+                   }
+                   */
                     Secrets.setCombinedPasswords(pmgui.manualPwdDialog, pmgui.sKeyPwdDialog);
                     Global.setPasswordFilePath(fileNameField.getText());
-                    FileProtector.createKey(Secrets.getCombinedPasswords());
+                   FileProtector.createKey(Secrets.getCombinedPasswords());
                     newScene(btn);
 
                     Global.getRecentFilesData().add(Global.getPasswordFilePath());
@@ -89,7 +75,8 @@ public class SceneHandler {
                         FileUtils.write(Global.getRecentFilesDir(), "".getBytes(StandardCharsets.UTF_8));
                         // empties the file, or generates an empty file if it doesn't exist
                         SerializedObject.writeObservableList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
-                    }
+
+                 }
 
                 }
             } catch (Exception E) {
@@ -105,6 +92,10 @@ public class SceneHandler {
 
     boolean newScene(Button btnCreateDB) throws Exception {
 
+        Authentication.hmac(Global.getPasswordFilePath());
+        FileUtils.write("C:\\Users\\bob-w\\Documents\\YubiManager\\src\\main\\resources\\sample\\passwords\\ratio1.txt",
+                Authentication.hmac(Global.getPasswordFilePath()).getBytes(StandardCharsets.UTF_8));
+
         DirectoryChooser directoryChooser = new DirectoryChooser();
         Stage anotherStage = new Stage();
 
@@ -115,7 +106,7 @@ public class SceneHandler {
             Global.setSelectedDirectoryPath(selectedDirectory.getAbsolutePath() + "\\" + Global.getPasswordFilePath() + "\\");
 
             new File(Global.getSelectedDirectoryPath()).mkdir();
-            Global.setPasswordFilePath(Global.getSelectedDirectoryPath() + Global.getPasswordFilePath() + ".aes");
+            Global.setPasswordFilePath(Global.getSelectedDirectoryPath() + Global.getPasswordFilePath() + ".kbf");
             FileUtils.write(Global.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
 
         } else {
@@ -138,26 +129,49 @@ public class SceneHandler {
     boolean loginAuthentication(Button btnSignIn) throws Exception {
         gui.dialog(mpField, skField);
         Platform.runLater(() -> mpField.requestFocus());
+      final  Button btnOk = (Button) gui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
+        btnOk.addEventFilter(
+                ActionEvent.ACTION,
+                event -> {
+                    // Checks if conditions are fulfilled
+
+                    try {
+                        Secrets.setCombinedPasswords(mpField, skField);
+                        byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+                        System.out.println(Global.getPasswordFilePath());
+                        DecryptFile decryptFile = new DecryptFile();
+                        Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
+                        System.out.println("THE FUCKING HEADER IS:"+ decryptedSecrets.getHeader());
+
+
+                        if (decryptedSecrets.getHeader()=="This is NOT a header")
+                        {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Information Dialog");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Login failed! Wrong Password!");
+                            alert.showAndWait();
+                            // If the conditions are not fulfilled, the event is consumed
+                            // to prevent the dialog from closing
+                            event.consume();
+                            return;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }   );
+
 
         gui.loginDialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    Secrets.setCombinedPasswords(mpField, skField);
-                    // SymmetricKey.setSecretKey(Global.getCombinedPasswords());
 
-                    byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-                    DecryptFile decryptFile = new DecryptFile();
+                    Authentication.hmac(Global.getPasswordFilePath());
+                    FileUtils.write("C:\\Users\\bob-w\\Documents\\YubiManager\\src\\main\\resources\\sample\\passwords\\ratio.txt",
+                            Authentication.hmac(Global.getPasswordFilePath()).getBytes(StandardCharsets.UTF_8));
 
-                    if (SerializedObject.readFileObservableList(decryptFile.Decryption(input)) != null &&
-                            SerializedObject.readFileObservableList(decryptFile.Decryption(input)).isEmpty()) {
-
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Login failed! Wrong Password!");
-                        alert.showAndWait();
-                        return null;
-                    }
                     Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
                     Stage stage = (Stage) btnSignIn.getScene().getWindow();
@@ -176,36 +190,16 @@ public class SceneHandler {
         return false;
     }
 
-    public void createMenuItems(Menu menuRecent) throws Exception {
-
-        for (int i = 0; i < Global.getRecentFilesData().size(); i++) {
-            MenuItem menuItems = new MenuItem(Global.getRecentFilesData().get(i));
-
-            menuRecent.getItems().addAll(menuItems);
-
-            menuItems.setOnAction(e ->
-            {
-                Global.setPasswordFilePath(menuItems.getText());
-                Global.setSelectedDirectoryPath(Paths.get(Global.getPasswordFilePath()).getParent() + "\\");
-
-                //            label.setVisible(true);
-
-            });
-        }
-
-    }
-
     static void stageFullScreen(Button btnSignOut) throws Exception {
         Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
         Stage stage = (Stage) btnSignOut.getScene().getWindow();
         stage.setScene(new Scene(root));
-        TimerHandler.TRANSITION.stop();
     }
 
     public boolean openDB() throws Exception {
         FileChooser fileChooser = new FileChooser();
 
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("AES File (*.aes)", "*.aes");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("KeyBine File (*.kbf)", "*.kbf");
 
         fileChooser.getExtensionFilters().add(extFilter);
 
@@ -224,6 +218,42 @@ public class SceneHandler {
             return true;
     }
 
+ 
+boolean validate(String manualPwd,String confirmPwd, String sKeyPwd)
+{
+    String combined =manualPwd+ sKeyPwd;
 
+    boolean atleastOneSymbol = combined.matches(".*[^A-Za-z0-9]+.*");
+    boolean alphanumeric=combined.matches("[a-zA-Z.0-9_]*");
+    if (!manualPwd.equals(confirmPwd)) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("The manually entered passwords do not match!");
+        alert.showAndWait();
+        return false;
+    }
+
+
+    if (combined.length() < 12) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("The Master password must be at least 12 characters!");
+        alert.showAndWait();
+        return false;
+    }
+
+
+    if ( !atleastOneSymbol||!alphanumeric ) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Master password must contain digits, uppercase, lowercase and special characters!");
+        alert.showAndWait();
+        return false;
+    }
+    return true;
+}
 
 }

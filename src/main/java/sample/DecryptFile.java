@@ -22,28 +22,23 @@ public class DecryptFile  {
     public byte[] Decryption(byte[] input) {
 
         try {
-            byte[] nonSecretsBytes = FileUtils.readAllBytes(NonSecrets.getStoredNonSecrets());
-
-            NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
-
+            Database dbSecrets = (Database) SerializedObject.readDB(input);
+            byte[] base64decodedBytes = Base64.getDecoder().decode(dbSecrets.getSecretString());
+            NonSecrets nonSecrets= dbSecrets.getNonSecrets();
             SymmetricKey.setSecretKey(Secrets.getCombinedPasswords(),nonSecrets.getStoredSalt()
                     ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
                     nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
-
+            FileProtector.salt = nonSecrets.getStoredSalt();
             Cipher cipher = Cipher.getInstance(nonSecrets.getStoredAlgorithmModePadding(), nonSecrets.getStoredProvider());
-
             cipher.init(Cipher.DECRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(nonSecrets.getStoredGeneratedIV()));
-
-            byte[] output = cipher.doFinal(input);
-
-
+            byte[] output = cipher.doFinal(base64decodedBytes);
             return output;
 
         } catch (Exception e) {
 
         }
         return "".getBytes(StandardCharsets.UTF_8);
-    }
 
+    }
 
 }

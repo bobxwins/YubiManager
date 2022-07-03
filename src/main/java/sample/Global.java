@@ -59,16 +59,6 @@ public final class Global {
         return DEFAULTHPATH;
     }
 
-  /*  public static Label getLabelEnterPwd() throws Exception{
-        labelEnterPwd.setVisible(false);
-        labelEnterPwd.setLayoutX(449);
-        labelEnterPwd.setLayoutY(290);
-        labelEnterPwd.setFont(new Font(33));
-        labelEnterPwd.setTextFill(Color.RED);
-        labelEnterPwd.setStyle("-fx-font-weight: bold;");
-        return labelEnterPwd;
-    }
-    */
 
     static void setEntryData (ObservableList observableList) {
         Global.OBSERVABLELIST =observableList;

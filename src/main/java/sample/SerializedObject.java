@@ -1,32 +1,14 @@
 package sample;
 
-    import javafx.collections.FXCollections;
-    import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-    import java.io.*;
-    import java.nio.file.Path;
-    import java.util.ArrayList;
-    import java.util.List;
+import java.io.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SerializedObject {
-
-    public static byte[] readMemoryObservableList(ObservableList  observableList) throws  Exception {
-        try {
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(new ArrayList<>(observableList));
-            byte[] listBytes = bos.toByteArray();
-            oos.close();
-            bos.close();
-            return listBytes;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     public static void writeObservableList(ObservableList  observableList, Path file) throws  Exception {
         try {
@@ -36,7 +18,6 @@ public class SerializedObject {
             oos.writeObject(new ArrayList<>(observableList));
             oos.close();
             fos.close();
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,34 +44,20 @@ public class SerializedObject {
         return FXCollections.emptyObservableList();
     }
 
-    public static void writeObject(Object  object, Path file) throws  Exception {
-        try {
-            FileOutputStream fos = new FileOutputStream(String.valueOf(file));
-            // writes an object given as parameter to a path given as parameter
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(object);
-            fos.close();
-            oos.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static NonSecrets readObject(byte [] inputBytes) {
+    public static Secrets readSecrets(byte [] inputBytes) {
 
         try
         {
             InputStream in = new ByteArrayInputStream(inputBytes);
             ObjectInputStream ois = new ObjectInputStream(in);
 
-            NonSecrets nonSecrets = (NonSecrets) ois.readObject();
+            Secrets Secrets = (Secrets) ois.readObject();
 
             ois.close();
             in.close();
 
-            return nonSecrets;
+            return Secrets;
         }
 
         catch(Exception e)
@@ -98,18 +65,22 @@ public class SerializedObject {
             e.printStackTrace();
         }
 
-         return  new NonSecrets();
+        return  new Secrets();
     }
 
-    public static TimerSpecs readTimerSpecs(byte [] inputBytes) {
+    public static Object readDB(byte [] inputBytes) {
 
         try
         {
             InputStream in = new ByteArrayInputStream(inputBytes);
             ObjectInputStream ois = new ObjectInputStream(in);
-            TimerSpecs  timerSpecs = (TimerSpecs) ois.readObject();
+
+            Database Database = (Database) ois.readObject();
+
+            ois.close();
             in.close();
-            return timerSpecs;
+
+            return Database;
         }
 
         catch(Exception e)
@@ -117,19 +88,18 @@ public class SerializedObject {
             e.printStackTrace();
         }
 
-        return  new TimerSpecs();
+        return  new Database();
     }
 
-    public static byte[] serializeObject(Object  object) throws  Exception {
+    public static byte[] serializeDB(Object  object) throws  Exception {
         try {
-
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(object);
             byte[] listBytes = bos.toByteArray();
-            oos.close();
-            bos.close();
             return listBytes;
+           // oos.close();
+          //  bos.close();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -12,18 +12,12 @@
 
 
                <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
-        <items>
-          <Button mnemonicParsing="false" text="Button" />
-        </items>
-      </ToolBar>
                   <MenuBar prefHeight="39.0" prefWidth="1135.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                            <items>
                               <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
                               <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
-                              <Menu fx:id="menuRecent" mnemonicParsing="false" onAction="#openRecent" text="Open Recent" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
                   <SeparatorMenuItem mnemonicParsing="false" />

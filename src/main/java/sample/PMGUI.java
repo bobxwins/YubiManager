@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -8,7 +9,7 @@ import javafx.util.Pair;
 import java.io.File;
 import java.nio.file.Files;
 import java.security.SecureRandom;
-import java.util.regex.Pattern;
+import java.util.Base64;
 
 public class PMGUI {
 
@@ -24,49 +25,29 @@ public class PMGUI {
         dialog.setTitle("Updating passwords");
         dialog.getDialogPane().setContent(grid);
         setPwdGrid();
+        final Button btnOk = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        btnOk.addEventFilter(
+                ActionEvent.ACTION,
+                event -> {
+                    // Checks if conditions are fulfilled
+                    SceneHandler sceneHandler = new SceneHandler();
+                    if (!sceneHandler.validate(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
+                        // If the conditions are not fulfilled, the event is consumed
+                        // to prevent the dialog from closing
+                        event.consume();
+                        return ;
+                    }
+                }
+        );
+
+
         dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    if (!manualPwdDialog.getText().equals(confirmPwdDialog.getText())) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Update failed! Password did not match!");
-                        alert.showAndWait();
 
-                        return null;
-                    }
-                    if (manualPwdDialog.getText().length() == 0 || confirmPwdDialog.getText().length() == 0 || sKeyPwdDialog.getText().length() == 0) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Please fill all fields!");
-                        alert.showAndWait();
-                        return null;
-                    }
-                    if (manualPwdDialog.getText().length() + sKeyPwdDialog.getText().length()  < 12  ) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Master password must be at least 12 characters!");
-                        alert.showAndWait();
-                        return null;
-                    }
-                /*    if ( !Pattern.matches(".*[^A-Za-z0-9]+.*",new String(Secrets.getCombinedPasswords()))
-                            || ! Pattern.matches("[a-zA-Z.0-9_]*",new String(Secrets.getCombinedPasswords()))  ) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Master password must contain digits, uppercase, lowercase and special characters!");
-                        alert.showAndWait();
-
-                        return null;
-                    }
-                    */
-
-                    byte[] nonSecretsBytes = FileUtils.readAllBytes(NonSecrets.getStoredNonSecrets());
-
-                    NonSecrets nonSecrets = SerializedObject.readObject(nonSecretsBytes);
+                    byte[] nonSecretsBytes = FileUtils.readAllBytes(Global.getPasswordFilePath());
+                    Database dbSecrets = (Database) SerializedObject.readDB(nonSecretsBytes);
+                    NonSecrets nonSecrets= dbSecrets.getNonSecrets();
 
                     Secrets.setCombinedPasswords(manualPwdDialog, sKeyPwdDialog);
 

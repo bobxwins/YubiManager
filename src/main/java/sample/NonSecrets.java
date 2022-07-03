@@ -1,7 +1,6 @@
 package sample;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 
 
 public class NonSecrets implements Serializable {
@@ -9,10 +8,10 @@ public class NonSecrets implements Serializable {
 
     byte[] generatedIV, salt;
     int iterationCount, keyLength;
-
     String secureRandomAlgorithm,provider,secretKeyAlgorithm,algorithmModePadding;
 
-    NonSecrets(byte[] IVBytes, byte[] saltByte, int iterationInt, int keyInt, String sRAString,String keyAlgorithmString, String providerString, String algoModePadString) {
+    NonSecrets(byte[] IVBytes, byte[] saltByte, int iterationInt, int keyInt,
+               String sRAString, String keyAlgorithmString, String providerString, String algoModePadString) {
         this.generatedIV = IVBytes;
         this.salt = saltByte;
         this.iterationCount = iterationInt;
@@ -21,13 +20,14 @@ public class NonSecrets implements Serializable {
         this.secretKeyAlgorithm = keyAlgorithmString;
         this.provider = providerString;
         this.algorithmModePadding = algoModePadString;
+
     }
     NonSecrets() {
     }
 
 
     public byte[] getStoredSalt() {
-
+        // used for decryption
         return salt;
     }
 
@@ -40,7 +40,6 @@ public class NonSecrets implements Serializable {
 
         return keyLength;
     }
-
 
     public byte[] getStoredGeneratedIV() {
         return generatedIV;
@@ -59,11 +58,11 @@ public class NonSecrets implements Serializable {
         return algorithmModePadding;
     }
 
-
-    public static String getStoredNonSecrets() {
+   /* public static String getNonSecretsDir() {
         String nonSecretsDir = Global.getSelectedDirectoryPath() + "NonSecrets.txt";
         return nonSecretsDir;
     }
+    */
 
 
 }

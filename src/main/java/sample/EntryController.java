@@ -1,5 +1,4 @@
 package sample;
-import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -29,7 +28,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import java.util.Optional;
@@ -153,7 +151,6 @@ public class EntryController implements Serializable   {
     @FXML void menuRandomPwd (ActionEvent event)
     {
         pfPwdField.setText(PasswordUtils.getPassword(32));
-        System.out.println(pfPwdField.getText());
     }
 
         @FXML
@@ -494,11 +491,12 @@ void openRecent (ActionEvent event) throws Exception
          void save () throws Exception {
 
     Global.setEntryData(entryData);
-
     FileProtector fileProtector = new FileProtector();
-   TimerSpecs stored =  TimerSpecs.getTimerSpecs();
-  fileProtector.encryption(entryData,stored);
-
+    Secrets secrets = new Secrets();
+    secrets.setEntry(entryData);
+    TimerSpecs tim = new TimerSpecs(TimerStatic.getTimer(),TimerStatic.getSelectedCheckBox());
+    secrets.setTimerSpecs(tim);
+    fileProtector.encryption(entryData,secrets.getTimerSpecs());
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
     VisbilityHandler.setSelectedPassword(pfPwdField.getText());
@@ -532,7 +530,6 @@ void openRecent (ActionEvent event) throws Exception
         pmgui.updatePasswords();
           save();
     }
-  //  TimerHandler timerHandler = new TimerHandler();
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
    TimerHandler.timerDialog(entryData);
@@ -543,15 +540,12 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
    private void initialize() throws Exception {
 
-        TimerHandler.timerCountDown(btnSignOut,anchorPane);
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
         String image = Main.class.getResource("PMAuth/magnifying-glass.png").toExternalForm();
         tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
                 " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;");
-
-
 
         for (int i = 0; i < 12; i++) {
             hidePwd = '\u2022' + hidePwd;
@@ -586,23 +580,22 @@ void openRecent (ActionEvent event) throws Exception
             }
         });
         VisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
-        SceneHandler sceneHandler = new SceneHandler();
-
-        sceneHandler.createMenuItems(menuRecent);
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
 
-              DecryptFile decryptFile = new DecryptFile();
+             DecryptFile decryptFile = new DecryptFile();
              byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-
-            entryData.addAll(SerializedObject.readFileObservableList(decryptFile.Decryption(input)));
-
+        if (input.length>0)
+        {
+           Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
+           ObservableList<Entry> observableList = FXCollections.observableList(decryptedSecrets.getEntry());
+           entryData.addAll(observableList);
+            TimerHandler.timerCountDown(btnSignOut,anchorPane);
+        }
             entryTable.setItems(entryData);
-
-
             filter();
             btnEnterMenu.setOnAction(e -> {
                 try {

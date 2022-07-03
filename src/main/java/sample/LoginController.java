@@ -24,18 +24,12 @@ public class LoginController {
 
     @FXML
     private Button btnLogo;
-
-    @FXML
-    private Menu menuRecent;
-
     @FXML
     private ImageView imgLocked;
     @FXML
     private ImageView imgUnLocked;
     @FXML
     private AnchorPane anchorPane;
-
-
     @FXML
     private TableColumn<String, String> recent;
 
@@ -77,7 +71,7 @@ public class LoginController {
     @FXML
     void openDB(ActionEvent event) throws Exception {
 
-        SceneHandler sceneHandler = new SceneHandler();
+     SceneHandler sceneHandler = new SceneHandler();
       sceneHandler.openDB()  ;
 
         if (sceneHandler.loginAuthentication(btnSignIn) == false) {
@@ -95,7 +89,6 @@ public class LoginController {
             Global.getRecentFilesData().remove(selectedItem);
             SerializedObject.writeObservableList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
             //updates the recentFile text file, after deleting the selected table item
-
 
         }
 

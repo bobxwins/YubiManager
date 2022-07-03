@@ -7,10 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 public class GUI {
-/*
-    public   PasswordField manualPwdDialog = new PasswordField();
-    public    PasswordField sKeyPwdDialog = new PasswordField();
-    */
+
     public   GridPane grid = new GridPane();
     public Dialog<Void> loginDialog = new Dialog<Void>();
 

@@ -1,14 +1,11 @@
 package sample;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Timer;
 
 public class TimerSpecs implements Serializable {
-
+ //  private static final long serialVersionUID = 6529685098267757690L;
+    private static TimerSpecs timerSpecs;
         int timer;
-    private static int TIMER;
        boolean selectedCheckBox ;
     TimerSpecs (int timerInt,  boolean selectedCheckBoxBool)
     {
@@ -28,22 +25,12 @@ public class TimerSpecs implements Serializable {
     }
 
 
-    public static String getTimerSpecsDir() {
-        String timerSpecsDir = Global.getSelectedDirectoryPath() + "Timer.aes";
-        return timerSpecsDir;
-    }
-    public static TimerSpecs getTimerSpecs () {
-        byte[] input = FileUtils.readAllBytes(TimerSpecs.getTimerSpecsDir());
+    public static TimerSpecs getStoredTimerSpecs() {
+        byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
         DecryptFile decryptFile = new DecryptFile();
-        TimerSpecs timerSpecs =  SerializedObject.readTimerSpecs(decryptFile.Decryption(input));
+        Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
+        TimerSpecs timerSpecs = decryptedSecrets.getTimerSpecs();
         return timerSpecs;
-    }
-
-
-    public static void setTimer(int timer) {
-        TimerSpecs.TIMER = timer;
-        FileUtils.write(Global.getSelectedDirectoryPath()+"timer.txt",String.valueOf(timer).getBytes(StandardCharsets.UTF_8));
-        // casts timer to a string, then casts the string to byte array. Integer cannot directly be cast to byte array
     }
 
 }

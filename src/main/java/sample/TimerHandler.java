@@ -1,44 +1,39 @@
 package sample;
 
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimerHandler {
     public  Dialog<Pair<String, String>> dialog = new Dialog<>();
     public  GridPane grid = new GridPane();
     public  CheckBox checkBox;
     public  Spinner<Integer> timerSpinner;
-    static  TimerSpecs timerSpecs;
+   public static  TimerSpecs timerSpecs;
     private static  boolean selectedCheckBox;
    public static PauseTransition TRANSITION  = new PauseTransition();
    static final EventHandler<InputEvent> filter = event -> TRANSITION.playFromStart();
 
     public static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
 
-      if(!Files.exists(Paths.get(TimerSpecs.getTimerSpecsDir())))
+      if(!Files.exists(Paths.get(Global.getPasswordFilePath())))
         {
             return;    }
 
-        timerSpecs = TimerSpecs.getTimerSpecs();
-
+        timerSpecs = TimerSpecs.getStoredTimerSpecs();
         if (!timerSpecs.getSelectedCheckBox())
         {
             anchorPane.removeEventFilter(InputEvent.ANY, filter);
             return;    }
-
          TRANSITION.setDuration(Duration.seconds(timerSpecs.getTimer()));
          anchorPane.addEventFilter(InputEvent.ANY, filter);
          TRANSITION.setOnFinished(evt -> {
@@ -48,6 +43,7 @@ public class TimerHandler {
                 alert.setTitle("Inactivity");
                 alert.setHeaderText("Connection closed due to inactivity!");
                 alert.show();
+                TRANSITION.stop();
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -68,6 +64,9 @@ public class TimerHandler {
                         //      timerDialog(), so the global boolean "selectedCheckBox" is set in timerDialog()
                         //     so it's state can be accessed in timerCountDown()
                         TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                        TimerStatic.setTimer(timerHandler.timerSpinner.getValue());
+                        TimerStatic.setSelectedCheckBox(selectedCheckBox);
+
                         FileProtector fileProtector = new FileProtector();
                         fileProtector.encryption(observableList,updateTimerSpecs);
                         // the TimerSpecs gets encrypted then stored as a file
@@ -75,6 +74,11 @@ public class TimerHandler {
                     }
                     selectedCheckBox = true;
                     TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                   // TimerSpecs.setinMemoryTimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                 //  TimerSpecs.setinMemoryTimerSpecs(updateTimerSpecs);
+                    TimerStatic.setTimer(timerHandler.timerSpinner.getValue());
+                    TimerStatic.setSelectedCheckBox(selectedCheckBox);
+
                     FileProtector fileProtector = new FileProtector();
                     fileProtector.encryption(observableList,updateTimerSpecs);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -90,10 +94,7 @@ public class TimerHandler {
 
             return null;
         });
-
-
         timerHandler.dialog.showAndWait();
-      //  timerHandler.timerCountDown(btnSignOut,anchorPane);
     }
     void timerGrid () {
 
@@ -107,8 +108,8 @@ public class TimerHandler {
         checkBox = new CheckBox("Seconds of inactivity database will be locked in: ");
         timerSpinner = (Spinner<Integer>) new Spinner(8, 999, 15);
 
-        if(Files.exists(Paths.get(TimerSpecs.getTimerSpecsDir()))) {
-          TimerSpecs storedTimerSpecs =  TimerSpecs.getTimerSpecs() ;
+        if(Files.exists(Paths.get(Global.getPasswordFilePath()))) {
+          TimerSpecs storedTimerSpecs =  TimerSpecs.getStoredTimerSpecs() ;
             checkBox.setSelected(storedTimerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(storedTimerSpecs.getTimer());
         }
