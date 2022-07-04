@@ -12,8 +12,8 @@ public   class PasswordUtils {
 
    private static char[] SYMBOLS = "+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
 
-   private static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyzæøå".toCharArray();
-    private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ".toCharArray();
+   private static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
   private  static char[] NUMBERS = "0123456789".toCharArray();
    private static char[] ALL_CHARS ;

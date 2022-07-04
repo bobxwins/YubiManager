@@ -4,9 +4,14 @@ import javax.crypto.spec.IvParameterSpec;
 
 import javax.crypto.*;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -20,17 +25,18 @@ public class FileProtector {
 
         Security.addProvider(new BouncyCastleProvider());
     }
-    static  String secureRandomAlgorithm = "DEFAULT";
-    static  String secretKeyAlgorithm = "PBKDF2WithHmacSHA512";
-    static  String transformationAlgorithm ="AES/CBC/PKCS7PADDING";
-    static  String provider = "BC";
-    static byte[] salt =new byte[32]; // Salt is always at least 128 bits
+
+    static String secureRandomAlgorithm = "DEFAULT";
+    static String secretKeyAlgorithm = "PBKDF2WithHmacSHA512";
+    static String transformationAlgorithm = "AES/CBC/PKCS7PADDING";
+    static String provider = "BC";
+    static byte[] salt = new byte[32]; // Salt is always at least 128 bits
     static int iterationCount = 100000;
     static int keyLength = 256;
     static byte[] generatedIV = new byte[16]; // IV is always 128 bits
     static SecureRandom secureRandom;
 
-  static {
+    static {
         try {
             secureRandom = SecureRandom.getInstance(secureRandomAlgorithm, provider);
         } catch (NoSuchAlgorithmException e) {
@@ -41,9 +47,13 @@ public class FileProtector {
     }
 
 
-    public void encryption(ObservableList observableList,Object timerSpecs) {
+    public void encryption(ObservableList observableList, Object timerSpecs) {
 
         try {
+
+
+            String header = Authentication.generateHmac("Global.getPasswordFilePath()", SymmetricKey.getSecretKey());
+
             secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
             secureRandom.nextBytes(generatedIV);
             Cipher cipher = Cipher.getInstance(transformationAlgorithm, provider);
@@ -51,19 +61,22 @@ public class FileProtector {
             cipher.init(Cipher.ENCRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(generatedIV));
 
             Secrets secrets = new Secrets();
-            byte[] inputSecrets = SerializedObject.serializeDB(databaseSecrets(secrets,observableList,timerSpecs));
-            byte[] outputSecrets = cipher.doFinal(inputSecrets);
+            byte[] inputSecrets = SerializedObject.serializeDB(databaseSecrets(secrets, observableList, timerSpecs));
 
-            NonSecrets nonSecrets = new NonSecrets(generatedIV,salt,iterationCount,keyLength,
-                    secureRandomAlgorithm, secretKeyAlgorithm,provider, transformationAlgorithm);
+            byte[] outputSecrets;//= cipher.doFinal(inputSecrets);
+
+            NonSecrets nonSecrets = new NonSecrets(generatedIV, salt, iterationCount, keyLength,
+                    secureRandomAlgorithm, secretKeyAlgorithm, provider, transformationAlgorithm, header);
 
             Database database = new Database();
             database.setNonSecrets(nonSecrets);
+
+                outputSecrets = cipher.doFinal(inputSecrets);
             String encoded = Base64.getEncoder().encodeToString(outputSecrets);
-            database.setSecretString(encoded);
-            byte[] dbSerialized= SerializedObject.serializeDB(database);
+            database.setCipherText(encoded);
+            byte[] dbSerialized = SerializedObject.serializeDB(database);
             FileUtils.write(Global.getPasswordFilePath(), dbSerialized);
-            System.out.println("DID IT WORK?????");
+            FileUtils.write("C:\\Users\\bob-w\\Documents\\YubiManager\\src\\main\\resources\\sample\\passwords\\check.txt", dbSerialized);
 
         } catch (Exception e) {
 
@@ -71,17 +84,16 @@ public class FileProtector {
     }
 
 
-    public static void createKey (char [] password) throws Exception {
+    public static void createKey(char[] password) throws Exception {
         secureRandom.nextBytes(salt);
         SymmetricKey.setSecretKey(password, salt, iterationCount, keyLength,
                 secretKeyAlgorithm, provider);
     }
 
 
-    public Secrets databaseSecrets( Secrets secrets,ObservableList observableList, Object object) {
+    public Secrets databaseSecrets(Secrets secrets, ObservableList observableList, Object object) {
 
         try {
-            secrets.setHeader("This is NOT a header");
             secrets.setTimerSpecs((TimerSpecs) object);
             secrets.setEntry(observableList);
             return secrets;
@@ -90,4 +102,21 @@ public class FileProtector {
         return null;
     }
 
+    public static boolean fileExists() throws Exception {
+        Path path = Paths.get(Global.getPasswordFilePath());
+        if (!Files.exists(path)) {
+            FileUtils.write(Global.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
+            FileProtector.createKey(Secrets.getCombinedPasswords());
+            FileProtector fileProtector = new FileProtector();
+            ObservableList<Entry> entryData = FXCollections.observableArrayList();
+            entryData.add(new Entry("", "", "",
+                    "", ""));
+            ObservableList observableList = FXCollections.emptyObservableList();
+            TimerSpecs defaultTimer = new TimerSpecs(8,false);
+            TimerSpecs.setTimerSpecs(defaultTimer);
+            fileProtector.encryption(entryData, defaultTimer);
+            return false;
+        }
+        return true;
+    }
 }

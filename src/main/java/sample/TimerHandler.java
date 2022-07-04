@@ -29,7 +29,7 @@ public class TimerHandler {
         {
             return;    }
 
-        timerSpecs = TimerSpecs.getStoredTimerSpecs();
+        timerSpecs = TimerSpecs.getTimerSpecs();
         if (!timerSpecs.getSelectedCheckBox())
         {
             anchorPane.removeEventFilter(InputEvent.ANY, filter);
@@ -64,6 +64,7 @@ public class TimerHandler {
                         //      timerDialog(), so the global boolean "selectedCheckBox" is set in timerDialog()
                         //     so it's state can be accessed in timerCountDown()
                         TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                        TimerSpecs.setTimerSpecs(updateTimerSpecs);
                         TimerStatic.setTimer(timerHandler.timerSpinner.getValue());
                         TimerStatic.setSelectedCheckBox(selectedCheckBox);
 
@@ -74,8 +75,7 @@ public class TimerHandler {
                     }
                     selectedCheckBox = true;
                     TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
-                   // TimerSpecs.setinMemoryTimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
-                 //  TimerSpecs.setinMemoryTimerSpecs(updateTimerSpecs);
+                    TimerSpecs.setTimerSpecs(updateTimerSpecs);
                     TimerStatic.setTimer(timerHandler.timerSpinner.getValue());
                     TimerStatic.setSelectedCheckBox(selectedCheckBox);
 
@@ -109,7 +109,7 @@ public class TimerHandler {
         timerSpinner = (Spinner<Integer>) new Spinner(8, 999, 15);
 
         if(Files.exists(Paths.get(Global.getPasswordFilePath()))) {
-          TimerSpecs storedTimerSpecs =  TimerSpecs.getStoredTimerSpecs() ;
+          TimerSpecs storedTimerSpecs =  TimerSpecs.getTimerSpecs() ;
             checkBox.setSelected(storedTimerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(storedTimerSpecs.getTimer());
         }

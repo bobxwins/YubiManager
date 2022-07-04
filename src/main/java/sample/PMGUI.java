@@ -59,6 +59,9 @@ public class PMGUI {
                     ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
                    nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
 
+                    String generatedHeader = Authentication.generateHmac("Global.getPasswordFilePath()",SymmetricKey.getSecretKey());
+                    nonSecrets.setHeader(generatedHeader);
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");
                     alert.setHeaderText(null);
@@ -112,35 +115,6 @@ public class PMGUI {
             }
         }
         file.delete();
-    }
-
-    void loginPasswords() {
-        dialog.setTitle("Updating passwords");
-        dialog.getDialogPane().setContent(grid);
-        setPwdGrid();
-        dialog.setResultConverter(dialogButton -> {
-            try {
-                if (dialogButton == ButtonType.OK) {
-                    if (!manualPwdDialog.getText().equals(confirmPwdDialog.getText())) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Information Dialog");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Password is incorrect!");
-                        alert.showAndWait();
-
-                        return null;
-                    }
-
-                }
-            } catch (Exception E) {
-
-
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
-
     }
 
 

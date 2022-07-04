@@ -28,6 +28,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import java.util.Optional;
@@ -539,7 +540,6 @@ void openRecent (ActionEvent event) throws Exception
    static String hidePwd = "";
     @FXML
    private void initialize() throws Exception {
-
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
@@ -585,16 +585,9 @@ void openRecent (ActionEvent event) throws Exception
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
-
-             DecryptFile decryptFile = new DecryptFile();
-             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-        if (input.length>0)
-        {
-           Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
-           ObservableList<Entry> observableList = FXCollections.observableList(decryptedSecrets.getEntry());
-           entryData.addAll(observableList);
+            Authentication authentication = new Authentication();
+           entryData.addAll(authentication.restoreEntries());
             TimerHandler.timerCountDown(btnSignOut,anchorPane);
-        }
             entryTable.setItems(entryData);
             filter();
             btnEnterMenu.setOnAction(e -> {

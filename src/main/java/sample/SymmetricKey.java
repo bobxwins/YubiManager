@@ -6,6 +6,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Base64;
@@ -35,6 +36,7 @@ static {
         SecretKeyFactory factory =
                 SecretKeyFactory.getInstance(secretKeyAlgorithmString, providerString);
          secretKey = factory.generateSecret(keySpec);
+
     }
 
 

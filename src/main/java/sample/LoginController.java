@@ -12,7 +12,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 public class LoginController {
 
@@ -44,7 +46,6 @@ public class LoginController {
 
             return;
         }
-
     }
 
 
@@ -131,6 +132,7 @@ public class LoginController {
         btnLogo.setStyle("-fx-background-radius: 5em; "
         );
         btnLogo.setOnAction(e -> {
+
                     if (!imgLocked.isVisible()) {
                         imgLocked.setVisible(true);
                         imgUnLocked.setVisible(false);

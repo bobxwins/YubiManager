@@ -39,14 +39,12 @@ public class VisbilityHandler {
         pf.textProperty().addListener((observable, oldValue,    newValue) -> {
             tf.setText(newValue);
 
-
         });
         tBtn.setOnAction(e -> {
 
             if (tBtn.isSelected() ) {
                 tf.textProperty().addListener((observable, oldValue, newValue) -> {
                     pf.setText(newValue);
-
 
                 });
 

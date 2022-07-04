@@ -10,25 +10,13 @@ import java.util.ArrayList;
 
 public class Secrets implements Serializable {
     public Secrets(){}
-    public Secrets(String headerString)
-    {
-        this.header= headerString;}
 
     private static String MANUALSKEYPWD;
     private static char[] COMBINEDPASSWORD;
 
-     private String header;
     Secrets secrets;
    TimerSpecs timerSpecs;
     ArrayList<Entry> entry;
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
 
     public ArrayList<Entry> getEntry() {
         return entry;
@@ -77,3 +65,6 @@ public class Secrets implements Serializable {
     }
 
 }
+ /* FileUtils.write("C:\\Users\\bob-w\\Documents\\YubiManager\\src\\main\\resources\\sample\\passwords\\fuck.txt"
+           ,Authentication.hmac(Global.getPasswordFilePath(),SymmetricKey.getSecretKey()).getBytes(StandardCharsets.UTF_8));
+           System.out.println("DRAGON BALLLLZ"); */

@@ -1,11 +1,7 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Database implements Serializable {
 
@@ -13,15 +9,15 @@ public class Database implements Serializable {
 
     }
     Secrets secrets;
-    String secretsString;
+    String cipherText;
     NonSecrets nonSecrets;
 
-    public String getSecretString() {
-        return secretsString;
+    public String getCipherText() {
+        return cipherText;
     }
 
-    public void setSecretString(String secretStrings) {
-        this.secretsString = secretStrings;
+    public void setCipherText(String cipherTextString) {
+        this.cipherText = cipherTextString;
     }
 
     public Secrets getSecrets() {
