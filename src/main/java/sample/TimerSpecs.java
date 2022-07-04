@@ -24,15 +24,6 @@ public class TimerSpecs implements Serializable {
         // when running the application
     }
 
-/*
-    public static TimerSpecs getStoredTimerSpecs() {
-        byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-        DecryptFile decryptFile = new DecryptFile();
-        Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
-        TimerSpecs timerSpecs = decryptedSecrets.getTimerSpecs();
-        return timerSpecs;
-    }
- */
  public static TimerSpecs getTimerSpecs() {
         return timerSpecs;
     }

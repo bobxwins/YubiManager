@@ -41,9 +41,8 @@ public class LoginController {
     @FXML
     void login(ActionEvent event) throws Exception {
 
-        SceneHandler sceneHandler = new SceneHandler();
-        if (sceneHandler.loginAuthentication(btnSignIn) == false) {
-
+        Authentication authentication = new Authentication ();
+        if (authentication.loginAuthentication(btnSignIn) == false) {
             return;
         }
     }
@@ -74,8 +73,8 @@ public class LoginController {
 
      SceneHandler sceneHandler = new SceneHandler();
       sceneHandler.openDB()  ;
-
-        if (sceneHandler.loginAuthentication(btnSignIn) == false) {
+  Authentication authentication = new Authentication ();
+        if (authentication.loginAuthentication(btnSignIn) == false) {
 
             return;
         }
@@ -147,9 +146,9 @@ public class LoginController {
         recentFilesTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 // Event that listens to if the mouse has been double clicked
-                SceneHandler sceneHandler = new SceneHandler();
+                Authentication authentication = new Authentication();
                 try {
-                    if (sceneHandler.loginAuthentication(btnSignIn) == false) {
+                    if (authentication.loginAuthentication(btnSignIn) == false) {
 
                         return;
                     }

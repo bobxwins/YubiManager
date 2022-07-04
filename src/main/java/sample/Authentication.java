@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import org.bouncycastle.crypto.params.KeyParameter;
 
@@ -17,6 +18,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
+import java.util.regex.Pattern;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -60,14 +62,15 @@ public ObservableList<Entry> restoreEntries () throws Exception {
 return FXCollections.emptyObservableList();
     }
 
-     boolean validate(String manualPwd,String confirmPwd, String sKeyPwd)
+  public static boolean validate(String manualPwd,String confirmPwd, String sKeyPwd)
      {
+         // checks if the password has valid credentials, when creating a new database or updating the master password
+
          String combined =manualPwd+ sKeyPwd;
          String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
                  "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
-         
-         boolean atleastOneSymbol = combined.matches(".*[^A-Za-z0-9]+.*");
-         boolean alphanumeric=combined.matches("[a-zA-Z.0-9_]*");
+
+         Pattern.compile(regex).matcher(combined).matches();
 
          if (combined.length() < 12) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -87,8 +90,7 @@ return FXCollections.emptyObservableList();
              return false;
          }
 
-
-         if ( !alphanumeric ) {
+         if ( !Pattern.compile(regex).matcher(combined).matches() ) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
              alert.setHeaderText(null);
@@ -96,22 +98,13 @@ return FXCollections.emptyObservableList();
              alert.showAndWait();
              return false;
          }
-/*
-        if ( !atleastOneSymbol ) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("Master password must contain special characters!");
-            alert.showAndWait();
-            return false;
-        }
-        */
 
          return true;
      }
 
-     /*
-
+     GUI gui = new GUI();
+     PasswordField mpField = new PasswordField();
+     PasswordField skField = new PasswordField();
      boolean loginAuthentication(Button btnSignIn) throws Exception {
          gui.dialog(mpField, skField);
          Platform.runLater(() -> mpField.requestFocus());
@@ -174,5 +167,4 @@ return FXCollections.emptyObservableList();
          return false;
      }
 
-      */
  }

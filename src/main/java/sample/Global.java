@@ -22,12 +22,9 @@ public final class Global {
     private static String DEFAULTHPATH;
     private static String RECENTFILESDIR;
 
-
-    private  static Label labelEnterPwd = new Label("Please Enter Passwords!");
     private  static Label labelRecentFile = new Label();
     private Global(){}  // Private constructor to prevent instantiation
-
-
+    
     public static String getPasswordFilePath() {
         return passwordFilePath;
     }

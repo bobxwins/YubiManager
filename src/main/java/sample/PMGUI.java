@@ -30,8 +30,8 @@ public class PMGUI {
                 ActionEvent.ACTION,
                 event -> {
                     // Checks if conditions are fulfilled
-                    SceneHandler sceneHandler = new SceneHandler();
-                    if (!sceneHandler.validate(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
+
+                    if (!Authentication.validate(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing
                         event.consume();

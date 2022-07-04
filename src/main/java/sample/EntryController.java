@@ -145,8 +145,6 @@ public class EntryController implements Serializable   {
     private ImageView imgPwdNotVisible;
  @FXML private ContextMenu ctxTableMenu;
 
-
-
     Slider slider = new Slider(4, 999, 1);
 
     @FXML void menuRandomPwd (ActionEvent event)

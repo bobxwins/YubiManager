@@ -54,7 +54,7 @@ public class SceneHandler {
                         event.consume();
                         return ;
                     }
-                    if (!validate(pmgui.manualPwdDialog.getText(),pmgui.confirmPwdDialog.getText(),pmgui.sKeyPwdDialog.getText())) {
+                    if (!Authentication.validate(pmgui.manualPwdDialog.getText(),pmgui.confirmPwdDialog.getText(),pmgui.sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing when clicking OK
                         event.consume();
@@ -125,72 +125,6 @@ public class SceneHandler {
     }
 
 
-    GUI gui = new GUI();
-    PasswordField mpField = new PasswordField();
-    PasswordField skField = new PasswordField();
-
-    boolean loginAuthentication(Button btnSignIn) throws Exception {
-        gui.dialog(mpField, skField);
-        Platform.runLater(() -> mpField.requestFocus());
-        final  Button btnOk = (Button) gui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
-        btnOk.addEventFilter(
-                ActionEvent.ACTION,
-                event -> {
-                    // Checks if conditions are fulfilled
-
-                    try {
-                        Secrets.setCombinedPasswords(mpField, skField);
-                        byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-
-                        Database dbSecrets = (Database) SerializedObject.readDB(input);
-                        NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-                        DecryptFile.restoreKey();
-                        String generatedHeader = Authentication.generateHmac("Global.getPasswordFilePath()",SymmetricKey.getSecretKey());
-                        nonSecrets.setHeader(generatedHeader);
-
-                        if (!Authentication.verifyHmac(generatedHeader))
-                        {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Information Dialog");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Login failed! Wrong Password!");
-                            alert.showAndWait();
-                            // If the conditions are not fulfilled, the event is consumed
-                            // to prevent the dialog from closing
-                            event.consume();
-                            return;
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }   );
-
-
-        gui.loginDialog.setResultConverter(dialogButton -> {
-            try {
-                if (dialogButton == ButtonType.OK) {
-
-                    Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
-
-                    Stage stage = (Stage) btnSignIn.getScene().getWindow();
-                    stage.setScene(new Scene(root));
-
-
-                }
-            } catch (Exception E) {
-
-            }
-
-            return null;
-        });
-
-        gui.loginDialog.showAndWait();
-
-        return false;
-    }
-
     static void stageFullScreen(Button btnSignOut) throws Exception {
 
         Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
@@ -216,55 +150,6 @@ public class SceneHandler {
         Global.setPasswordFilePath(file.getAbsolutePath());
 
         Global.setSelectedDirectoryPath(file.getAbsoluteFile().getParent() + "\\");
-
-        return true;
-    }
-
-
-    boolean validate(String manualPwd,String confirmPwd, String sKeyPwd)
-    {
-        String combined =manualPwd+ sKeyPwd;
-
-        boolean atleastOneSymbol = combined.matches(".*[^A-Za-z0-9]+.*");
-        boolean alphanumeric=combined.matches("[a-zA-Z.0-9_]*");
-
-        if (combined.length() < 12) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("The Master password must be at least 12 characters long!");
-            alert.showAndWait();
-            return false;
-        }
-
-        if (!manualPwd.equals(confirmPwd)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("The manually entered passwords do not match!");
-            alert.showAndWait();
-            return false;
-        }
-
-
-        if ( !alphanumeric ) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("Master password must contain digits, uppercase, and lowercase characters!");
-            alert.showAndWait();
-            return false;
-        }
-/*
-        if ( !atleastOneSymbol ) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("Master password must contain special characters!");
-            alert.showAndWait();
-            return false;
-        }
-        */
 
         return true;
     }
