@@ -65,6 +65,3 @@ public class Secrets implements Serializable {
     }
 
 }
- /* FileUtils.write("C:\\Users\\bob-w\\Documents\\YubiManager\\src\\main\\resources\\sample\\passwords\\fuck.txt"
-           ,Authentication.hmac(Global.getPasswordFilePath(),SymmetricKey.getSecretKey()).getBytes(StandardCharsets.UTF_8));
-           System.out.println("DRAGON BALLLLZ"); */

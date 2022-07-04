@@ -52,8 +52,8 @@ public class FileProtector {
         try {
 
 
-            String header = Authentication.generateHmac("Global.getPasswordFilePath()", SymmetricKey.getSecretKey());
-
+            String header = Authentication.generateHmac(Global.getPasswordFilePath(), SymmetricKey.getSecretKey());
+            System.out.println("the password file path is:" +Global.getPasswordFilePath());
             secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
             secureRandom.nextBytes(generatedIV);
             Cipher cipher = Cipher.getInstance(transformationAlgorithm, provider);
@@ -76,8 +76,6 @@ public class FileProtector {
             database.setCipherText(encoded);
             byte[] dbSerialized = SerializedObject.serializeDB(database);
             FileUtils.write(Global.getPasswordFilePath(), dbSerialized);
-            FileUtils.write("C:\\Users\\bob-w\\Documents\\YubiManager\\src\\main\\resources\\sample\\passwords\\check.txt", dbSerialized);
-
         } catch (Exception e) {
 
         }

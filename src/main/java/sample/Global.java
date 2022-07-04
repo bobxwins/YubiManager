@@ -24,7 +24,7 @@ public final class Global {
 
     private  static Label labelRecentFile = new Label();
     private Global(){}  // Private constructor to prevent instantiation
-    
+
     public static String getPasswordFilePath() {
         return passwordFilePath;
     }

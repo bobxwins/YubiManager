@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
 import java.nio.charset.StandardCharsets;
@@ -93,7 +94,17 @@ public class LoginController {
         }
 
     }
-
+    @FXML
+    private void helpInfo() throws  Exception
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setContentText("If you struggle a lot with creating and remembering a unique and secure passwords for each of your accounts, consider using KeyBine today!"
+                 );
+        alert.showAndWait();
+    }
 
     @FXML
     private void initialize() throws Exception {

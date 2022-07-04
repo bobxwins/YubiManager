@@ -105,6 +105,7 @@ return FXCollections.emptyObservableList();
      GUI gui = new GUI();
      PasswordField mpField = new PasswordField();
      PasswordField skField = new PasswordField();
+
      boolean loginAuthentication(Button btnSignIn) throws Exception {
          gui.dialog(mpField, skField);
          Platform.runLater(() -> mpField.requestFocus());
@@ -121,7 +122,7 @@ return FXCollections.emptyObservableList();
                          Database dbSecrets = (Database) SerializedObject.readDB(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
                          DecryptFile.restoreKey();
-                         String generatedHeader = Authentication.generateHmac("Global.getPasswordFilePath()",SymmetricKey.getSecretKey());
+                         String generatedHeader = Authentication.generateHmac(Global.getPasswordFilePath(),SymmetricKey.getSecretKey());
                          nonSecrets.setHeader(generatedHeader);
 
                          if (!Authentication.verifyHmac(generatedHeader))

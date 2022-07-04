@@ -108,7 +108,7 @@ public class SceneHandler {
             new File(Global.getSelectedDirectoryPath()).mkdir();
             Global.setPasswordFilePath(Global.getSelectedDirectoryPath() + Global.getPasswordFilePath() + ".txt");
 
-          // FileUtils.write(Global.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
+
 
         } else {
             return false;
