@@ -227,7 +227,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ToggleButton fx:id="togBtnPwd" layoutX="580.0" layoutY="-6.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5">
+                                    <Button fx:id="togBtnPwd" layoutX="580.0" layoutY="-12.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="59.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" text="passwordVisiblity">
                                        <graphic>
                                           <AnchorPane>
                                              <children>
@@ -244,7 +244,7 @@
                                              </children>
                                           </AnchorPane>
                                        </graphic>
-                                    </ToggleButton>
+                                    </Button>
                                  </children>
                               </AnchorPane>
                                           <TextArea fx:id="tANotes" prefHeight="255.0" prefWidth="600.0" />
@@ -267,7 +267,7 @@
                <children>
                   <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="819.0">
                      <children>
-                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="1103.0">
+                        <TableView fx:id="selectedEntryTableView" editable="true" prefHeight="146.0" prefWidth="1103.0">
                             <placeholder>
                                 <Label text="" />
                             </placeholder>
@@ -337,7 +337,7 @@
                         <Font size="28.0" />
                      </font>
                   </Text>
-                  <ToggleButton fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0">
+                  <Button fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0">
                      <graphic>
                         <AnchorPane>
                            <children>
@@ -354,7 +354,7 @@
                            </children>
                         </AnchorPane>
                      </graphic>
-                  </ToggleButton>
+                  </Button>
                </children>
             </AnchorPane>
                      </children>

@@ -9,7 +9,6 @@ import javafx.util.Pair;
 import java.io.File;
 import java.nio.file.Files;
 import java.security.SecureRandom;
-import java.util.Base64;
 
 public class PMGUI {
 
@@ -31,9 +30,10 @@ public class PMGUI {
                 event -> {
                     // Checks if conditions are fulfilled
 
-                    if (!Authentication.validate(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
+                    if (!Authentication.validateNewPwd(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing
+
                         event.consume();
                         return ;
                     }
@@ -44,24 +44,8 @@ public class PMGUI {
         dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-
-                    byte[] nonSecretsBytes = FileUtils.readAllBytes(Global.getPasswordFilePath());
-                    Database dbSecrets = (Database) SerializedObject.readDB(nonSecretsBytes);
-                    NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-
-                    Secrets.setCombinedPasswords(manualPwdDialog, sKeyPwdDialog);
-
-                    SecureRandom secureRandom = SecureRandom.getInstance (nonSecrets.getStoredSecureRandomAlgorithm(),
-                            nonSecrets.getStoredProvider());
-                    secureRandom.nextBytes(nonSecrets.getStoredSalt());
-
-                    SymmetricKey.setSecretKey(Secrets.getCombinedPasswords(),nonSecrets.getStoredSalt()
-                    ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
-                   nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
-
-                    String generatedHeader = Authentication.generateHmac("Global.getPasswordFilePath()",SymmetricKey.getSecretKey());
-                    nonSecrets.setHeader(generatedHeader);
-
+                    PasswordUtils passwordUtils = new PasswordUtils();
+                    passwordUtils.updateMasterPwd(manualPwdDialog,sKeyPwdDialog);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");
                     alert.setHeaderText(null);
@@ -103,18 +87,6 @@ public class PMGUI {
         grid.add(sKeyPwdDialog, 1, 3);
         return grid;
 
-    }
-
-    void deleteDir(File file) {
-        File[] contents = file.listFiles();
-        if (contents != null) {
-            for (File f : contents) {
-                if (! Files.isSymbolicLink(f.toPath())) {
-                    deleteDir(f);
-                }
-            }
-        }
-        file.delete();
     }
 
 

@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,10 +31,10 @@ public class FileProtector {
     static String secretKeyAlgorithm = "PBKDF2WithHmacSHA512";
     static String transformationAlgorithm = "AES/CBC/PKCS7PADDING";
     static String provider = "BC";
-    static byte[] salt = new byte[32]; // Salt is always at least 128 bits
+    static byte[] salt = new byte[32]; // Salt is always at least 64 bit
     static int iterationCount = 100000;
     static int keyLength = 256;
-    static byte[] generatedIV = new byte[16]; // IV is always 128 bits
+    static byte[] generatedIV = new byte[16]; // IV is always 128 bit
     static SecureRandom secureRandom;
 
     static {
@@ -50,7 +51,6 @@ public class FileProtector {
     public void encryption(ObservableList observableList, Object timerSpecs) {
 
         try {
-
 
             String header = Authentication.generateHmac(Global.getPasswordFilePath(), SymmetricKey.getSecretKey());
             System.out.println("the password file path is:" +Global.getPasswordFilePath());
@@ -100,21 +100,5 @@ public class FileProtector {
         return null;
     }
 
-    public static boolean fileExists() throws Exception {
-        Path path = Paths.get(Global.getPasswordFilePath());
-        if (!Files.exists(path)) {
-            FileUtils.write(Global.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
-            FileProtector.createKey(Secrets.getCombinedPasswords());
-            FileProtector fileProtector = new FileProtector();
-            ObservableList<Entry> entryData = FXCollections.observableArrayList();
-            entryData.add(new Entry("", "", "",
-                    "", ""));
-            ObservableList observableList = FXCollections.emptyObservableList();
-            TimerSpecs defaultTimer = new TimerSpecs(8,false);
-            TimerSpecs.setTimerSpecs(defaultTimer);
-            fileProtector.encryption(entryData, defaultTimer);
-            return false;
-        }
-        return true;
-    }
+
 }

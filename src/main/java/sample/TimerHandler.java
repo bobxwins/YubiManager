@@ -65,8 +65,7 @@ public class TimerHandler {
                         //     so it's state can be accessed in timerCountDown()
                         TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
                         TimerSpecs.setTimerSpecs(updateTimerSpecs);
-                        TimerStatic.setTimer(timerHandler.timerSpinner.getValue());
-                        TimerStatic.setSelectedCheckBox(selectedCheckBox);
+
 
                         FileProtector fileProtector = new FileProtector();
                         fileProtector.encryption(observableList,updateTimerSpecs);
@@ -76,8 +75,6 @@ public class TimerHandler {
                     selectedCheckBox = true;
                     TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
                     TimerSpecs.setTimerSpecs(updateTimerSpecs);
-                    TimerStatic.setTimer(timerHandler.timerSpinner.getValue());
-                    TimerStatic.setSelectedCheckBox(selectedCheckBox);
 
                     FileProtector fileProtector = new FileProtector();
                     fileProtector.encryption(observableList,updateTimerSpecs);

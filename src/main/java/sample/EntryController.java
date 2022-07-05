@@ -10,7 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,7 +28,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import java.util.Optional;
@@ -37,115 +36,78 @@ import static java.lang.Integer.parseInt;
 
 
 public class EntryController implements Serializable   {
-    @FXML
-    private  AnchorPane anchorPane;
+    @FXML private  AnchorPane anchorPane;
     @FXML private AnchorPane  apBottomTable;
 
-    @FXML
-    private TableView<Entry> entryTable;
+    @FXML private TableView<Entry> entryTable;
 
-    @FXML
-    private TableColumn<Entry, String> colTitel;
-    @FXML
-    private TableColumn<Entry, String> colUsername;
-    @FXML
-    private TableColumn<Entry, String> colURL;
+    @FXML private TableColumn<Entry, String> colTitel;
+    @FXML private TableColumn<Entry, String> colUsername;
+    @FXML private TableColumn<Entry, String> colURL;
 
-    @FXML
-    private TableColumn<Entry, String> colNotes;
+    @FXML private TableColumn<Entry, String> colNotes;
 
-    @FXML
-    private TextField tfSearch;
-    @FXML
-    private TextField tfTitel;
-    @FXML
-    private TextField tfUsername;
-    @FXML
-    private TextField tfURL;
-    @FXML
-    private PasswordField pfPwdField;
-    @FXML
-    private TextArea tANotes;
+    @FXML private TextField tfSearch;
+    @FXML private TextField tfTitel;
+    @FXML private TextField tfUsername;
+    @FXML private TextField tfURL;
+    @FXML private PasswordField pfPwdField;
+    @FXML private TextArea tANotes;
 
-    @FXML
-    private Button btnSignOut;
+    @FXML private Button btnSignOut;
 
-    @FXML
-    private Button btnPwdGenerator;
+    @FXML private Button btnPwdGenerator;
 
-    @FXML
-    private Menu menuRecent;
+    @FXML private Button btnEnterMenu;
+    @FXML private Button btnEditOK;
+
+    @FXML private Button btnCreate;
+
+    @FXML private Button btnReturn;
+
+    @FXML private Button toggleButton;
+    @FXML private Button togBtnPwd;
+
+    @FXML private TextField generatedPWDfield;
+
+    @FXML private  TextField tfPwd;
+
+    @FXML private Text textUsername;
+
+    @FXML private Hyperlink hyperLinkURL;
+    @FXML private Text textPassword;
+
+    @FXML private Text textNotes;
+
+    @FXML private Text textTitel;
+
+    @FXML private AnchorPane apEntryMenu;
+
+    @FXML private AnchorPane apPwdGenerate;
+
+    @FXML private AnchorPane entryPane;
+
+    @FXML private Text textGenePwdQuality;
+
+    @FXML private Text textBruteForceTime;
+
+    @FXML private Text textEntropy;
+
+    @FXML private ImageView imgPwdVisible;
+
+    @FXML private ImageView imgVisible;
+
+    @FXML private ImageView imgNotVisible;
+    @FXML private ImageView imgPwdNotVisible;
+    @FXML private ContextMenu ctxTableMenu;
+
+    static int pwdLength;
 
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
-
-    @FXML
-    private Button btnEnterMenu;
-    @FXML
-    private Button btnEditOK;
-
-    @FXML
-    private Button btnCreate;
-
-    @FXML
-    private Button btnReturn;
-
-    @FXML
-    private ToggleButton toggleButton;
-    @FXML private ToggleButton togBtnPwd;
-
-    @FXML
-    private TextField generatedPWDfield;
-
-     @FXML private  TextField tfPwd;
-
-    @FXML
-    private Text textUsername;
-
-    @FXML
-    private Hyperlink hyperLinkURL;
-    @FXML
-    private Text textPassword;
-
-    @FXML
-    private Text textNotes;
-
-    @FXML
-    private Text textTitel;
-
-    @FXML
-    private AnchorPane apEntryMenu;
-
-    @FXML
-    private AnchorPane apPwdGenerate;
-
-    @FXML
-    private AnchorPane entryPane;
-
-    static int length;
-
-    @FXML
-    private Text textGenePwdQuality;
-
-    @FXML
-    private Text textBruteForceTime;
-
-    @FXML
-    private Text textEntropy;
-
-    @FXML
-     private ImageView imgPwdVisible;
-
-    @FXML
-    private ImageView imgVisible;
-
-    @FXML
-    private ImageView imgNotVisible;
-
-    @FXML
-    private ImageView imgPwdNotVisible;
- @FXML private ContextMenu ctxTableMenu;
+    PasswordVisbilityHandler pwdvh = new PasswordVisbilityHandler ();
 
     Slider slider = new Slider(4, 999, 1);
+   //Entry selectedItem;//   = entryTable.getSelectionModel().getSelectedItem();
 
     @FXML void menuRandomPwd (ActionEvent event)
     {
@@ -182,15 +144,11 @@ public class EntryController implements Serializable   {
             pwdLengthSpinner.setLayoutY(100);
             pwdLengthSpinner.setEditable(true);
             apPwdGenerate.getChildren().addAll(pwdLengthSpinner, slider);
-            apPwdGenerate.setVisible(true);
-            apPwdGenerate.setDisable(false);
-            entryPane.setDisable(true);
-            entryPane.setVisible(false);
-            btnEditOK.setDisable(true);
-            btnEditOK.setVisible(false);
-            apBottomTable.setVisible(false);
+            ComponentVisibilityHandler cVBH = new ComponentVisibilityHandler();
 
-            Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+            cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
+
+           Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 entryData.set(entryData.indexOf(selectedItem), selectedItem);
 
@@ -235,9 +193,9 @@ public class EntryController implements Serializable   {
                     // when Generator button is pressed
             {
                 try {
-                    length = pwdLengthSpinner.getValue();
+                    pwdLength = pwdLengthSpinner.getValue();
 
-                    generatedPWDfield.setText(PasswordUtils.getPassword(length));
+                    generatedPWDfield.setText(PasswordUtils.getPassword(pwdLength));
 
                     PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
 
@@ -262,14 +220,13 @@ public class EntryController implements Serializable   {
 
                 File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
 
-                PMGUI pmgui = new PMGUI();
-                pmgui.deleteDir(deleteFile);
+                FileHandler fileHandler= new FileHandler();
+                fileHandler.deleteDir(deleteFile);
                 Global.getPasswordFilePath();
-            //    Global.getRecentFilesData().remove(selectedItem);
 
                 // find the index of the RecentFiles, delete
-                SerializedObject.writeObservableList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
-
+                SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+                SceneHandler.stageFullScreen(btnSignOut);
             }
 
         }
@@ -341,7 +298,7 @@ public class EntryController implements Serializable   {
     {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+     Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             content.putString(selectedItem.getUsername());
             clipboard.setContent(content);
@@ -357,7 +314,7 @@ public class EntryController implements Serializable   {
     void copyPwd(ActionEvent event) throws Exception
     { final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+     Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             content.putString(selectedItem.getPassword());
             clipboard.setContent(content);
@@ -432,12 +389,11 @@ void openRecent (ActionEvent event) throws Exception
     @FXML
     void signOut(ActionEvent event) throws Exception {
         SceneHandler.stageFullScreen(btnSignOut);
-
     }
 
     @FXML
     void deleteRow(ActionEvent event) throws  Exception {
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+     Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             entryData.remove(selectedItem);
            save();
@@ -445,9 +401,9 @@ void openRecent (ActionEvent event) throws Exception
 
     }
 
-    static Entry selectedItem ;
+   // static Entry selectedItem ;
     @FXML void editEntry (ActionEvent event) throws  Exception {
-         selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
 
@@ -493,14 +449,16 @@ void openRecent (ActionEvent event) throws Exception
     FileProtector fileProtector = new FileProtector();
     Secrets secrets = new Secrets();
     secrets.setEntry(entryData);
-    TimerSpecs tim = new TimerSpecs(TimerStatic.getTimer(),TimerStatic.getSelectedCheckBox());
-    secrets.setTimerSpecs(tim);
+    secrets.setTimerSpecs(TimerSpecs.getTimerSpecs());
     fileProtector.encryption(entryData,secrets.getTimerSpecs());
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
-    VisbilityHandler.setSelectedPassword(pfPwdField.getText());
-   togBtnPwd.setSelected(false);
-   toggleButton.setSelected(false);
+
+  pwdvh.setSelectedPassword(pfPwdField.getText());
+   imgVisible.setVisible(false);
+   imgNotVisible.setVisible(true);
+  imgPwdNotVisible.setVisible(true);
+  imgPwdVisible.setVisible(false);
    hyperLinkURL.setText(tfURL.getText());
     textNotes.setText(tANotes.getText());
 
@@ -538,6 +496,7 @@ void openRecent (ActionEvent event) throws Exception
    static String hidePwd = "";
     @FXML
    private void initialize() throws Exception {
+        entryTable.setPlaceholder(new Label("0 entries in the database. Click the + button to add new entries!"));
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
@@ -552,7 +511,7 @@ void openRecent (ActionEvent event) throws Exception
 
         String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-              Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+            Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 textTitel.setText(selectedItem.getTitle());
                 textNotes.setText(selectedItem.getNotes());
@@ -566,25 +525,23 @@ void openRecent (ActionEvent event) throws Exception
                     } catch (Exception E) {
 
                     }
-                    textNotes.setText(selectedItem.getNotes());
 
                 });
-
-                VisbilityHandler.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
-                        selectedItem.getPassword(),   finalHidePwd);
-
+             /*   PasswordVisbilityHandler */ pwdvh = new PasswordVisbilityHandler ();
+                pwdvh.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
+                        selectedItem.getPassword(),   finalHidePwd,entryTable);
                 textPassword.setText(finalHidePwd);
 
             }
         });
-        VisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
+        PasswordVisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
             Authentication authentication = new Authentication();
-           entryData.addAll(authentication.restoreEntries());
+           entryData.addAll(authentication.restoreDatabase());
             TimerHandler.timerCountDown(btnSignOut,anchorPane);
             entryTable.setItems(entryData);
             filter();

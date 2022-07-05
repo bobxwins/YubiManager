@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SerializedObject {
 
-    public static void writeObservableList(ObservableList  observableList, Path file) throws  Exception {
+    public static void writeArrayList(ObservableList  observableList, Path file) throws  Exception {
         try {
 
             FileOutputStream fos = new FileOutputStream(String.valueOf(file));
@@ -98,8 +98,7 @@ public class SerializedObject {
             oos.writeObject(object);
             byte[] listBytes = bos.toByteArray();
             return listBytes;
-           // oos.close();
-          //  bos.close();
+
 
         } catch (Exception e) {
             e.printStackTrace();

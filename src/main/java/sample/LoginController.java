@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.animation.PauseTransition;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,11 +10,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.util.Duration;
 
-import java.nio.charset.StandardCharsets;
+import java.io.File;
 import java.nio.file.Paths;
-import java.util.Base64;
+import java.util.Optional;
 
 public class LoginController {
 
@@ -87,10 +85,24 @@ public class LoginController {
     void deleteRow(ActionEvent event) throws Exception {
         String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            Global.getRecentFilesData().remove(selectedItem);
-            SerializedObject.writeObservableList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
-            //updates the recentFile text file, after deleting the selected table item
 
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Warning, this will permanently delete all your passwords");
+            alert.setContentText("Are you sure you want to proceed?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+
+                Global.getRecentFilesData().remove(selectedItem);
+                SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+                //updates the recentFile text file, after deleting the selected table item
+
+                File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
+                FileHandler fileHandler = new FileHandler();
+                fileHandler.deleteDir(deleteFile);
+                Global.getRecentFilesData().remove(selectedItem);
+                SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+            }
         }
 
     }
@@ -108,19 +120,10 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
-
+        recentFilesTable.setPlaceholder(new Label("0 databases available. Click the Create New database button to create a new one!"));
         recentFilesTable.setItems(Global.getRecentFilesData());
         recentFilesTable.getItems().clear();
-        if ((FileUtils.readAllBytes(Global.getRecentFilesDir()).length) != 0) {
-            Global.getRecentFilesData().addAll(SerializedObject.readFileObservableList(FileUtils.readAllBytes(Global.getRecentFilesDir())));
-
-            String defaultFile = recentFilesTable.getItems().get(0);
-            // sets the default RecentFile to the first element
-            Global.setPasswordFilePath(defaultFile);
-            Global.setSelectedDirectoryPath(Paths.get(Global.getPasswordFilePath()).getParent() + "\\");
-        }
-
-
+       FileHandler.recentFileExists(recentFilesTable);
         recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
         recentFilesTable.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -128,9 +131,22 @@ public class LoginController {
                         String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
 
                         if (selectedItem != null) {
-
                             Global.setPasswordFilePath(selectedItem);
                             Global.setSelectedDirectoryPath(Paths.get(Global.getPasswordFilePath()).getParent() + "\\");
+                            recentFilesTable.setOnMouseClicked((MouseEvent event) -> {
+                                if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                                    // Event that listens to if the mouse has been double clicked
+                                    Authentication authentication = new Authentication();
+                                    try {
+                                        if (authentication.loginAuthentication(btnSignIn) == false) {
+
+                                            return;
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
 
                         }
 
@@ -154,19 +170,6 @@ public class LoginController {
                 }
 
         );
-        recentFilesTable.setOnMouseClicked((MouseEvent event) -> {
-            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-                // Event that listens to if the mouse has been double clicked
-                Authentication authentication = new Authentication();
-                try {
-                    if (authentication.loginAuthentication(btnSignIn) == false) {
-
-                        return;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
+
 }

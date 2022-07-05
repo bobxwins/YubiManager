@@ -1,39 +1,51 @@
 package sample;
 
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
-public class VisbilityHandler {
-    private static  String selectedPassword;
-    public static void setSelectedPassword(String selectedP) {
-        VisbilityHandler.selectedPassword = selectedP;
+public class PasswordVisbilityHandler {
+    public  String getSelectedPassword() {
+        return selectedPassword;
     }
 
-    public static void toggleVisbility (ToggleButton toggleButton, ImageView imgPwdVisible, ImageView imgPwdNotVisible, Text textPassword,
-                                        String showPwd, String hidePwd)
+    private   String selectedPassword;
+
+    public  void setSelectedPassword(String selectedP) {
+        this.selectedPassword = selectedP;
+    }
+
+    public   void toggleVisbility (Button toggleButton, ImageView imgPwdVisible, ImageView imgPwdNotVisible, Text textPassword,
+                                   String showPwd, String hidePwd, TableView<Entry> entryTable)
             //Toggles the visibilty of the password shown in the tableview at the bottom of the application
     {
 
         toggleButton.setOnAction(e -> {
-            if (toggleButton.isSelected() ) {
+            if (!imgPwdVisible.isVisible() ) {
                 imgPwdVisible.setVisible(true);
                 imgPwdNotVisible.setVisible(false);
-                textPassword.setText(showPwd);
+                Entry selectedItem  = entryTable.getSelectionModel().getSelectedItem();
+               if (selectedItem != null && selectedPassword == null)
+                {
+                    textPassword.setText(showPwd);
+                }
+                else {
+
+                textPassword.setText(getSelectedPassword());
+
+                }
                 return;     }
 
             imgPwdVisible.setVisible(false);
             imgPwdNotVisible.setVisible(true);
-            textPassword.setText(hidePwd);
+         textPassword.setText(hidePwd);
 
         });
         imgPwdVisible.setVisible(false);
         imgPwdNotVisible.setVisible(true);
-        textPassword.setText(hidePwd);
+       textPassword.setText(hidePwd);
     }
-    public static  void toggleVisbility (ToggleButton tBtn, ImageView imgPwdVisible, ImageView imgPwdNotVisible, TextField tf, PasswordField pf) {
+    public static  void toggleVisbility (Button tBtn, ImageView imgPwdVisible, ImageView imgPwdNotVisible, TextField tf, PasswordField pf) {
       /// toggles the visibility of the password, when editing or creating a new entry
 
         pf.textProperty().addListener((observable, oldValue,    newValue) -> {
@@ -42,10 +54,11 @@ public class VisbilityHandler {
         });
         tBtn.setOnAction(e -> {
 
-            if (tBtn.isSelected() ) {
+            if (!imgPwdVisible.isVisible() ) {
                 tf.textProperty().addListener((observable, oldValue, newValue) -> {
                     pf.setText(newValue);
 
+// The textfield listens to the passwordfield and vice versa
                 });
 
                 imgPwdVisible.setVisible(true);

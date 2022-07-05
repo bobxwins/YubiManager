@@ -1,6 +1,7 @@
 
 package sample;
 
+import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -174,6 +175,10 @@ public   class PasswordUtils {
                 "\nIn days: "+String.format(doubleFormat , BRUTEFORCETIME /3600/24)+" days"+
                 "\nIn years: "+String.format(doubleFormat , BRUTEFORCETIME /3600/24/365)+" years");
 
+    }
+    public void updateMasterPwd (PasswordField manualPwdDialog, PasswordField sKeyPwdDialog) throws  Exception {
+        Secrets.setCombinedPasswords(manualPwdDialog, sKeyPwdDialog);
+        FileProtector.createKey(Secrets.getCombinedPasswords());
     }
 }
 

@@ -12,11 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import org.bouncycastle.crypto.params.KeyParameter;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Base64;
 import java.util.regex.Pattern;
 import javax.crypto.Mac;
@@ -49,8 +46,8 @@ import javax.crypto.spec.SecretKeySpec;
         return false;
   }
 
-public ObservableList<Entry> restoreEntries () throws Exception {
-    if (FileProtector.fileExists()) {
+public ObservableList<Entry> restoreDatabase() throws Exception {
+    if (FileHandler.dbExists()) {
         DecryptFile decryptFile = new DecryptFile();
         byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
         Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
@@ -62,7 +59,7 @@ public ObservableList<Entry> restoreEntries () throws Exception {
 return FXCollections.emptyObservableList();
     }
 
-  public static boolean validate(String manualPwd,String confirmPwd, String sKeyPwd)
+  public static boolean validateNewPwd(String manualPwd, String confirmPwd, String sKeyPwd)
      {
          // checks if the password has valid credentials, when creating a new database or updating the master password
 
@@ -122,10 +119,10 @@ return FXCollections.emptyObservableList();
                          Database dbSecrets = (Database) SerializedObject.readDB(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
                          DecryptFile.restoreKey();
-                         String generatedHeader = Authentication.generateHmac(Global.getPasswordFilePath(),SymmetricKey.getSecretKey());
+                         String generatedHeader = generateHmac(Global.getPasswordFilePath(),SymmetricKey.getSecretKey());
                          nonSecrets.setHeader(generatedHeader);
 
-                         if (!Authentication.verifyHmac(generatedHeader))
+                         if (!verifyHmac(generatedHeader))
                          {
                              Alert alert = new Alert(Alert.AlertType.ERROR);
                              alert.setTitle("Information Dialog");

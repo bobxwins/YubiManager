@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,9 +13,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.Base64;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SceneHandler {
 
@@ -54,7 +49,7 @@ public class SceneHandler {
                         event.consume();
                         return ;
                     }
-                    if (!Authentication.validate(pmgui.manualPwdDialog.getText(),pmgui.confirmPwdDialog.getText(),pmgui.sKeyPwdDialog.getText())) {
+                    if (!Authentication.validateNewPwd(pmgui.manualPwdDialog.getText(),pmgui.confirmPwdDialog.getText(),pmgui.sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing when clicking OK
                         event.consume();
@@ -66,10 +61,7 @@ public class SceneHandler {
         pmgui.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-           /*        if (!validate()) {
-                       return null;
-                   }
-                   */
+
                     Secrets.setCombinedPasswords(pmgui.manualPwdDialog, pmgui.sKeyPwdDialog);
                     Global.setPasswordFilePath(fileNameField.getText());
                     newScene(btn);
@@ -78,7 +70,7 @@ public class SceneHandler {
                     if (Global.getRecentFilesData().get(0) != null) {
                         FileUtils.write(Global.getRecentFilesDir(), "".getBytes(StandardCharsets.UTF_8));
                         // empties the file, or generates an empty file if it doesn't exist
-                        SerializedObject.writeObservableList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+                        SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
 
                     }
 
@@ -96,24 +88,10 @@ public class SceneHandler {
 
     boolean newScene(Button btnCreateDB) throws Exception {
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        Stage anotherStage = new Stage();
+        Global.setSelectedDirectoryPath(Global.getDefaultDir() + "\\" + Global.getPasswordFilePath() + "\\");
 
-        directoryChooser.setInitialDirectory(new File(Global.getDefaultDir()));
-        File selectedDirectory = directoryChooser.showDialog(anotherStage);
-
-        if (selectedDirectory != null) {
-            Global.setSelectedDirectoryPath(selectedDirectory.getAbsolutePath() + "\\" + Global.getPasswordFilePath() + "\\");
-
-            new File(Global.getSelectedDirectoryPath()).mkdir();
-            Global.setPasswordFilePath(Global.getSelectedDirectoryPath() + Global.getPasswordFilePath() + ".txt");
-
-
-
-        } else {
-            return false;
-        }
-
+        new File(Global.getSelectedDirectoryPath()).mkdir();
+        Global.setPasswordFilePath(Global.getSelectedDirectoryPath() + Global.getPasswordFilePath() + ".txt");
 
         Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
 
