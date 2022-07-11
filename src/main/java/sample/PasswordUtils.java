@@ -1,12 +1,19 @@
 
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+
+import static java.lang.Integer.parseInt;
 
 public   class PasswordUtils {
 
@@ -180,6 +187,8 @@ public   class PasswordUtils {
         Secrets.setMasterPassword(manualPwdDialog, sKeyPwdDialog);
         FileProtector.createKey(Secrets.getMasterPassword());
     }
+
+
 }
 
 

@@ -94,13 +94,10 @@ public class LoginController {
             if (result.get() == ButtonType.OK) {
 
                 Global.getRecentFilesData().remove(selectedItem);
-                SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
                 //updates the recentFile text file, after deleting the selected table item
-
                 File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
                 FileHandler fileHandler = new FileHandler();
                 fileHandler.deleteDir(deleteFile);
-                Global.getRecentFilesData().remove(selectedItem);
                 SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
             }
         }

@@ -36,8 +36,39 @@ import static java.lang.Integer.parseInt;
 
 
 public class EntryController implements Serializable   {
-    @FXML private  AnchorPane anchorPane;
-    @FXML private AnchorPane  apBottomTable;
+    @FXML private AnchorPane anchorPane;
+
+    @FXML private AnchorPane apBottomTable;
+
+    @FXML private AnchorPane apEntryMenu;
+
+    @FXML private AnchorPane apPwdGenerate;
+
+    @FXML private AnchorPane entryPane;
+
+    @FXML private Button btnSignOut;
+
+    @FXML private Button btnPwdGenerator;
+
+    @FXML private Button btnEnterMenu;
+    @FXML private Button btnEditOK;
+
+    @FXML private Button btnCreate;
+
+    @FXML private Button btnReturn;
+
+    @FXML private ContextMenu ctxTableMenu;
+
+    @FXML private Button toggleButton;
+    @FXML private Button togBtnPwd;
+
+    @FXML private ImageView imgPwdVisible;
+
+    @FXML private ImageView imgVisible;
+
+    @FXML private ImageView imgNotVisible;
+    @FXML private ImageView imgPwdNotVisible;
+    @FXML private Hyperlink hyperLinkURL;
 
     @FXML private TableView<Entry> entryTable;
 
@@ -54,38 +85,17 @@ public class EntryController implements Serializable   {
     @FXML private PasswordField pfPwdField;
     @FXML private TextArea tANotes;
 
-    @FXML private Button btnSignOut;
-
-    @FXML private Button btnPwdGenerator;
-
-    @FXML private Button btnEnterMenu;
-    @FXML private Button btnEditOK;
-
-    @FXML private Button btnCreate;
-
-    @FXML private Button btnReturn;
-
-    @FXML private Button toggleButton;
-    @FXML private Button togBtnPwd;
-
     @FXML private TextField generatedPWDfield;
 
-    @FXML private  TextField tfPwd;
+    @FXML private TextField tfPwd;
 
     @FXML private Text textUsername;
 
-    @FXML private Hyperlink hyperLinkURL;
     @FXML private Text textPassword;
 
     @FXML private Text textNotes;
 
     @FXML private Text textTitel;
-
-    @FXML private AnchorPane apEntryMenu;
-
-    @FXML private AnchorPane apPwdGenerate;
-
-    @FXML private AnchorPane entryPane;
 
     @FXML private Text textGenePwdQuality;
 
@@ -93,158 +103,29 @@ public class EntryController implements Serializable   {
 
     @FXML private Text textEntropy;
 
-    @FXML private ImageView imgPwdVisible;
-
-    @FXML private ImageView imgVisible;
-
-    @FXML private ImageView imgNotVisible;
-    @FXML private ImageView imgPwdNotVisible;
-    @FXML private ContextMenu ctxTableMenu;
-
     static int pwdLength;
   //  private static final long serialVersionUID = 6529685098267757690L;
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
-     VisibilityHandler visibilityHandler = new VisibilityHandler ();
-
+    VisibilityHandler visibilityHandler = new VisibilityHandler ();
     Slider slider = new Slider(4, 999, 1);
+  //  Spinner<Integer> pwdLengthSpinner ;//= (Spinner<Integer>) new Spinner(0, 999, 12);
+     Spinner<Integer> pwdLengthSpinner ;//= (Spinner<Integer>) new Spinner(0, 999, 12);
 
-
-    @FXML void menuRandomPwd (ActionEvent event)
-    {
-        pfPwdField.setText(PasswordUtils.getPassword(32));
-    }
-
-        @FXML
-        void createEntry (ActionEvent event) throws Exception {
-            entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
-            VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
-            tfTitel.setText("");
-            tfUsername.setText("");
-            tfURL.setText("");
-            pfPwdField.setText("");
-            tANotes.setText("");
-            save();
-
-        }
-
-        @FXML
-        void generatePwd (ActionEvent event) throws Exception {
-
-            Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 12);
-
-            slider.setBlockIncrement(1);
-
-            slider.setValue(pwdLengthSpinner.getValue());
-            slider.setPrefWidth(570);
-            slider.setLayoutY(110);
-            slider.setShowTickLabels(true);
-
-            pwdLengthSpinner.setPrefSize(75, 25);
-            pwdLengthSpinner.setLayoutX(580);
-            pwdLengthSpinner.setLayoutY(100);
-            pwdLengthSpinner.setEditable(true);
-            apPwdGenerate.getChildren().addAll(pwdLengthSpinner, slider);
-            VisibilityHandler cVBH = new VisibilityHandler();
-
-            cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
-
-           Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                entryData.set(entryData.indexOf(selectedItem), selectedItem);
-
-                generatedPWDfield.setText(selectedItem.getPassword());
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
-                entryTable.getSelectionModel().clearSelection();
-            } else {
-                generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
-
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
-
-            }
-
-            pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-
-                pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
-                {
-                    generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
-
-                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
-                });
-
-                generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
-
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
-                slider.setValue(parseInt(newValue));
-
-            });
-
-            slider.setOnMouseDragged(e -> {
-                Double newData = slider.getValue();
-                int value = newData.intValue();
-                pwdLengthSpinner.getValueFactory().setValue(value);
-            });
-
-
-            generatedPWDfield.setOnKeyReleased(e ->
-                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText()));
-
-
-            btnPwdGenerator.setOnAction(e ->
-                    // when Generator button is pressed
-            {
-                try {
-                    pwdLength = pwdLengthSpinner.getValue();
-
-                    generatedPWDfield.setText(PasswordUtils.getPassword(pwdLength));
-
-                    PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
-
-                } catch (Exception E) {
-
-                }
-
-            });
-
-        }
-        @FXML
-        void deleteAll (ActionEvent event) throws Exception
-        {
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Warning, this will permanently delete all your passwords for this database");
-            alert.setContentText("Are you sure you want to proceed?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                entryData.remove(entryData);
-
-                File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
-
-                FileHandler fileHandler= new FileHandler();
-                fileHandler.deleteDir(deleteFile);
-                Global.getPasswordFilePath();
-
-                // find the index of the RecentFiles, delete
-                SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
-                SceneHandler.stageFullScreen(btnSignOut);
-            }
-
-        }
 
     @FXML
-    void returnTableView(ActionEvent event) throws Exception
-    {
-        VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
-        apPwdGenerate.setDisable(true);
-        apPwdGenerate.setVisible(false);
-        apPwdGenerate.getChildren().remove(slider);
-        // Empties the edited entry after clicking the cancel button,so the values
-        // of the previously edited entry doesn't get transferred to the entry about to be created
-        tfTitel.setText("");
-        tfUsername.setText("");
-        tfURL.setText("");
-        pfPwdField.setText("");
-        tANotes.setText("");
+    void copyPwd(ActionEvent event) throws Exception
+    { final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            content.putString(selectedItem.getPassword());
+            clipboard.setContent(content);
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Password succesfully copied!");
+        alert.showAndWait();
     }
 
     @FXML
@@ -266,7 +147,7 @@ public class EntryController implements Serializable   {
     {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
-     Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             content.putString(selectedItem.getUsername());
             clipboard.setContent(content);
@@ -278,20 +159,87 @@ public class EntryController implements Serializable   {
         alert.showAndWait();
     }
 
+
+
     @FXML
-    void copyPwd(ActionEvent event) throws Exception
-    { final Clipboard clipboard = Clipboard.getSystemClipboard();
-        final ClipboardContent content = new ClipboardContent();
-     Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            content.putString(selectedItem.getPassword());
-            clipboard.setContent(content);
+        void createEntry (ActionEvent event) throws Exception {
+            entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+            VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
+            tfTitel.setText("");
+            tfUsername.setText("");
+            tfURL.setText("");
+            pfPwdField.setText("");
+            tANotes.setText("");
+            save();
+
         }
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("Password succesfully copied!");
-        alert.showAndWait();
+
+
+
+
+    @FXML void editEntry (ActionEvent event) throws  Exception {
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null) {
+
+            VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
+            tfTitel.setText(selectedItem.getTitle());
+            tfUsername.setText(selectedItem.getUsername());
+            tfURL.setText(selectedItem.getUrl());
+            pfPwdField.setText(selectedItem.getPassword());
+            tANotes.setText(selectedItem.getNotes());
+            //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
+            // otherwise the values in the fieds from the selected entry would be empty
+            VisibilityHandler.editEntryVisibility (btnEditOK,btnCreate);
+
+            btnEditOK.setOnAction(e -> {
+                try{
+                    entryData.set(entryData.indexOf(selectedItem),selectedItem);
+                    selectedItem.setTitle( tfTitel.getText());
+                    selectedItem.setUsername( tfUsername.getText());
+                    selectedItem.setURL( tfURL.getText());
+                    selectedItem.setPassword( pfPwdField.getText());
+                    selectedItem.setNotes(tANotes.getText());
+                    // updates the value of both the tableview at the top and bottom of the page,
+                    // with the newly added values, after clicking the OK button
+                    VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
+                    save();
+
+                } catch (Exception E) {
+
+                }
+            });
+
+        }
+    }
+
+    @FXML
+    void deleteDatabase (ActionEvent event) throws Exception
+    {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Warning, this will permanently delete all your passwords for this database");
+        alert.setContentText("Are you sure you want to proceed?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            entryData.remove(entryData);
+            File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
+            FileHandler fileHandler= new FileHandler();
+            fileHandler.deleteDir(deleteFile);
+            SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
+            SceneHandler.stageFullScreen(btnSignOut);
+        }
+
+    }
+    @FXML
+    void deleteEntry(ActionEvent event) throws  Exception {
+        Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            entryData.remove(selectedItem);
+            save();
+        }
+
     }
 
     @FXML
@@ -300,7 +248,16 @@ public class EntryController implements Serializable   {
         VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
     }
 
+    @FXML
+    void generatePwd (ActionEvent event) throws Exception {
+        setPwdGeneratorActionEvents();
+    }
 
+
+    @FXML void menuRandomPwd (ActionEvent event)
+    {
+        pfPwdField.setText(PasswordUtils.getPassword(32));
+    }
 
     @FXML
     void newDB(ActionEvent event) throws  Exception {
@@ -338,72 +295,29 @@ public class EntryController implements Serializable   {
         Global.setSelectedDirectoryPath(  directoryNewValue);
     }
 
-@FXML
-void openRecent (ActionEvent event) throws Exception
 
-        {
+    @FXML
+    void returnTableView(ActionEvent event) throws Exception
+    {
+        VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
+        apPwdGenerate.setDisable(true);
+        apPwdGenerate.setVisible(false);
+        apPwdGenerate.getChildren().remove(slider);
+        // Empties the edited entry after clicking the cancel button,so the values
+        // of the previously edited entry doesn't get transferred to the entry about to be created
+        tfTitel.setText("");
+        tfUsername.setText("");
+        tfURL.setText("");
+        pfPwdField.setText("");
+        tANotes.setText("");
+    }
 
-      FXMLLoader fxmlLoader = new FXMLLoader();
-     fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
-
-       Scene scene = new Scene(fxmlLoader.load());
-       Stage stage = new Stage();
-
-       stage.setTitle("New Window");
-       stage.setScene(scene);
-       stage.show();
-}
 
     @FXML
     void signOut(ActionEvent event) throws Exception {
         SceneHandler.stageFullScreen(btnSignOut);
     }
 
-    @FXML
-    void deleteRow(ActionEvent event) throws  Exception {
-     Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            entryData.remove(selectedItem);
-           save();
-        }
-
-    }
-
-    @FXML void editEntry (ActionEvent event) throws  Exception {
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-
-        if (selectedItem != null) {
-
-            VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
-            tfTitel.setText(selectedItem.getTitle());
-            tfUsername.setText(selectedItem.getUsername());
-            tfURL.setText(selectedItem.getUrl());
-            pfPwdField.setText(selectedItem.getPassword());
-            tANotes.setText(selectedItem.getNotes());
-          //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
-            // otherwise the values in the fieds from the selected entry would be empty
-            VisibilityHandler.editEntryVisibility (btnEditOK,btnCreate);
-
-            btnEditOK.setOnAction(e -> {
-                try{
-                    entryData.set(entryData.indexOf(selectedItem),selectedItem);
-                    selectedItem.setTitle( tfTitel.getText());
-                    selectedItem.setUsername( tfUsername.getText());
-                    selectedItem.setURL( tfURL.getText());
-                    selectedItem.setPassword( pfPwdField.getText());
-                    selectedItem.setNotes(tANotes.getText());
-                    // updates the value of both the tableview at the top and bottom of the page,
-                    // with the newly added values, after clicking the OK button
-                    VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
-                    save();
-
-                } catch (Exception E) {
-
-                }
-            });
-
-        }
-    }
 
 
          void save () throws Exception {
@@ -418,6 +332,7 @@ void openRecent (ActionEvent event) throws Exception
     textUsername.setText(tfUsername.getText());
 
   visibilityHandler.setSelectedPassword(pfPwdField.getText());
+  // sets the password of the selected Entry to be the same as the newly added or edited password
    imgVisible.setVisible(false);
    imgNotVisible.setVisible(true);
   imgPwdNotVisible.setVisible(true);
@@ -443,6 +358,89 @@ void openRecent (ActionEvent event) throws Exception
         alert.showAndWait();
         
     }
+
+    void setPwdGeneratorActionEvents() throws Exception {
+
+        pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 12);
+        slider.setBlockIncrement(1);
+
+        slider.setValue(pwdLengthSpinner.getValue());
+        slider.setPrefWidth(570);
+        slider.setLayoutY(110);
+        slider.setShowTickLabels(true);
+
+        pwdLengthSpinner.setPrefSize(75, 25);
+        pwdLengthSpinner.setLayoutX(580);
+        pwdLengthSpinner.setLayoutY(100);
+        pwdLengthSpinner.setEditable(true);
+        apPwdGenerate.getChildren().addAll(pwdLengthSpinner, slider);
+
+        VisibilityHandler cVBH = new VisibilityHandler();
+
+        cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
+        setPwdLengthSpinner ();
+        setPwdSlider();
+        setPwdBtnGenerator();
+    }
+    public void setPwdLengthSpinner () {
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            entryData.set(entryData.indexOf(selectedItem), selectedItem);
+
+            generatedPWDfield.setText(selectedItem.getPassword());
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            entryTable.getSelectionModel().clearSelection();
+        } else {
+            generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
+
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+
+        }
+
+        pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+
+            pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
+            {
+                generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            });
+
+            generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
+            slider.setValue(parseInt(newValue));
+
+        });
+    }
+
+    public void setPwdSlider()
+    {
+        slider.setOnMouseDragged(e -> {
+            Double newData = slider.getValue();
+            int value = newData.intValue();
+            pwdLengthSpinner.getValueFactory().setValue(value);
+        });
+    }
+    public void setPwdBtnGenerator( ) {
+
+        btnPwdGenerator.setOnAction(e ->
+                // when Generator button is pressed
+        {
+            try {
+                pwdLength = pwdLengthSpinner.getValue();
+
+                generatedPWDfield.setText(PasswordUtils.getPassword(pwdLength));
+
+                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+
+            } catch (Exception E) {
+
+            }
+
+        });
+    }
+
 
     @FXML
     void updateMasterPwd(ActionEvent event) throws Exception {
@@ -559,3 +557,4 @@ void openRecent (ActionEvent event) throws Exception
     }
 
 }
+

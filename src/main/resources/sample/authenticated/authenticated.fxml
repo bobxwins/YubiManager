@@ -23,7 +23,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="menuItemTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer" />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteAll" text="Delete Database" />
+                              <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteDatabase" text="Delete Database" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
                            </items>
@@ -34,7 +34,7 @@
                   <MenuItem fx:id="updateMPMenu" mnemonicParsing="false" onAction="#updateMasterPwd" text="Update Master Password" />
                               <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                               <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                              <MenuItem fx:id="ctxmenuDeleteRow" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                              <MenuItem fx:id="ctxmenuDeleteEntry" mnemonicParsing="false" onAction="#deleteEntry" text="Delete Entry..." />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
                   <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password" />
@@ -53,16 +53,16 @@
                <graphic>
                   <ImageView fx:id="imgAdd" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@AddRow.png" />
+                        <Image url="@AddEntry.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnDeleteRow" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteRow" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Delete Entry Button">
+            <Button fx:id="btnDeleteEntry" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Delete Entry Button">
                <graphic>
                   <ImageView fx:id="imgEdit2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@DeleteRow.jpg" />
+                        <Image url="@DeleteEntry.jpg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -184,7 +184,7 @@
                               <ContextMenu fx:id="ctxTableMenu">
                                 <items>
                                   <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
-                                    <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                                    <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteEntry" text="Delete Entry..." />
                                     <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                                     <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
                         <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
@@ -278,7 +278,7 @@
                                     <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
                                     <MenuItem mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
                                     <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#deleteRow" text="Delete Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#deleteEntry" text="Delete Entry..." />
                                     <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                                 </items>
                               </ContextMenu>
