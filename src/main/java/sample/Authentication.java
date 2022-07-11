@@ -21,7 +21,27 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 
- public class Authentication {
+ public class Authentication  {
+
+     LoginGUI loginGui = new LoginGUI();
+     PasswordField mpField = new PasswordField();
+     PasswordField skField = new PasswordField();
+
+     public ObservableList<Entry> authenticated() throws Exception {
+         // Restores the database, by decrypting it and storing it in memory,
+         // only if the database exists and if the user is authenticated
+         if (FileHandler.dbExists()) {
+             DecryptFile decryptFile = new DecryptFile();
+             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+             Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
+             TimerSpecs storedTimerSpecs = decryptedSecrets.getTimerSpecs();
+             TimerSpecs.setTimerSpecs(storedTimerSpecs);
+             ObservableList<Entry> observableList = FXCollections.observableList(decryptedSecrets.getEntry());
+             return observableList;
+         }
+         return FXCollections.emptyObservableList();
+     }
+
     public static String generateHmac(String data, SecretKey key) throws Exception {
 
         String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
@@ -46,22 +66,10 @@ import javax.crypto.spec.SecretKeySpec;
         return false;
   }
 
-public ObservableList<Entry> restoreDatabase() throws Exception {
-    if (FileHandler.dbExists()) {
-        DecryptFile decryptFile = new DecryptFile();
-        byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
-        Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
-        TimerSpecs storedTimerSpecs = decryptedSecrets.getTimerSpecs();
-        TimerSpecs.setTimerSpecs(storedTimerSpecs);
-        ObservableList<Entry> observableList = FXCollections.observableList(decryptedSecrets.getEntry());
-        return observableList;
-    }
-return FXCollections.emptyObservableList();
-    }
 
-  public static boolean validateNewPwd(String manualPwd, String confirmPwd, String sKeyPwd)
+  public static boolean validatePwdCredentials(String manualPwd, String confirmPwd, String sKeyPwd)
      {
-         // checks if the password has valid credentials, when creating a new database or updating the master password
+         // checks if the master password has valid criteria, when creating a new database or updating the master password
 
          String combined =manualPwd+ sKeyPwd;
          String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
@@ -99,21 +107,18 @@ return FXCollections.emptyObservableList();
          return true;
      }
 
-     GUI gui = new GUI();
-     PasswordField mpField = new PasswordField();
-     PasswordField skField = new PasswordField();
 
      boolean loginAuthentication(Button btnSignIn) throws Exception {
-         gui.dialog(mpField, skField);
+         loginGui.dialog(mpField, skField);
          Platform.runLater(() -> mpField.requestFocus());
-         final  Button btnOk = (Button) gui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
+         final  Button btnOk = (Button) loginGui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
          btnOk.addEventFilter(
                  ActionEvent.ACTION,
                  event -> {
                      // Checks if conditions are fulfilled
 
                      try {
-                         Secrets.setCombinedPasswords(mpField, skField);
+                         Secrets.setMasterPassword(mpField, skField);
                          byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
 
                          Database dbSecrets = (Database) SerializedObject.readDB(input);
@@ -142,11 +147,11 @@ return FXCollections.emptyObservableList();
                  }   );
 
 
-         gui.loginDialog.setResultConverter(dialogButton -> {
+         loginGui.loginDialog.setResultConverter(dialogButton -> {
              try {
                  if (dialogButton == ButtonType.OK) {
 
-                     Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
+                     Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
 
                      Stage stage = (Stage) btnSignIn.getScene().getWindow();
                      stage.setScene(new Scene(root));
@@ -160,7 +165,7 @@ return FXCollections.emptyObservableList();
              return null;
          });
 
-         gui.loginDialog.showAndWait();
+         loginGui.loginDialog.showAndWait();
 
          return false;
      }

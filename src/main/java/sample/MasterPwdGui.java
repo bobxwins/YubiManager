@@ -6,11 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.security.SecureRandom;
-
-public class PMGUI {
+public class MasterPwdGui {
 
      public   PasswordField manualPwdDialog = new PasswordField();
      public    PasswordField confirmPwdDialog = new PasswordField();
@@ -20,17 +16,17 @@ public class PMGUI {
    public    Dialog<Pair<String, String>> dialog = new Dialog<>();
    public   GridPane grid = new GridPane();
 
-    void updatePasswords() {
-        dialog.setTitle("Updating passwords");
+    void updateMasterPwd() {
+        dialog.setTitle("Updating master password");
         dialog.getDialogPane().setContent(grid);
-        setPwdGrid();
+        setMasterPwdGui();
         final Button btnOk = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         btnOk.addEventFilter(
                 ActionEvent.ACTION,
                 event -> {
                     // Checks if conditions are fulfilled
 
-                    if (!Authentication.validateNewPwd(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
+                    if (!Authentication.validatePwdCredentials(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing
 
@@ -62,7 +58,7 @@ public class PMGUI {
         dialog.showAndWait();
 
     }
-     GridPane setPwdGrid()
+     GridPane setMasterPwdGui()
     {
 
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);

@@ -11,6 +11,7 @@ public class Database implements Serializable {
     Secrets secrets;
     String cipherText;
     NonSecrets nonSecrets;
+   // private static final long serialVersionUID = 6529685098267757690L;
 
     public String getCipherText() {
         return cipherText;

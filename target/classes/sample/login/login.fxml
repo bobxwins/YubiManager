@@ -72,7 +72,7 @@
       </ImageView>
       <TableView fx:id="recentFilesTable" layoutX="269.0" layoutY="547.0" prefHeight="128.0" prefWidth="606.0">
         <columns>
-          <TableColumn fx:id="recent" minWidth="0.0" prefWidth="605.0" text="Double click the rows below to sign in!" />
+          <TableColumn fx:id="recent" minWidth="0.0" prefWidth="605.0" text="Double click an existing database row below to sign in!" />
         </columns>
          <contextMenu>
             <ContextMenu>

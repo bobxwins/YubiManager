@@ -102,12 +102,12 @@ public class EntryController implements Serializable   {
     @FXML private ContextMenu ctxTableMenu;
 
     static int pwdLength;
-
+  //  private static final long serialVersionUID = 6529685098267757690L;
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
-    PasswordVisbilityHandler pwdvh = new PasswordVisbilityHandler ();
+     VisibilityHandler visibilityHandler = new VisibilityHandler ();
 
     Slider slider = new Slider(4, 999, 1);
-   //Entry selectedItem;//   = entryTable.getSelectionModel().getSelectedItem();
+
 
     @FXML void menuRandomPwd (ActionEvent event)
     {
@@ -117,7 +117,7 @@ public class EntryController implements Serializable   {
         @FXML
         void createEntry (ActionEvent event) throws Exception {
             entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
-            showTableView();
+            VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
             tfTitel.setText("");
             tfUsername.setText("");
             tfURL.setText("");
@@ -133,7 +133,7 @@ public class EntryController implements Serializable   {
             Spinner<Integer> pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 12);
 
             slider.setBlockIncrement(1);
-        ;
+
             slider.setValue(pwdLengthSpinner.getValue());
             slider.setPrefWidth(570);
             slider.setLayoutY(110);
@@ -144,7 +144,7 @@ public class EntryController implements Serializable   {
             pwdLengthSpinner.setLayoutY(100);
             pwdLengthSpinner.setEditable(true);
             apPwdGenerate.getChildren().addAll(pwdLengthSpinner, slider);
-            ComponentVisibilityHandler cVBH = new ComponentVisibilityHandler();
+            VisibilityHandler cVBH = new VisibilityHandler();
 
             cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
 
@@ -212,7 +212,7 @@ public class EntryController implements Serializable   {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Warning, this will permanently delete all your passwords");
+            alert.setHeaderText("Warning, this will permanently delete all your passwords for this database");
             alert.setContentText("Are you sure you want to proceed?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
@@ -231,42 +231,10 @@ public class EntryController implements Serializable   {
 
         }
 
-        void showTableView ()
-        {
-
-            entryPane.setVisible(true);
-            entryPane.setDisable(false);
-
-             apEntryMenu.setDisable(true);
-             apEntryMenu.setVisible(false);
-
-            tfSearch.setDisable(false);
-
-            entryTable.setVisible(true);
-            entryTable.setDisable(false);
-
-            btnEditOK.setDisable(true);
-            btnEditOK.setVisible(false);
-            apBottomTable.setDisable(false);
-            apBottomTable.setVisible(true);
-
-        }
-
-        void entrySpecs () throws Exception {
-            apEntryMenu.setVisible(true);
-            apEntryMenu.setDisable(false);
-            tfSearch.setDisable(true);
-            btnCreate.setVisible(true);
-            btnCreate.setDisable(false);
-            entryTable.setVisible(false);
-            entryTable.setDisable(true);
-            apBottomTable.setDisable(true);
-            apBottomTable.setVisible(false);
-        }
     @FXML
     void returnTableView(ActionEvent event) throws Exception
     {
-        showTableView();
+        VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
         apPwdGenerate.setDisable(true);
         apPwdGenerate.setVisible(false);
         apPwdGenerate.getChildren().remove(slider);
@@ -329,7 +297,7 @@ public class EntryController implements Serializable   {
     @FXML
     void entryMenu(ActionEvent event) throws Exception
     {
-        entrySpecs();
+        VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
     }
 
 
@@ -361,11 +329,11 @@ public class EntryController implements Serializable   {
 
            Scene scene = new Scene(fxmlLoader.load());
            Stage stage = new Stage();
-      //     stage.setMaximized(true);
+
            stage.setTitle("New Window");
            stage.setScene(scene);
            stage.show();
-         //  Global.getLabelEnterPwd().setVisible(true);
+
         Global.setPasswordFilePath( pwdFPNewValue);
         Global.setSelectedDirectoryPath(  directoryNewValue);
     }
@@ -380,7 +348,7 @@ void openRecent (ActionEvent event) throws Exception
 
        Scene scene = new Scene(fxmlLoader.load());
        Stage stage = new Stage();
-     //  stage.setMaximized(true);
+
        stage.setTitle("New Window");
        stage.setScene(scene);
        stage.show();
@@ -401,13 +369,12 @@ void openRecent (ActionEvent event) throws Exception
 
     }
 
-   // static Entry selectedItem ;
     @FXML void editEntry (ActionEvent event) throws  Exception {
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
 
-            entrySpecs();
+            VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
             tfTitel.setText(selectedItem.getTitle());
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
@@ -415,12 +382,8 @@ void openRecent (ActionEvent event) throws Exception
             tANotes.setText(selectedItem.getNotes());
           //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
             // otherwise the values in the fieds from the selected entry would be empty
-            apBottomTable.setDisable(true);
-            apBottomTable.setVisible(false);
-            btnEditOK.setDisable(false);
-            btnEditOK.setVisible(true);
-            btnCreate.setVisible(false);
-            btnCreate.setDisable(true);
+            VisibilityHandler.editEntryVisibility (btnEditOK,btnCreate);
+
             btnEditOK.setOnAction(e -> {
                 try{
                     entryData.set(entryData.indexOf(selectedItem),selectedItem);
@@ -431,7 +394,7 @@ void openRecent (ActionEvent event) throws Exception
                     selectedItem.setNotes(tANotes.getText());
                     // updates the value of both the tableview at the top and bottom of the page,
                     // with the newly added values, after clicking the OK button
-                    showTableView();
+                    VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
                     save();
 
                 } catch (Exception E) {
@@ -445,7 +408,7 @@ void openRecent (ActionEvent event) throws Exception
 
          void save () throws Exception {
 
-    Global.setEntryData(entryData);
+    Secrets.setEntryData(entryData);
     FileProtector fileProtector = new FileProtector();
     Secrets secrets = new Secrets();
     secrets.setEntry(entryData);
@@ -454,7 +417,7 @@ void openRecent (ActionEvent event) throws Exception
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
 
-  pwdvh.setSelectedPassword(pfPwdField.getText());
+  visibilityHandler.setSelectedPassword(pfPwdField.getText());
    imgVisible.setVisible(false);
    imgNotVisible.setVisible(true);
   imgPwdNotVisible.setVisible(true);
@@ -483,8 +446,8 @@ void openRecent (ActionEvent event) throws Exception
 
     @FXML
     void updateMasterPwd(ActionEvent event) throws Exception {
-        PMGUI pmgui  = new PMGUI();
-        pmgui.updatePasswords();
+        MasterPwdGui masterPwdGui = new MasterPwdGui();
+        masterPwdGui.updateMasterPwd();
           save();
     }
 @FXML
@@ -500,7 +463,7 @@ void openRecent (ActionEvent event) throws Exception
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
-        String image = Main.class.getResource("PMAuth/magnifying-glass.png").toExternalForm();
+        String image = Main.class.getResource("authenticated/magnifying-glass.png").toExternalForm();
         tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
                 " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;");
 
@@ -527,27 +490,27 @@ void openRecent (ActionEvent event) throws Exception
                     }
 
                 });
-             /*   PasswordVisbilityHandler */ pwdvh = new PasswordVisbilityHandler ();
-                pwdvh.toggleVisbility (  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
+                visibilityHandler = new VisibilityHandler ();
+                visibilityHandler.pwdVisibilityTable(  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
                         selectedItem.getPassword(),   finalHidePwd,entryTable);
                 textPassword.setText(finalHidePwd);
 
             }
         });
-        PasswordVisbilityHandler.toggleVisbility(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
+        VisibilityHandler.pwdVisibilityMenu(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
             Authentication authentication = new Authentication();
-           entryData.addAll(authentication.restoreDatabase());
+           entryData.addAll(authentication.authenticated());
             TimerHandler.timerCountDown(btnSignOut,anchorPane);
             entryTable.setItems(entryData);
-            filter();
+            searchFilter();
             btnEnterMenu.setOnAction(e -> {
                 try {
-                    entrySpecs();
+                    VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
                 } catch (Exception E) {
 
                 }
@@ -556,7 +519,7 @@ void openRecent (ActionEvent event) throws Exception
     }
 
     @FXML
-    private void filter()
+    private void searchFilter()
     {
 
         FilteredList<Entry> filteredData = new FilteredList<>(entryTable.getItems()

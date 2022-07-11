@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class Entry implements Serializable {
 
     //private static final long serialVersionUID = 1L;
+   // private static final long serialVersionUID = 6529685098267757690L;
 
     Entry(String titelString, String usernameString, String urlString, String passwordString, String noteString) {
         this.title = titelString;

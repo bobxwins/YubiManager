@@ -1,14 +1,12 @@
 package sample;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
-public class GUI {
+public class LoginGUI {
 
-    public   GridPane grid = new GridPane();
+    private   GridPane grid = new GridPane();
     public Dialog<Void> loginDialog = new Dialog<Void>();
 
    public void dialog(PasswordField manualPwd,PasswordField skPwd) {
@@ -19,7 +17,7 @@ public class GUI {
     }
 
 
-    public GridPane grid (PasswordField manualPwd,PasswordField skPwd) {
+    public GridPane grid(PasswordField manualPwd,PasswordField skPwd) {
 
         grid.setHgap(10);
         grid.setVgap(10);

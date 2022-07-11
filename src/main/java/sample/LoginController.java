@@ -88,7 +88,7 @@ public class LoginController {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Warning, this will permanently delete all your passwords");
+            alert.setHeaderText("Warning, this will permanently delete all your passwords for this database");
             alert.setContentText("Are you sure you want to proceed?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
@@ -120,7 +120,7 @@ public class LoginController {
 
     @FXML
     private void initialize() throws Exception {
-        recentFilesTable.setPlaceholder(new Label("0 databases available. Click the Create New database button to create a new one!"));
+        recentFilesTable.setPlaceholder(new Label("0 databases available. Click the Create New database button to get started!"));
         recentFilesTable.setItems(Global.getRecentFilesData());
         recentFilesTable.getItems().clear();
        FileHandler.recentFileExists(recentFilesTable);
@@ -134,7 +134,7 @@ public class LoginController {
                             Global.setPasswordFilePath(selectedItem);
                             Global.setSelectedDirectoryPath(Paths.get(Global.getPasswordFilePath()).getParent() + "\\");
                             recentFilesTable.setOnMouseClicked((MouseEvent event) -> {
-                                if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                                if (selectedItem != null && event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                                     // Event that listens to if the mouse has been double clicked
                                     Authentication authentication = new Authentication();
                                     try {

@@ -8,22 +8,16 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="1135.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.EntryController">
 
 
                <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
-        <items>
-          <Button mnemonicParsing="false" text="Button" />
-        </items>
-      </ToolBar>
                   <MenuBar prefHeight="39.0" prefWidth="1135.0">
                      <menus>
                         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                            <items>
                               <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
                               <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
-                              <Menu fx:id="menuRecent" mnemonicParsing="false" onAction="#openRecent" text="Open Recent" />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
                   <SeparatorMenuItem mnemonicParsing="false" />
@@ -53,7 +47,7 @@
                         </Menu>
                      </menus>
                   </MenuBar>
-                  <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1135.0">
+                  <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1148.0">
                      <items>
             <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#entryMenu" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Entry Button">
                <graphic>
@@ -126,22 +120,65 @@
                   </ImageView>
                </graphic>
             </Button>
-                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="729.0" promptText="Search..." style="-fx-background-image: url(PMAuth/magnifying-glass.png);" />
+                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="339.0" promptText="Search..." style="-fx-background-image: url(authenticated/magnifying-glass.png);" />
                      </items>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </ToolBar>
+                  <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="148.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <children>
+                        <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
+                           <children>
+                              <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
+                              <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
+                                 <graphic>
+                                    <ImageView fx:id="copyIMG" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@redo.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="btnCopy" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyGeneratedPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
+                                 <graphic>
+                                    <ImageView fx:id="copyIMG1" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@copythat.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Button fx:id="btnReturn" layoutY="400.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="OK" />
+                        <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                           <font>
+                              <Font name="Arial Bold" size="21.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="textBruteForceTime" fontSmoothingType="LCD" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
+                           <font>
+                              <Font name="Arial" size="21.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="textEntropy" fontSmoothingType="LCD" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                           <font>
+                              <Font name="Arial" size="21.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="entryPane" layoutX="-135.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
             <AnchorPane fx:id="selectedRowPane" disable="true" layoutX="169.0" layoutY="500.0" prefHeight="219.0" prefWidth="1162.0" />
-                        <TableView fx:id="entryTable" editable="true" layoutX="133.0" layoutY="30.0" prefHeight="180.0" prefWidth="1135.0">
+                        <TableView fx:id="entryTable" editable="true" layoutX="141.0" layoutY="30.0" prefHeight="183.0" prefWidth="819.0">
 
                           <columns>
-                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="253.0" text="Titel" />
-                            <TableColumn fx:id="colUsername" prefWidth="272.0" text="Username" />
-                             <TableColumn fx:id="colURL" prefWidth="298.0" text="URL" />
-                              <TableColumn fx:id="colNotes" prefWidth="317.0" text="Notes" />
+                            <TableColumn id="colTitel" fx:id="colTitel" prefWidth="165.0" text="Titel" />
+                            <TableColumn fx:id="colUsername" prefWidth="216.0" text="Username" />
+                             <TableColumn fx:id="colURL" prefWidth="204.0" text="URL" />
+                              <TableColumn fx:id="colNotes" prefWidth="238.0" text="Notes" />
                           </columns>
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
@@ -157,9 +194,9 @@
                               </ContextMenu>
                            </contextMenu>
                         </TableView>
-            <AnchorPane fx:id="apEntryMenu" disable="true" layoutX="400.0" layoutY="40.0" visible="false">
+            <AnchorPane fx:id="apEntryMenu" disable="true" layoutX="250.0" layoutY="40.0" visible="false">
                <children>
-                              <BorderPane fx:id="bpEntryMenu" layoutY="-20.0" prefHeight="421.0" prefWidth="653.0">
+                              <BorderPane fx:id="bpEntryMenu" prefHeight="421.0" prefWidth="653.0">
                                  <left>
                                     <VBox fx:id="vBoxLabel" prefHeight="443.0" prefWidth="66.0" spacing="19.0" BorderPane.alignment="CENTER">
                                        <children>
@@ -181,7 +218,7 @@
                                  <children>
                                     <TextField fx:id="tfPwd" minWidth="626.0" />
                                                 <PasswordField fx:id="pfPwdField" minWidth="626.0" />
-                                    <Button fx:id="btnRandomPwd" contentDisplay="GRAPHIC_ONLY" layoutX="540.0" layoutY="-12.0" mnemonicParsing="false" onAction="#menuRandomPwd" prefHeight="49.0" prefWidth="38.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" style="-fx-background-color: transparent;" text="Password Generator">
+                                    <Button fx:id="btnRandomPwd" contentDisplay="GRAPHIC_ONLY" layoutX="560.0" layoutY="-12.0" mnemonicParsing="false" onAction="#menuRandomPwd" prefHeight="49.0" prefWidth="38.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" style="-fx-background-color: transparent;" text="Password Generator">
                                        <graphic>
                                           <ImageView fx:id="imgRandom" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -190,7 +227,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ToggleButton fx:id="togBtnPwd" layoutX="580.0" layoutY="-6.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5">
+                                    <Button fx:id="togBtnPwd" layoutX="601.0" layoutY="-12.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="59.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5">
                                        <graphic>
                                           <AnchorPane>
                                              <children>
@@ -207,24 +244,30 @@
                                              </children>
                                           </AnchorPane>
                                        </graphic>
-                                    </ToggleButton>
+                                    </Button>
                                  </children>
                               </AnchorPane>
-                                          <TextArea fx:id="tANotes" prefHeight="121.0" prefWidth="626.0" />
+                                          <TextArea fx:id="tANotes" prefHeight="255.0" prefWidth="600.0" />
                                        </children>
                                     </VBox>
                                  </center>
                                  <bottom>
-                                    <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER" />
+                                    <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
+                                          <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                                          <Button fx:id="btnEditOK" disable="true" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" visible="false" />
+                                       </children>
+                                    </AnchorPane>
                                  </bottom>
                               </BorderPane>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="124.0" layoutY="320.0" prefHeight="147.0" prefWidth="1205.0">
+            <AnchorPane fx:id="apBottomTable" layoutX="134.0" layoutY="273.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="260.0" prefWidth="1105.0">
                <children>
-                  <VBox layoutX="6.0" layoutY="16.0" prefHeight="131.0" prefWidth="1135.0">
+                  <VBox layoutX="6.0" layoutY="-10.0" prefHeight="157.0" prefWidth="819.0">
                      <children>
-                        <TableView fx:id="menuTableView" editable="true" prefHeight="146.0" prefWidth="798.0">
+                        <TableView fx:id="selectedEntryTableView" editable="true" prefHeight="146.0" prefWidth="1103.0">
                             <placeholder>
                                 <Label text="" />
                             </placeholder>
@@ -243,7 +286,7 @@
                          </TableView>
                      </children>
       
-                              </VBox>
+                        </VBox>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" x="50.0" y="35.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
@@ -289,7 +332,12 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <ToggleButton fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0">
+                  <Text fx:id="textTitel" layoutX="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125" x="10.0" y="-17.0">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="toggleButton" layoutX="120.0" layoutY="45.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="46.0">
                      <graphic>
                         <AnchorPane>
                            <children>
@@ -306,60 +354,9 @@
                            </children>
                         </AnchorPane>
                      </graphic>
-                  </ToggleButton>
+                  </Button>
                </children>
             </AnchorPane>
-                        <AnchorPane fx:id="apPwdGenerate" disable="true" layoutX="319.0" layoutY="13.0" prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
-                                 <children>
-                                    <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
-                                    <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
-                                       <graphic>
-                                          <ImageView fx:id="copyIMG" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@redo.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="btnCopy" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyGeneratedPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
-                                       <graphic>
-                                          <ImageView fx:id="copyIMG1" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@copythat.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Button fx:id="btnReturn" layoutY="490.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="102.0" text="OK" />
-                              <Text fx:id="textGenePwdQuality" fontSmoothingType="LCD" layoutX="238.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0">
-                                 <font>
-                                    <Font name="Arial Bold" size="21.0" />
-                                 </font>
-                              </Text>
-                              <Text fx:id="textBruteForceTime" fontSmoothingType="LCD" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" y="40.0">
-                                 <font>
-                                    <Font name="Arial" size="21.0" />
-                                 </font>
-                              </Text>
-                              <Text fx:id="textEntropy" fontSmoothingType="LCD" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0">
-                                 <font>
-                                    <Font name="Arial" size="21.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                        </AnchorPane>
-            <Text fx:id="textTitel" layoutX="225.0" layoutY="348.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Titel" wrappingWidth="907.064453125" x="10.0" y="-17.0">
-               <font>
-                  <Font size="28.0" />
-               </font>
-            </Text>
-                        <Button fx:id="btnCreate" layoutX="460.0" layoutY="304.0" mnemonicParsing="false" onAction="#createEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
-                        <Button fx:id="btnCancel" layoutX="907.0" layoutY="301.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
-                        <Button fx:id="btnEditOK" disable="true" layoutX="460.0" layoutY="301.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" visible="false" />
                      </children>
                   </AnchorPane>
       <ToolBar layoutX="452.0" layoutY="39.0" prefHeight="20.0" prefWidth="756.0" visible="false" />

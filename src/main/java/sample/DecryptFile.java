@@ -41,7 +41,7 @@ public class DecryptFile  {
         byte [] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
         Database dbSecrets = (Database) SerializedObject.readDB(input);
         NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-        SymmetricKey.setSecretKey(Secrets.getCombinedPasswords(),nonSecrets.getStoredSalt()
+        SymmetricKey.setSecretKey(Secrets.getMasterPassword(),nonSecrets.getStoredSalt()
                 ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
                 nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
         FileProtector.salt = nonSecrets.getStoredSalt();

@@ -30,7 +30,7 @@ public class FileHandler {
         Path path = Paths.get(Global.getPasswordFilePath());
         if (!Files.exists(path)) {
             FileUtils.write(Global.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
-            FileProtector.createKey(Secrets.getCombinedPasswords());
+            FileProtector.createKey(Secrets.getMasterPassword());
             FileProtector fileProtector = new FileProtector();
             ObservableList<Entry> entryData = FXCollections.observableArrayList();
             entryData.add(new Entry("", "", "",
@@ -54,4 +54,6 @@ public class FileHandler {
         }
         file.delete();
     }
+
+
 }

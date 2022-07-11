@@ -10,9 +10,10 @@ import java.util.ArrayList;
 
 public class Secrets implements Serializable {
     public Secrets(){}
-
+   // private static final long serialVersionUID = 6529685098267757690L;
     private static String MANUALSKEYPWD;
     private static char[] COMBINEDPASSWORD;
+    private static ObservableList OBSERVABLELIST;
 
     Secrets secrets;
    TimerSpecs timerSpecs;
@@ -42,10 +43,10 @@ public class Secrets implements Serializable {
         Secrets.MANUALSKEYPWD = manualSkeyPwd;
     }
 
-    public static char[] getCombinedPasswords () throws Exception{
+    public static char[] getMasterPassword() throws Exception{
         return COMBINEDPASSWORD;
     }
-    public static void setCombinedPasswords(PasswordField mpField, PasswordField sKeyField) throws Exception{
+    public static void setMasterPassword(PasswordField mpField, PasswordField sKeyField) throws Exception{
 
         char[] manualPassword = mpField.getText().toCharArray();
         char[] sKeyPassword = sKeyField.getText().toCharArray();
@@ -62,6 +63,10 @@ public class Secrets implements Serializable {
 
     public void setTimerSpecs(TimerSpecs timerSpecs) {
         this.timerSpecs = timerSpecs;
+    }
+
+    static void setEntryData (ObservableList observableList) {
+        Secrets.OBSERVABLELIST =observableList;
     }
 
 }

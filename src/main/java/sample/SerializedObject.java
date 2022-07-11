@@ -8,7 +8,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SerializedObject {
+public class SerializedObject   {
+   // private static final long serialVersionUID = 6529685098267757690L;
 
     public static void writeArrayList(ObservableList  observableList, Path file) throws  Exception {
         try {

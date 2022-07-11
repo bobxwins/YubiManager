@@ -13,9 +13,7 @@ import java.nio.charset.StandardCharsets;
 public final class Global {
 
 
-    private static ObservableList OBSERVABLELIST;
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
-
 
     private static String passwordFilePath;
     private static String SELECTEDDIRECTORYPATH;//=
@@ -57,8 +55,5 @@ public final class Global {
     }
 
 
-    static void setEntryData (ObservableList observableList) {
-        Global.OBSERVABLELIST =observableList;
-    }
 
 }

@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -16,31 +15,31 @@ import java.nio.file.Paths;
 
 public class SceneHandler {
 
-    PMGUI pmgui = new PMGUI();
+    MasterPwdGui masterPwdGui = new MasterPwdGui();
       TextField fileNameField = new TextField("");
 
     void newDBdialog(Button btn) throws Exception {
 
-        pmgui.setPwdGrid();
-        pmgui.dialog.setTitle("Creating new database");
+        masterPwdGui.setMasterPwdGui();
+        masterPwdGui.dialog.setTitle("Creating new database");
 
-        pmgui.dialog.getDialogPane().setContent(pmgui.grid);
+        masterPwdGui.dialog.getDialogPane().setContent(masterPwdGui.grid);
 
         fileNameField.setPromptText("File name...");
 
         Label fileLabel = new Label("Enter new File name:");
 
-        pmgui.grid.addRow(0, fileLabel, fileNameField);
+        masterPwdGui.grid.addRow(0, fileLabel, fileNameField);
 
         Platform.runLater(() -> fileNameField.requestFocus());
-        final Button btnOk = (Button) pmgui.dialog.getDialogPane().lookupButton(ButtonType.OK);
+        final Button btnOk = (Button) masterPwdGui.dialog.getDialogPane().lookupButton(ButtonType.OK);
         btnOk.addEventFilter(
                 ActionEvent.ACTION,
                 event -> {
                     // Checks if conditions are fulfilled
 
-                    if (fileNameField.getText().length() == 0 || pmgui.manualPwdDialog.getText().length() == 0
-                            || pmgui.confirmPwdDialog.getText().length() == 0 || pmgui.sKeyPwdDialog.getText().length() == 0) {
+                    if (fileNameField.getText().length() == 0 || masterPwdGui.manualPwdDialog.getText().length() == 0
+                            || masterPwdGui.confirmPwdDialog.getText().length() == 0 || masterPwdGui.sKeyPwdDialog.getText().length() == 0) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
@@ -49,7 +48,7 @@ public class SceneHandler {
                         event.consume();
                         return ;
                     }
-                    if (!Authentication.validateNewPwd(pmgui.manualPwdDialog.getText(),pmgui.confirmPwdDialog.getText(),pmgui.sKeyPwdDialog.getText())) {
+                    if (!Authentication.validatePwdCredentials(masterPwdGui.manualPwdDialog.getText(), masterPwdGui.confirmPwdDialog.getText(), masterPwdGui.sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing when clicking OK
                         event.consume();
@@ -58,11 +57,11 @@ public class SceneHandler {
                 }
         );
 
-        pmgui.dialog.setResultConverter(dialogButton -> {
+        masterPwdGui.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
 
-                    Secrets.setCombinedPasswords(pmgui.manualPwdDialog, pmgui.sKeyPwdDialog);
+                    Secrets.setMasterPassword(masterPwdGui.manualPwdDialog, masterPwdGui.sKeyPwdDialog);
                     Global.setPasswordFilePath(fileNameField.getText());
                     newScene(btn);
 
@@ -82,7 +81,7 @@ public class SceneHandler {
             return null;
         });
 
-        pmgui.dialog.showAndWait();
+        masterPwdGui.dialog.showAndWait();
 
     }
 
@@ -93,7 +92,7 @@ public class SceneHandler {
         new File(Global.getSelectedDirectoryPath()).mkdir();
         Global.setPasswordFilePath(Global.getSelectedDirectoryPath() + Global.getPasswordFilePath() + ".txt");
 
-        Parent root = FXMLLoader.load(Main.class.getResource("PMAuth/pmlayerAuthenticated.fxml"));
+        Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
 
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
 
