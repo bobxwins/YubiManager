@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>sample</groupId>
-    <artifactId>YubiManager</artifactId>
+    <artifactId>KeyBine</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Yubi Manager</name>
+    <name>KeyBine</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -119,7 +119,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>sample.yubimanager/sample.Main</mainClass>
+                            <mainClass>sample.KeyBine/sample.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="bcprov-jdk15on-168">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Documents/YubiManager/libs/bcprov-jdk15on-168.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/bcprov-jdk15on-168.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
