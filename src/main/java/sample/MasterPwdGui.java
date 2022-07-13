@@ -26,7 +26,7 @@ public class MasterPwdGui {
                 event -> {
                     // Checks if conditions are fulfilled
 
-                    if (!Authentication.validatePwdCredentials(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
+                    if (!Authentication.validateCredentials(manualPwdDialog.getText(),confirmPwdDialog.getText(),sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing
 

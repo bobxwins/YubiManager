@@ -25,8 +25,8 @@ public class DecryptFile  {
             Database dbSecrets = (Database) SerializedObject.readDB(input);
             byte[] base64decodedBytes = Base64.getDecoder().decode(dbSecrets.getCipherText());
             NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-            Cipher cipher = Cipher.getInstance(nonSecrets.getStoredAlgorithmModePadding(), nonSecrets.getStoredProvider());
-            cipher.init(Cipher.DECRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(nonSecrets.getStoredGeneratedIV()));
+            Cipher cipher = Cipher.getInstance(nonSecrets.getAlgorithmModePadding(), nonSecrets.getProvider());
+            cipher.init(Cipher.DECRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(nonSecrets.getGeneratedIV()));
             byte[] output = cipher.doFinal(base64decodedBytes);
             System.out.println("ratio ten?");
             return output;
@@ -42,8 +42,8 @@ public class DecryptFile  {
         Database dbSecrets = (Database) SerializedObject.readDB(input);
         NonSecrets nonSecrets= dbSecrets.getNonSecrets();
         SymmetricKey.setSecretKey(Secrets.getMasterPassword(),nonSecrets.getStoredSalt()
-                ,nonSecrets.getStoredIterationCount(),nonSecrets.getStoredKeyLength(),
-                nonSecrets.getStoredSecretKeyAlgorithm(),nonSecrets.getStoredProvider());
+                ,nonSecrets.getIterationCount(),nonSecrets.getKeyLength(),
+                nonSecrets.getSecretKeyAlgorithm(),nonSecrets.getProvider());
         FileProtector.salt = nonSecrets.getStoredSalt();
     }
 

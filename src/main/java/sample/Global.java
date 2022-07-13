@@ -50,7 +50,7 @@ public final class Global {
     }
 
     public static String getDefaultDir() {
-        DEFAULTHPATH = System.getProperty("user.dir") + "/resources/sample/passwords";
+        DEFAULTHPATH = System.getProperty("user.dir") + "/resources/sample/databases";
         return DEFAULTHPATH;
     }
 

@@ -31,10 +31,10 @@ public class FileProtector {
     static String secretKeyAlgorithm = "PBKDF2WithHmacSHA512";
     static String transformationAlgorithm = "AES/CBC/PKCS7PADDING";
     static String provider = "BC";
-    static byte[] salt = new byte[32]; // Salt is always at least 64 bit
-    static int iterationCount = 100000;
+    static byte[] salt = new byte[32]; // Salt should be at least 128 bits
+    static int iterationCount = 150000;
     static int keyLength = 256;
-    static byte[] generatedIV = new byte[16]; // IV is always 128 bit
+    static byte[] generatedIV = new byte[16]; // IV is always 128 bits
     static SecureRandom secureRandom;
 
     static {
@@ -52,7 +52,7 @@ public class FileProtector {
 
         try {
 
-            String header = Authentication.generateHmac(Global.getPasswordFilePath(), SymmetricKey.getSecretKey());
+
             System.out.println("the password file path is:" +Global.getPasswordFilePath());
             secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
             secureRandom.nextBytes(generatedIV);
@@ -63,17 +63,18 @@ public class FileProtector {
             Secrets secrets = new Secrets();
             byte[] inputSecrets = SerializedObject.serializeDB(databaseSecrets(secrets, observableList, timerSpecs));
 
-            byte[] outputSecrets;//= cipher.doFinal(inputSecrets);
-
-            NonSecrets nonSecrets = new NonSecrets(generatedIV, salt, iterationCount, keyLength,
-                    secureRandomAlgorithm, secretKeyAlgorithm, provider, transformationAlgorithm, header);
+            byte[] outputSecrets;
 
             Database database = new Database();
-            database.setNonSecrets(nonSecrets);
 
-                outputSecrets = cipher.doFinal(inputSecrets);
+            outputSecrets = cipher.doFinal(inputSecrets);
             String encoded = Base64.getEncoder().encodeToString(outputSecrets);
+            System.out.println("the protected file header is :"+encoded);
             database.setCipherText(encoded);
+            String header = Authentication.generateHmac(database.getCipherText(), SymmetricKey.getSecretKey());
+            NonSecrets nonSecrets = new NonSecrets(generatedIV, salt, iterationCount, keyLength,
+                    secureRandomAlgorithm, secretKeyAlgorithm, provider, transformationAlgorithm, header);
+            database.setNonSecrets(nonSecrets);
             byte[] dbSerialized = SerializedObject.serializeDB(database);
             FileUtils.write(Global.getPasswordFilePath(), dbSerialized);
         } catch (Exception e) {

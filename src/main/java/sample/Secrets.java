@@ -11,13 +11,10 @@ import java.util.ArrayList;
 public class Secrets implements Serializable {
     public Secrets(){}
    // private static final long serialVersionUID = 6529685098267757690L;
-    private static String MANUALSKEYPWD;
-    private static char[] COMBINEDPASSWORD;
-    private static ObservableList OBSERVABLELIST;
-
-    Secrets secrets;
-   TimerSpecs timerSpecs;
-    ArrayList<Entry> entry;
+    private static String CONFIGUREHWKPWD;
+    private static char[] CONCATENATEDPWDS;
+    private TimerSpecs timerSpecs;
+    private ArrayList<Entry> entry;
 
     public ArrayList<Entry> getEntry() {
         return entry;
@@ -27,24 +24,16 @@ public class Secrets implements Serializable {
         this.entry = new ArrayList<>(observableList);
     }
 
-    public Secrets getSecrets() {
-        return secrets;
+    public static String getConfigureHwkPwd() {
+        return CONFIGUREHWKPWD;
     }
 
-    public void setSecrets(Secrets secrets) {
-        this.secrets = secrets;
-    }
-
-    public static String getManualYbkPwd() {
-        return MANUALSKEYPWD;
-    }
-
-    public static void setManualYbkPwd(String manualSkeyPwd) {
-        Secrets.MANUALSKEYPWD = manualSkeyPwd;
+    public static void setConfigureHwPwd(String configureHwPwdString) {
+        Secrets.CONFIGUREHWKPWD = configureHwPwdString;
     }
 
     public static char[] getMasterPassword() throws Exception{
-        return COMBINEDPASSWORD;
+        return CONCATENATEDPWDS;
     }
     public static void setMasterPassword(PasswordField mpField, PasswordField sKeyField) throws Exception{
 
@@ -54,7 +43,7 @@ public class Secrets implements Serializable {
         StringBuilder sb = new StringBuilder(128);
         sb.append(manualPassword);
         sb.append(sKeyPassword);
-        COMBINEDPASSWORD = sb.toString().toCharArray();
+        CONCATENATEDPWDS = sb.toString().toCharArray();
     }
 
     public TimerSpecs getTimerSpecs() {
@@ -65,8 +54,6 @@ public class Secrets implements Serializable {
         this.timerSpecs = timerSpecs;
     }
 
-    static void setEntryData (ObservableList observableList) {
-        Secrets.OBSERVABLELIST =observableList;
-    }
+
 
 }

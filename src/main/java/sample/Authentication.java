@@ -24,8 +24,8 @@ import javax.crypto.spec.SecretKeySpec;
  public class Authentication  {
 
      LoginGUI loginGui = new LoginGUI();
-     PasswordField mpField = new PasswordField();
-     PasswordField skField = new PasswordField();
+     PasswordField manualPwdField = new PasswordField();
+     PasswordField hKeyPwdField = new PasswordField();
 
      public ObservableList<Entry> authenticated() throws Exception {
          // Restores the database, by decrypting it and storing it in memory,
@@ -42,13 +42,14 @@ import javax.crypto.spec.SecretKeySpec;
          return FXCollections.emptyObservableList();
      }
 
-    public static String generateHmac(String data, SecretKey key) throws Exception {
-
+    public static String generateHmac(String cipherText, SecretKey key ) throws Exception {
+        byte [] cipherBytes = cipherText.getBytes(StandardCharsets.UTF_8);
         String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
         SecretKeySpec secretKeySpec = new SecretKeySpec(encodedKey.getBytes()," HMACSHA512");
         Mac mac = Mac.getInstance("HMACSHA512");
         mac.init(secretKeySpec);
-        byte[] digest = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        mac.update(cipherBytes);
+        byte[] digest = mac.doFinal(cipherBytes);
         String encoded = Base64.getEncoder().encodeToString(digest);
         return  encoded;
     }
@@ -60,6 +61,7 @@ import javax.crypto.spec.SecretKeySpec;
       String storedHeader = nonSecrets.getHeader();
       if (storedHeader.equals(generatedHeader))
       {
+          System.out.println("the header is :"+ storedHeader);
           return true;
       }
 
@@ -67,11 +69,11 @@ import javax.crypto.spec.SecretKeySpec;
   }
 
 
-  public static boolean validatePwdCredentials(String manualPwd, String confirmPwd, String sKeyPwd)
+  public static boolean validateCredentials(String manualPwd, String confirmPwd, String hKeyPwd)
      {
          // checks if the master password has valid criteria, when creating a new database or updating the master password
 
-         String combined =manualPwd+ sKeyPwd;
+         String combined =manualPwd+ hKeyPwd;
          String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
                  "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
 
@@ -109,8 +111,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 
      boolean loginAuthentication(Button btnSignIn) throws Exception {
-         loginGui.dialog(mpField, skField);
-         Platform.runLater(() -> mpField.requestFocus());
+         loginGui.dialog(manualPwdField, hKeyPwdField);
+         Platform.runLater(() -> manualPwdField.requestFocus());
          final  Button btnOk = (Button) loginGui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
          btnOk.addEventFilter(
                  ActionEvent.ACTION,
@@ -118,13 +120,14 @@ import javax.crypto.spec.SecretKeySpec;
                      // Checks if conditions are fulfilled
 
                      try {
-                         Secrets.setMasterPassword(mpField, skField);
+                         Secrets.setMasterPassword(manualPwdField, hKeyPwdField);
                          byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
 
                          Database dbSecrets = (Database) SerializedObject.readDB(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
                          DecryptFile.restoreKey();
-                         String generatedHeader = generateHmac(Global.getPasswordFilePath(),SymmetricKey.getSecretKey());
+
+                         String generatedHeader = generateHmac(dbSecrets.getCipherText(),SymmetricKey.getSecretKey());
                          nonSecrets.setHeader(generatedHeader);
 
                          if (!verifyHmac(generatedHeader))

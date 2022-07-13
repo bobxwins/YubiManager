@@ -38,38 +38,31 @@ public class NonSecrets implements Serializable {
         return salt;
     }
 
-    public int getStoredIterationCount() {
+    public int getIterationCount() {
 
         return iterationCount;
     }
 
-    public int getStoredKeyLength() {
+    public int getKeyLength() {
 
         return keyLength;
     }
 
-    public byte[] getStoredGeneratedIV() {
+    public byte[] getGeneratedIV() {
         return generatedIV;
     }
 
-    public String getStoredSecureRandomAlgorithm() {
+    public String getSecureRandomAlgorithm() {
         return secureRandomAlgorithm;
     }
 
-    public String getStoredProvider() {
+    public String getProvider() {
         return provider;
     }
-    public String getStoredSecretKeyAlgorithm (){return secretKeyAlgorithm;}
+    public String getSecretKeyAlgorithm(){return secretKeyAlgorithm;}
 
-    public String getStoredAlgorithmModePadding() {
+    public String getAlgorithmModePadding() {
         return algorithmModePadding;
     }
-
-   /* public static String getNonSecretsDir() {
-        String nonSecretsDir = Global.getSelectedDirectoryPath() + "NonSecrets.txt";
-        return nonSecretsDir;
-    }
-    */
-
 
 }

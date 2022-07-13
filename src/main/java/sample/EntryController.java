@@ -37,80 +37,51 @@ import static java.lang.Integer.parseInt;
 
 public class EntryController implements Serializable   {
     @FXML private AnchorPane anchorPane;
-
     @FXML private AnchorPane apBottomTable;
-
     @FXML private AnchorPane apEntryMenu;
-
     @FXML private AnchorPane apPwdGenerate;
-
     @FXML private AnchorPane entryPane;
-
-    @FXML private Button btnSignOut;
-
-    @FXML private Button btnPwdGenerator;
-
+    @FXML private Button btnCreate;
     @FXML private Button btnEnterMenu;
     @FXML private Button btnEditOK;
-
-    @FXML private Button btnCreate;
-
     @FXML private Button btnReturn;
-
-    @FXML private ContextMenu ctxTableMenu;
-
+    @FXML private Button btnSignOut;
+    @FXML private Button btnPwdGenerator;
     @FXML private Button toggleButton;
     @FXML private Button togBtnPwd;
-
-    @FXML private ImageView imgPwdVisible;
-
-    @FXML private ImageView imgVisible;
-
+    @FXML private ContextMenu ctxTableMenu;
     @FXML private ImageView imgNotVisible;
+    @FXML private ImageView imgPwdVisible;
+    @FXML private ImageView imgVisible;
     @FXML private ImageView imgPwdNotVisible;
     @FXML private Hyperlink hyperLinkURL;
-
     @FXML private TableView<Entry> entryTable;
-
     @FXML private TableColumn<Entry, String> colTitel;
     @FXML private TableColumn<Entry, String> colUsername;
     @FXML private TableColumn<Entry, String> colURL;
-
     @FXML private TableColumn<Entry, String> colNotes;
-
     @FXML private TextField tfSearch;
     @FXML private TextField tfTitel;
     @FXML private TextField tfUsername;
     @FXML private TextField tfURL;
     @FXML private PasswordField pfPwdField;
     @FXML private TextArea tANotes;
-
     @FXML private TextField generatedPWDfield;
-
     @FXML private TextField tfPwd;
-
     @FXML private Text textUsername;
-
     @FXML private Text textPassword;
-
     @FXML private Text textNotes;
-
     @FXML private Text textTitel;
-
     @FXML private Text textGenePwdQuality;
-
     @FXML private Text textBruteForceTime;
-
     @FXML private Text textEntropy;
 
     static int pwdLength;
   //  private static final long serialVersionUID = 6529685098267757690L;
     private ObservableList<Entry> entryData = FXCollections.observableArrayList();
     VisibilityHandler visibilityHandler = new VisibilityHandler ();
-    Slider slider = new Slider(4, 999, 1);
-  //  Spinner<Integer> pwdLengthSpinner ;//= (Spinner<Integer>) new Spinner(0, 999, 12);
-     Spinner<Integer> pwdLengthSpinner ;//= (Spinner<Integer>) new Spinner(0, 999, 12);
-
+    Slider sliderPwdGenerator = new Slider(4, 999, 1);
+    Spinner<Integer> spinnerPwdGenerator;
 
     @FXML
     void copyPwd(ActionEvent event) throws Exception
@@ -159,8 +130,6 @@ public class EntryController implements Serializable   {
         alert.showAndWait();
     }
 
-
-
     @FXML
         void createEntry (ActionEvent event) throws Exception {
             entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
@@ -173,9 +142,6 @@ public class EntryController implements Serializable   {
             save();
 
         }
-
-
-
 
     @FXML void editEntry (ActionEvent event) throws  Exception {
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
@@ -250,20 +216,36 @@ public class EntryController implements Serializable   {
 
     @FXML
     void generatePwd (ActionEvent event) throws Exception {
-        setPwdGeneratorActionEvents();
-    }
+        VisibilityHandler cVBH = new VisibilityHandler();
+        cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
+        spinnerPwdGenerator();
+        sliderPwdGenerator();
+        btnPwdGenerator();
+        textFieldPwdGenerator();
+        apPwdGenerate.getChildren().addAll(spinnerPwdGenerator, sliderPwdGenerator);
+        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            entryData.set(entryData.indexOf(selectedItem), selectedItem);
+            generatedPWDfield.setText(selectedItem.getPassword());
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            entryTable.getSelectionModel().clearSelection();
+        }
+        else {
+            generatedPWDfield.setText(PasswordUtils.generatePassword(spinnerPwdGenerator.getValue()));
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+        }
 
+    }
 
     @FXML void menuRandomPwd (ActionEvent event)
     {
-        pfPwdField.setText(PasswordUtils.getPassword(32));
+        pfPwdField.setText(PasswordUtils.generatePassword(32));
     }
 
     @FXML
     void newDB(ActionEvent event) throws  Exception {
         SceneHandler sceneHandler = new SceneHandler();
         sceneHandler.newDBdialog(btnReturn);
-
     }
 
 
@@ -302,7 +284,7 @@ public class EntryController implements Serializable   {
         VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
         apPwdGenerate.setDisable(true);
         apPwdGenerate.setVisible(false);
-        apPwdGenerate.getChildren().remove(slider);
+        apPwdGenerate.getChildren().remove(sliderPwdGenerator);
         // Empties the edited entry after clicking the cancel button,so the values
         // of the previously edited entry doesn't get transferred to the entry about to be created
         tfTitel.setText("");
@@ -318,11 +300,7 @@ public class EntryController implements Serializable   {
         SceneHandler.stageFullScreen(btnSignOut);
     }
 
-
-
-         void save () throws Exception {
-
-    Secrets.setEntryData(entryData);
+   void save () throws Exception {
     FileProtector fileProtector = new FileProtector();
     Secrets secrets = new Secrets();
     secrets.setEntry(entryData);
@@ -330,21 +308,19 @@ public class EntryController implements Serializable   {
     fileProtector.encryption(entryData,secrets.getTimerSpecs());
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
-
-  visibilityHandler.setSelectedPassword(pfPwdField.getText());
+    visibilityHandler.setSelectedPassword(pfPwdField.getText());
   // sets the password of the selected Entry to be the same as the newly added or edited password
-   imgVisible.setVisible(false);
-   imgNotVisible.setVisible(true);
-  imgPwdNotVisible.setVisible(true);
-  imgPwdVisible.setVisible(false);
-   hyperLinkURL.setText(tfURL.getText());
+    imgVisible.setVisible(false);
+    imgNotVisible.setVisible(true);
+    imgPwdNotVisible.setVisible(true);
+    imgPwdVisible.setVisible(false);
+    hyperLinkURL.setText(tfURL.getText());
     textNotes.setText(tANotes.getText());
-
-             tfTitel.setText("");
-             tfUsername.setText("");
-             tfURL.setText("");
-             pfPwdField.setText("");
-             tANotes.setText("");
+    tfTitel.setText("");
+    tfUsername.setText("");
+    tfURL.setText("");
+    pfPwdField.setText("");
+    tANotes.setText("");
  }
     @FXML
     void saveEntry(ActionEvent event) throws Exception {
@@ -359,78 +335,53 @@ public class EntryController implements Serializable   {
         
     }
 
-    void setPwdGeneratorActionEvents() throws Exception {
-
-        pwdLengthSpinner = (Spinner<Integer>) new Spinner(0, 999, 12);
-        slider.setBlockIncrement(1);
-
-        slider.setValue(pwdLengthSpinner.getValue());
-        slider.setPrefWidth(570);
-        slider.setLayoutY(110);
-        slider.setShowTickLabels(true);
-
-        pwdLengthSpinner.setPrefSize(75, 25);
-        pwdLengthSpinner.setLayoutX(580);
-        pwdLengthSpinner.setLayoutY(100);
-        pwdLengthSpinner.setEditable(true);
-        apPwdGenerate.getChildren().addAll(pwdLengthSpinner, slider);
-
-        VisibilityHandler cVBH = new VisibilityHandler();
-
-        cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
-        setPwdLengthSpinner ();
-        setPwdSlider();
-        setPwdBtnGenerator();
-    }
-    public void setPwdLengthSpinner () {
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            entryData.set(entryData.indexOf(selectedItem), selectedItem);
-
-            generatedPWDfield.setText(selectedItem.getPassword());
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
-            entryTable.getSelectionModel().clearSelection();
-        } else {
-            generatedPWDfield.setText(PasswordUtils.getPassword(pwdLengthSpinner.getValue()));
-
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
-
-        }
-
-        pwdLengthSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-
-            pwdLengthSpinner.getEditor().setOnKeyReleased(e ->
+    public void spinnerPwdGenerator() {
+        spinnerPwdGenerator = (Spinner<Integer>) new Spinner(0, 999, 12);
+        spinnerPwdGenerator.setPrefSize(75, 25);
+        spinnerPwdGenerator.setLayoutX(580);
+        spinnerPwdGenerator.setLayoutY(100);
+        spinnerPwdGenerator.setEditable(true);
+        spinnerPwdGenerator.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+        spinnerPwdGenerator.getEditor().setOnKeyReleased(e ->
             {
-                generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+                generatedPWDfield.setText(PasswordUtils.generatePassword(parseInt(newValue)));
 
                 PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
             });
 
-            generatedPWDfield.setText(PasswordUtils.getPassword(parseInt(newValue)));
+            generatedPWDfield.setText(PasswordUtils.generatePassword(parseInt(newValue)));
 
             PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
-            slider.setValue(parseInt(newValue));
+            sliderPwdGenerator.setValue(parseInt(newValue));
 
         });
     }
 
-    public void setPwdSlider()
+    public void sliderPwdGenerator()
     {
-        slider.setOnMouseDragged(e -> {
-            Double newData = slider.getValue();
-            int value = newData.intValue();
-            pwdLengthSpinner.getValueFactory().setValue(value);
+        sliderPwdGenerator.setBlockIncrement(1);
+        sliderPwdGenerator.setValue(spinnerPwdGenerator.getValue());
+        sliderPwdGenerator.setPrefWidth(570);
+        sliderPwdGenerator.setLayoutY(110);
+        sliderPwdGenerator.setShowTickLabels(true);
+        sliderPwdGenerator.setOnMouseDragged(e -> {
+          Double newData = sliderPwdGenerator.getValue();
+          int value = newData.intValue();
+          spinnerPwdGenerator.getValueFactory().setValue(value);
         });
     }
-    public void setPwdBtnGenerator( ) {
+    public void btnPwdGenerator( ) {
 
         btnPwdGenerator.setOnAction(e ->
-                // when Generator button is pressed
+                // when the btnPwdGenerator button is pressed, the length of the integer pwdLenght is set to be equal to
+                // the value of the pwdSpinner
+                // then the string generated by generatePassword() is put inside the generatePwdField textfield
+                //which is then used to calculate the the estimated cracking time of the password.
         {
             try {
-                pwdLength = pwdLengthSpinner.getValue();
+                pwdLength = spinnerPwdGenerator.getValue();
 
-                generatedPWDfield.setText(PasswordUtils.getPassword(pwdLength));
+                generatedPWDfield.setText(PasswordUtils.generatePassword(pwdLength));
 
                 PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
 
@@ -438,6 +389,12 @@ public class EntryController implements Serializable   {
 
             }
 
+        });
+    }
+    void textFieldPwdGenerator() {
+        generatedPWDfield.textProperty().addListener((observable, oldValue, newValue) -> {
+          //  System.out.println("textfield changed from " + oldValue + " to " + newValue);
+            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  newValue);
         });
     }
 

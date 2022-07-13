@@ -56,14 +56,14 @@ public class LoginController {
 
     @FXML
     void newYbkPwd(ActionEvent event) throws Exception {
-        YubiKeyPwdHandler.generateYbkPassword();
+        HardwareKeyHandler.cmdGenerateHwkPwd();
 
 
     }
 
     @FXML
     void setYbkPwd(ActionEvent event) throws Exception {
-        YubiKeyPwdHandler.manualYbkPwd();
+        HardwareKeyHandler.cmdConfigureHwkPwd();
 
     }
 

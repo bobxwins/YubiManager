@@ -1,12 +1,7 @@
 
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -32,9 +27,8 @@ public   class PasswordUtils {
 
    private static SecureRandom rand = new SecureRandom();
 
-    public static String getPassword(int length) {
+    public static String generatePassword(int length) {
 // generates a random password
-
 
 
         StringBuilder sb = new StringBuilder();
@@ -73,7 +67,6 @@ public   class PasswordUtils {
             // The generated temp char is put in a random position of the password array.
 
         }
-
 
         return new String(password);
     }

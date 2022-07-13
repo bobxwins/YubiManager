@@ -48,7 +48,7 @@ public class SceneHandler {
                         event.consume();
                         return ;
                     }
-                    if (!Authentication.validatePwdCredentials(masterPwdGui.manualPwdDialog.getText(), masterPwdGui.confirmPwdDialog.getText(), masterPwdGui.sKeyPwdDialog.getText())) {
+                    if (!Authentication.validateCredentials(masterPwdGui.manualPwdDialog.getText(), masterPwdGui.confirmPwdDialog.getText(), masterPwdGui.sKeyPwdDialog.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing when clicking OK
                         event.consume();
