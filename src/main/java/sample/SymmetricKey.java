@@ -26,13 +26,13 @@ static {
         return secretKey;
     }
 
-    public static  void setSecretKey(char [] Password
+    public static  void setSecretKey(char [] masterPassword
              ,byte [] saltBytes, int iterationInt, int keyLengthInt
             , String secretKeyAlgorithmString , String providerString
             ) throws Exception
     {
 
-        PBEKeySpec keySpec = new PBEKeySpec(Password, saltBytes, iterationInt, keyLengthInt);
+        PBEKeySpec keySpec = new PBEKeySpec(masterPassword, saltBytes, iterationInt, keyLengthInt);
         SecretKeyFactory factory =
                 SecretKeyFactory.getInstance(secretKeyAlgorithmString, providerString);
          secretKey = factory.generateSecret(keySpec);

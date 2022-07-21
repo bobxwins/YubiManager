@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec;
 
      LoginGUI loginGui = new LoginGUI();
      PasswordField manualPwdField = new PasswordField();
-     PasswordField hKeyPwdField = new PasswordField();
+     PasswordField responseField = new PasswordField();
 
      public ObservableList<Entry> authenticated() throws Exception {
          // Restores the database, by decrypting it and storing it in memory,
@@ -64,26 +64,24 @@ import javax.crypto.spec.SecretKeySpec;
           System.out.println("the header is :"+ storedHeader);
           return true;
       }
-
         return false;
   }
 
 
-  public static boolean validateCredentials(String manualPwd, String confirmPwd, String hKeyPwd)
+  public static boolean validateCredentials(String manualPwd, String confirmPwd)
      {
          // checks if the master password has valid criteria, when creating a new database or updating the master password
-
-         String combined =manualPwd+ hKeyPwd;
+ ;
          String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
                  "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
 
-         Pattern.compile(regex).matcher(combined).matches();
+         Pattern.compile(regex).matcher(manualPwd).matches();
 
-         if (combined.length() < 12) {
+         if (manualPwd.length() < 6) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
              alert.setHeaderText(null);
-             alert.setContentText("The Master password must be at least 12 characters long!");
+             alert.setContentText("The manual password must be at least 6 characters long!");
              alert.showAndWait();
              return false;
          }
@@ -97,11 +95,11 @@ import javax.crypto.spec.SecretKeySpec;
              return false;
          }
 
-         if ( !Pattern.compile(regex).matcher(combined).matches() ) {
+         if ( !Pattern.compile(regex).matcher(manualPwd).matches() ) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
              alert.setHeaderText(null);
-             alert.setContentText("Master password must contain digits, uppercase, and lowercase characters!");
+             alert.setContentText("The manual password must contain digits, uppercase, and lowercase characters!");
              alert.showAndWait();
              return false;
          }
@@ -109,9 +107,9 @@ import javax.crypto.spec.SecretKeySpec;
          return true;
      }
 
-
      boolean loginAuthentication(Button btnSignIn) throws Exception {
-         loginGui.dialog(manualPwdField, hKeyPwdField);
+         responseField.setText(new String(DecryptFile.recreateResponse()));
+         loginGui.dialog(manualPwdField, responseField);
          Platform.runLater(() -> manualPwdField.requestFocus());
          final  Button btnOk = (Button) loginGui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
          btnOk.addEventFilter(
@@ -120,7 +118,7 @@ import javax.crypto.spec.SecretKeySpec;
                      // Checks if conditions are fulfilled
 
                      try {
-                         Secrets.setMasterPassword(manualPwdField, hKeyPwdField);
+                         Secrets.setMasterPassword(manualPwdField.getText().toCharArray(), responseField.getText().toCharArray());
                          byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
 
                          Database dbSecrets = (Database) SerializedObject.readDB(input);
@@ -129,6 +127,7 @@ import javax.crypto.spec.SecretKeySpec;
 
                          String generatedHeader = generateHmac(dbSecrets.getCipherText(),SymmetricKey.getSecretKey());
                          nonSecrets.setHeader(generatedHeader);
+
 
                          if (!verifyHmac(generatedHeader))
                          {

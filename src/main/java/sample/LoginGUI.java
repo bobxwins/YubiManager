@@ -17,7 +17,7 @@ public class LoginGUI {
     }
 
 
-    public GridPane grid(PasswordField manualPwd,PasswordField skPwd) {
+    public GridPane grid(PasswordField manualPwd,PasswordField responseField) {
 
         grid.setHgap(10);
         grid.setVgap(10);
@@ -25,13 +25,14 @@ public class LoginGUI {
 
         manualPwd.setPromptText("Manual Password");
 
-        skPwd.setPromptText("Security Key Password");
+        responseField.setDisable(true); // Prevents the user from accidentally typing in the responseField
+        responseField.setPromptText("Security Key Password");
 
         grid.add(new Label("Manual Password:"), 0, 1);
         grid.add(manualPwd, 1, 1);
 
         grid.add(new Label("Security Key Password:"), 0, 2);
-        grid.add(skPwd, 1, 2);
+        grid.add(responseField, 1, 2);
 
         return grid;
     }

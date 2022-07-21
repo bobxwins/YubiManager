@@ -2,40 +2,37 @@ package sample;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Optional;
 
 
 public class HardwareKeyHandler {
 
     static String ykManPath  = "C:/Program Files/Yubico/YubiKey Manager";
-    // Folder path to the application YubiKey Manager, by YubiCo.
-    static String textRandomPwdHwk = " A new YubiKey password has been generated succesfully!";
-    static String textConfigureHwk = " YubiKey password has been set succesfully!";
+    // Folder path to the application YubiKey Manager app
+    static String textConfigureHwk = " YubiKey challenge response has been set successfully!";
     // Using the command prompt, the command opens the YubiKey Manager, and generates a 38 character long random password, with the keyboard being the  US layout
 
-    public static void cmdProcess(String command, String contentText)  {
-
-        try {
-            Process process =
+    public static void cmdProcess(String command) throws Exception  {
+            Process p =
                     Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + command + "&&" + "y");
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText(contentText);
-                alert.showAndWait();
-
-        }
-
-        catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    public static void cmdGenerateHwkPwd()  {
-        String generatePwdCommand= "ykman otp static 1 --generate --length 38 --force --keyboard-layout US";
+
+    public static void cmdGenerateCR()  {
+        // 	Programs a challenge-response credential
+        String generatePwdCommand= "ykman otp chalresp 1 -g -f";
         try {
-            cmdProcess(generatePwdCommand, textRandomPwdHwk);
+            String textRandomPwdHwk = " A new YubiKey symmetric key has been generated succesfully!";
+            cmdProcess(generatePwdCommand);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText(textRandomPwdHwk);
+            alert.showAndWait();
 
         }
         catch (Exception e) {
@@ -43,12 +40,26 @@ public class HardwareKeyHandler {
         }
     }
 
+    public static void cmdResponse(String challenge)  {
+        // 	Programs a  response
 
-    public static void cmdConfigureHwkPwd()
+        String calculateResponse= "ykman otp calculate 1 "+ challenge + " | clip";
+        // generates the response and copies the output to the Windows Clipboard
+        try {
+            cmdProcess(calculateResponse);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public static void cmdConfigureCR()
     {
 
         try {
-        dialogConfigureHwkPwd();
+        dialogConfigureCR();
             if (Secrets.getConfigureHwkPwd().length()==0)
             {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -58,8 +69,13 @@ public class HardwareKeyHandler {
                 alert.showAndWait();
                 return;
             }
-            String manualCommand= "ykman otp static 1 --generate "+Secrets.getConfigureHwkPwd()+" --force --keyboard-layout US";
-          cmdProcess(manualCommand, textConfigureHwk);
+            String manualCommand= "ykman otp chalresp 1"+Secrets.getConfigureHwkPwd();
+          cmdProcess(manualCommand);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText(textConfigureHwk);
+            alert.showAndWait();
 
         }
         catch (Exception e) {
@@ -67,12 +83,12 @@ public class HardwareKeyHandler {
         }
 
     }
-    public static void dialogConfigureHwkPwd()
+    public static void dialogConfigureCR()
     {
         TextInputDialog textDialog = new TextInputDialog();
-        textDialog.setTitle("YubiKey manager");
-        textDialog.setHeaderText("Configure Hardware key Password");
-        textDialog.setContentText("Enter a string to configure the Hardware key password:");
+        textDialog.setTitle("Configuring Hardware key");
+        textDialog.setHeaderText("Configure the Hardware key challenge response");
+        textDialog.setContentText("Enter a string to configure the Hardware key challenge response:");
 
         Optional<String> result = textDialog.showAndWait();
         Secrets.setConfigureHwPwd(result.get());

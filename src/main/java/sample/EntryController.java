@@ -459,7 +459,7 @@ public class EntryController implements Serializable   {
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
             Authentication authentication = new Authentication();
-           entryData.addAll(authentication.authenticated());
+            entryData.addAll(authentication.authenticated());
             TimerHandler.timerCountDown(btnSignOut,anchorPane);
             entryTable.setItems(entryData);
             searchFilter();
@@ -470,7 +470,9 @@ public class EntryController implements Serializable   {
 
                 }
             });
-
+           save();
+           // Saves the database each time a user logs in,
+        // so the challenge and response are never used more than once
     }
 
     @FXML

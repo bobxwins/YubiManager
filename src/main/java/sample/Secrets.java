@@ -13,6 +13,7 @@ public class Secrets implements Serializable {
    // private static final long serialVersionUID = 6529685098267757690L;
     private static String CONFIGUREHWKPWD;
     private static char[] CONCATENATEDPWDS;
+    private static char[] MANUALPWD;
     private TimerSpecs timerSpecs;
     private ArrayList<Entry> entry;
 
@@ -35,14 +36,22 @@ public class Secrets implements Serializable {
     public static char[] getMasterPassword() throws Exception{
         return CONCATENATEDPWDS;
     }
-    public static void setMasterPassword(PasswordField mpField, PasswordField sKeyField) throws Exception{
 
-        char[] manualPassword = mpField.getText().toCharArray();
-        char[] sKeyPassword = sKeyField.getText().toCharArray();
+    public static void setManualPassword(char[] manualPassword) {
+        Secrets.MANUALPWD = manualPassword;
+    }
 
-        StringBuilder sb = new StringBuilder(128);
+    public static char[] getManualPassword() throws Exception{
+        return MANUALPWD;
+    }
+
+
+    public static void setMasterPassword(char[] manualPassword, char[] response) throws Exception{
+
+        setManualPassword(manualPassword);
+        StringBuilder sb = new StringBuilder(856);
         sb.append(manualPassword);
-        sb.append(sKeyPassword);
+        sb.append(response);
         CONCATENATEDPWDS = sb.toString().toCharArray();
     }
 

@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class SceneHandler {
 
     MasterPwdGui masterPwdGui = new MasterPwdGui();
-      TextField fileNameField = new TextField("");
+    TextField fileNameField = new TextField("");
 
     void newDBdialog(Button btn) throws Exception {
 
@@ -38,8 +38,8 @@ public class SceneHandler {
                 event -> {
                     // Checks if conditions are fulfilled
 
-                    if (fileNameField.getText().length() == 0 || masterPwdGui.manualPwdDialog.getText().length() == 0
-                            || masterPwdGui.confirmPwdDialog.getText().length() == 0 || masterPwdGui.sKeyPwdDialog.getText().length() == 0) {
+                    if (fileNameField.getText().length() == 0 || masterPwdGui.manualPwdDField.getText().length() == 0
+                            || masterPwdGui.confirmPwdField.getText().length() == 0 ) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
@@ -48,7 +48,7 @@ public class SceneHandler {
                         event.consume();
                         return ;
                     }
-                    if (!Authentication.validateCredentials(masterPwdGui.manualPwdDialog.getText(), masterPwdGui.confirmPwdDialog.getText(), masterPwdGui.sKeyPwdDialog.getText())) {
+                    if (!Authentication.validateCredentials(masterPwdGui.manualPwdDField.getText(), masterPwdGui.confirmPwdField.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing when clicking OK
                         event.consume();
@@ -60,9 +60,9 @@ public class SceneHandler {
         masterPwdGui.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-
-                    Secrets.setMasterPassword(masterPwdGui.manualPwdDialog, masterPwdGui.sKeyPwdDialog);
+                    Secrets.setManualPassword(masterPwdGui.manualPwdDField.getText().toCharArray());
                     Global.setPasswordFilePath(fileNameField.getText());
+                    System.out.println(Global.getPasswordFilePath());
                     newScene(btn);
 
                     Global.getRecentFilesData().add(Global.getPasswordFilePath());

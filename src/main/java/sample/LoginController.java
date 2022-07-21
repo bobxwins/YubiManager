@@ -55,16 +55,13 @@ public class LoginController {
     }
 
     @FXML
-    void newYbkPwd(ActionEvent event) throws Exception {
-        HardwareKeyHandler.cmdGenerateHwkPwd();
-
-
+    void generateChallengeResponse(ActionEvent event) throws Exception {
+        HardwareKeyHandler.cmdGenerateCR();
     }
 
     @FXML
-    void setYbkPwd(ActionEvent event) throws Exception {
-        HardwareKeyHandler.cmdConfigureHwkPwd();
-
+    void configureChallengeResponse(ActionEvent event) throws Exception {
+        HardwareKeyHandler.cmdConfigureCR();
     }
 
     @FXML
@@ -93,11 +90,13 @@ public class LoginController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
 
-                Global.getRecentFilesData().remove(selectedItem);
+
                 //updates the recentFile text file, after deleting the selected table item
                 File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
                 FileHandler fileHandler = new FileHandler();
                 fileHandler.deleteDir(deleteFile);
+
+                Global.getRecentFilesData().remove(selectedItem);
                 SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
             }
         }

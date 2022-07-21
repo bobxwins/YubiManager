@@ -27,15 +27,16 @@ public class FileHandler {
     }
 
     public static boolean dbExists() throws Exception {
+
         Path path = Paths.get(Global.getPasswordFilePath());
         if (!Files.exists(path)) {
             FileUtils.write(Global.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
-            FileProtector.createKey(Secrets.getMasterPassword());
+            //FileProtector.createKey();
             FileProtector fileProtector = new FileProtector();
             ObservableList<Entry> entryData = FXCollections.observableArrayList();
             entryData.add(new Entry("", "", "",
                     "", ""));
-            ObservableList observableList = FXCollections.emptyObservableList();
+
             TimerSpecs defaultTimer = new TimerSpecs(8,false);
             TimerSpecs.setTimerSpecs(defaultTimer);
             fileProtector.encryption(entryData, defaultTimer);

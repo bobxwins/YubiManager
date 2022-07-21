@@ -177,10 +177,9 @@ public   class PasswordUtils {
 
     }
     public void updateMasterPwd (PasswordField manualPwdDialog, PasswordField sKeyPwdDialog) throws  Exception {
-        Secrets.setMasterPassword(manualPwdDialog, sKeyPwdDialog);
-        FileProtector.createKey(Secrets.getMasterPassword());
+        Secrets.setManualPassword(manualPwdDialog.getText().toCharArray());
+        FileProtector.createKey();
     }
-
 
 }
 

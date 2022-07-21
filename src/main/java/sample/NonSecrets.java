@@ -8,19 +8,16 @@ public class NonSecrets implements Serializable {
 
     byte[] generatedIV, salt;
     int iterationCount, keyLength;
-    String secureRandomAlgorithm,provider,secretKeyAlgorithm,algorithmModePadding,header;
+    String header,challenge;
 
     NonSecrets(byte[] IVBytes, byte[] saltByte, int iterationInt, int keyInt,
-               String sRAString, String keyAlgorithmString, String providerString, String algoModePadString, String headerString) {
+               String headerString,String challengeString) {
         this.generatedIV = IVBytes;
         this.salt = saltByte;
         this.iterationCount = iterationInt;
         this.keyLength = keyInt;
-        this.secureRandomAlgorithm = sRAString;
-        this.secretKeyAlgorithm = keyAlgorithmString;
-        this.provider = providerString;
-        this.algorithmModePadding = algoModePadString;
         this.header=headerString;
+        this.challenge=challengeString;
 
     }
     NonSecrets() {
@@ -47,22 +44,16 @@ public class NonSecrets implements Serializable {
 
         return keyLength;
     }
+    public String getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge( String challenge) {
+        this.challenge = challenge;
+    }
 
     public byte[] getGeneratedIV() {
         return generatedIV;
-    }
-
-    public String getSecureRandomAlgorithm() {
-        return secureRandomAlgorithm;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-    public String getSecretKeyAlgorithm(){return secretKeyAlgorithm;}
-
-    public String getAlgorithmModePadding() {
-        return algorithmModePadding;
     }
 
 }
