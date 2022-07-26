@@ -45,7 +45,7 @@ public class EntryController implements Serializable   {
     @FXML private Button btnEnterMenu;
     @FXML private Button btnEditOK;
     @FXML private Button btnReturn;
-    @FXML private Button btnSignOut;
+    @FXML private Button btnLockDB;
     @FXML private Button btnPwdGenerator;
     @FXML private Button toggleButton;
     @FXML private Button togBtnPwd;
@@ -82,6 +82,19 @@ public class EntryController implements Serializable   {
     VisibilityHandler visibilityHandler = new VisibilityHandler ();
     Slider sliderPwdGenerator = new Slider(4, 999, 1);
     Spinner<Integer> spinnerPwdGenerator;
+    @FXML
+    void generateChallengeResponse(ActionEvent event) throws Exception {
+        HardwareKeyHandler.cmdGenerateCR();
+        Thread.sleep(1900);
+        save();
+    }
+
+    @FXML
+    void configureChallengeResponse(ActionEvent event) throws Exception {
+        HardwareKeyHandler.cmdConfigureCR();
+        Thread.sleep(1900);
+        save();
+    }
 
     @FXML
     void copyPwd(ActionEvent event) throws Exception
@@ -190,11 +203,11 @@ public class EntryController implements Serializable   {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             entryData.remove(entryData);
-            File deleteFile = new File(Global.getPasswordFilePath()).getAbsoluteFile().getParentFile();
+            File deleteFile = new File(Files.getPasswordFilePath()).getAbsoluteFile().getParentFile();
             FileHandler fileHandler= new FileHandler();
             fileHandler.deleteDir(deleteFile);
-            SerializedObject.writeArrayList(Global.getRecentFilesData(), Paths.get(Global.getRecentFilesDir()));
-            SceneHandler.stageFullScreen(btnSignOut);
+            SerializedObject.writeArrayList(Files.getRecentFilesData(), Paths.get(Files.getRecentFilesDir()));
+            SceneHandler.stageFullScreen(btnLockDB);
         }
 
     }
@@ -257,8 +270,8 @@ public class EntryController implements Serializable   {
         {
             return;
         }
-        String pwdFPNewValue= Global.getPasswordFilePath();
-        String directoryNewValue =  Global.getSelectedDirectoryPath();
+        String pwdFPNewValue= Files.getPasswordFilePath();
+        String directoryNewValue =  Files.getSelectedDirectoryPath();
        //the new values of passwordFilePath and selectedDirectoryPath will be lost upon loading the FXML login "login.fxml"
         //so to keep the new values of both Strings,I create 2 new strings that store the values of the new paths,
         //load login.FXML, then set the values of the static path Strings to the new values.
@@ -273,8 +286,8 @@ public class EntryController implements Serializable   {
            stage.setScene(scene);
            stage.show();
 
-        Global.setPasswordFilePath( pwdFPNewValue);
-        Global.setSelectedDirectoryPath(  directoryNewValue);
+        Files.setPasswordFilePath( pwdFPNewValue);
+        Files.setSelectedDirectoryPath(  directoryNewValue);
     }
 
 
@@ -296,8 +309,8 @@ public class EntryController implements Serializable   {
 
 
     @FXML
-    void signOut(ActionEvent event) throws Exception {
-        SceneHandler.stageFullScreen(btnSignOut);
+    void lockDB(ActionEvent event) throws Exception {
+        SceneHandler.stageFullScreen(btnLockDB);
     }
 
    void save () throws Exception {
@@ -408,7 +421,7 @@ public class EntryController implements Serializable   {
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
    TimerHandler.timerDialog(entryData);
-   TimerHandler.timerCountDown(btnSignOut,anchorPane);
+   TimerHandler.timerCountDown(btnLockDB,anchorPane);
     }
 
    static String hidePwd = "";
@@ -460,7 +473,7 @@ public class EntryController implements Serializable   {
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
             Authentication authentication = new Authentication();
             entryData.addAll(authentication.authenticated());
-            TimerHandler.timerCountDown(btnSignOut,anchorPane);
+            TimerHandler.timerCountDown(btnLockDB,anchorPane);
             entryTable.setItems(entryData);
             searchFilter();
             btnEnterMenu.setOnAction(e -> {

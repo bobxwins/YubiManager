@@ -3,12 +3,10 @@ import javax.crypto.spec.IvParameterSpec;
 
 import javax.crypto.*;
 
-import javafx.scene.input.Clipboard;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 
 
-import java.awt.*;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.util.Base64;
@@ -42,7 +40,7 @@ public class DecryptFile  {
 
     }
     public static void restoreKey () throws Exception {
-        byte [] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+        byte [] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
         Database dbSecrets = (Database) SerializedObject.readDB(input);
         NonSecrets nonSecrets= dbSecrets.getNonSecrets();
         SymmetricKey.setSecretKey(Secrets.getMasterPassword(),nonSecrets.getStoredSalt()
@@ -52,13 +50,13 @@ public class DecryptFile  {
     }
 
      public static char [] recreateResponse () throws  Exception {
-         byte [] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+         byte [] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
          Database dbSecrets = (Database) SerializedObject.readDB(input);
          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
          HardwareKeyHandler.cmdResponse(nonSecrets.getChallenge());
-         Thread.sleep(1900);
-         String clipBoard = Hex.toHexString(Clipboard.getSystemClipboard().getString().getBytes(StandardCharsets.UTF_8));
-         char [] response = clipBoard.toCharArray();
-         return response;
+         System.out.println("the output IS " + HardwareKeyHandler.getOutput());
+         String response = Hex.toHexString(HardwareKeyHandler.output.getBytes(StandardCharsets.UTF_8));
+         char [] responseCharArr = response.toCharArray();
+         return responseCharArr;
      }
 }

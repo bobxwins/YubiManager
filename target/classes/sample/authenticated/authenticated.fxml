@@ -18,20 +18,12 @@
                            <items>
                               <MenuItem fx:id="menuNewDB" mnemonicParsing="false" onAction="#newDB" text="New Database" />
                               <MenuItem fx:id="menuOpenDB" mnemonicParsing="false" onAction="#openDB" text="Open Database" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="menuItemTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="btnSave" mnemonicParsing="false" onAction="#saveEntry" text="Save Database" />
                               <MenuItem fx:id="deleteDBMenu" mnemonicParsing="false" onAction="#deleteDatabase" text="Delete Database" />
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                              <MenuItem fx:id="menuExit" mnemonicParsing="false" text="Exit" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Entries">
                            <items>
-                              <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="updateMPMenu" mnemonicParsing="false" onAction="#updateMasterPwd" text="Update Master Password" />
                               <MenuItem mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                               <MenuItem mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
                               <MenuItem fx:id="ctxmenuDeleteEntry" mnemonicParsing="false" onAction="#deleteEntry" text="Delete Entry..." />
@@ -40,6 +32,20 @@
                   <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password" />
                            </items>
                         </Menu>
+            <Menu mnemonicParsing="false" text="Tools">
+              <items>
+                  <MenuItem fx:id="updateMPMenu" mnemonicParsing="false" onAction="#updateMasterPwd" text="Update Master Password" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="menuGenerateCR" mnemonicParsing="false" onAction="#generateChallengeResponse" text="Generate challenge-response credential" />
+                  <MenuItem fx:id="menuConfigureeCR" mnemonicParsing="false" onAction="#configureChallengeResponse" text="Configure challenge-response credential" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="menuItemTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#lockDB" text="Lock database" />
+              </items>
+            </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                            <items>
                               <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
@@ -111,7 +117,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="btnSignOut" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#signOut" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Sign Out">
+            <Button fx:id="btnLockDB" contentDisplay="GRAPHIC_ONLY" layoutX="100.0" layoutY="10.0" mnemonicParsing="false" onAction="#lockDB" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Lock database">
                <graphic>
                   <ImageView fx:id="imgLock" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -186,10 +192,11 @@
                                   <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editEntry" text="Edit Entry..." />
                                     <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deleteEntry" text="Delete Entry..." />
                                     <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#entryMenu" text="New Entry..." />
-                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#generatePwd" text="Calculate Password strength..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
                         <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username..." />
-                        <MenuItem fx:id="ctxSetTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer..." />
                                 </items>
                               </ContextMenu>
                            </contextMenu>

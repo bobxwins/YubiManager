@@ -83,7 +83,7 @@
          </contextMenu>
       </TableView>
       <Button fx:id="btnRecentDB" layoutX="269.0" layoutY="465.0" mnemonicParsing="false" onAction="#openDB" prefHeight="31.0" prefWidth="606.0" text="Open Existing Database" />
-      <Button fx:id="btnGenYbkPwd" layoutX="269.0" layoutY="507.0" mnemonicParsing="false" onAction="#generateChallengeResponse" prefHeight="31.0" prefWidth="296.0" text="Generate hardware key secret key" />
-      <Button fx:id="btnsetYbkPwd" layoutX="570.0" layoutY="507.0" mnemonicParsing="false" onAction="#configureChallengeResponse" prefHeight="31.0" prefWidth="304.0" text="Manually set hardware key secret key" />
+      <Button fx:id="btnGenYbkPwd" layoutX="269.0" layoutY="507.0" mnemonicParsing="false" onAction="#generateChallengeResponse" prefHeight="31.0" prefWidth="296.0" text="Generate challenge-response credential" />
+      <Button fx:id="btnsetYbkPwd" layoutX="570.0" layoutY="507.0" mnemonicParsing="false" onAction="#configureChallengeResponse" prefHeight="31.0" prefWidth="304.0" text="Configure challenge-response credential" />
                </children>
             </AnchorPane>

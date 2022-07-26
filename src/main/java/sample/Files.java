@@ -3,15 +3,9 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-
-import java.nio.charset.StandardCharsets;
 
 
-public final class Global {
-
+public final class Files {
 
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
 
@@ -21,7 +15,7 @@ public final class Global {
     private static String RECENTFILESDIR;
 
     private  static Label labelRecentFile = new Label();
-    private Global(){}  // Private constructor to prevent instantiation
+    private Files(){}  // Private constructor to prevent instantiation
 
     public static String getPasswordFilePath() {
         return passwordFilePath;
@@ -29,14 +23,14 @@ public final class Global {
 
     public static void setPasswordFilePath(String passwordFilePath) {
 
-        Global.passwordFilePath = passwordFilePath;
+        Files.passwordFilePath = passwordFilePath;
         labelRecentFile.setText(passwordFilePath );
     }
     public static String getSelectedDirectoryPath() {
         return SELECTEDDIRECTORYPATH;
     }
     public static void setSelectedDirectoryPath(String selectedDirectoryPath) {
-        Global.SELECTEDDIRECTORYPATH = selectedDirectoryPath;
+        Files.SELECTEDDIRECTORYPATH = selectedDirectoryPath;
     }
 // save as
     public static ObservableList<String> getRecentFilesData() {

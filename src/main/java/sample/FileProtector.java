@@ -5,7 +5,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.*;
 
 import javafx.collections.ObservableList;
-import javafx.scene.input.Clipboard;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -31,7 +30,7 @@ public class FileProtector {
     static int iterationCount = 150000;
     static int keyLength = 256;
     static byte[] generatedIV = new byte[16]; // IV is always 128 bits
-    static byte[] challenge = new byte[20];
+    static byte[] challenge = new byte[40];
     static SecureRandom secureRandom ;
 
     public void encryption(ObservableList observableList, Object timerSpecs) {
@@ -58,7 +57,7 @@ public class FileProtector {
             nonSecrets.setChallenge(Hex.toHexString(challenge));
             database.setNonSecrets(nonSecrets);
             byte[] dbSerialized = SerializedObject.serializeDB(database);
-            FileUtils.write(Global.getPasswordFilePath(), dbSerialized);
+            FileUtils.write(Files.getPasswordFilePath(), dbSerialized);
 
         } catch (Exception e) {
 
@@ -72,9 +71,10 @@ public class FileProtector {
         secureRandom.nextBytes(challenge);
         secureRandom.nextBytes(salt);
         HardwareKeyHandler.cmdResponse(Hex.toHexString(challenge));
-        Thread.sleep(1900);
+       // Thread.sleep(1900);
         // the CMD process needs to be completed before the output can be used as a String
-        String response = Hex.toHexString(Clipboard.getSystemClipboard().getString().getBytes(StandardCharsets.UTF_8));
+        String response = Hex.toHexString(HardwareKeyHandler.output.getBytes(StandardCharsets.UTF_8));
+     //   String response = Hex.toHexString(Clipboard.getSystemClipboard().getString().getBytes(StandardCharsets.UTF_8));
         Secrets.setMasterPassword(Secrets.getManualPassword(),response.toCharArray());
         SymmetricKey.setSecretKey(Secrets.getMasterPassword(), salt, iterationCount, keyLength,
                 secretKeyAlgorithm, provider);

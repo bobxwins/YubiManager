@@ -32,7 +32,7 @@ import javax.crypto.spec.SecretKeySpec;
          // only if the database exists and if the user is authenticated
          if (FileHandler.dbExists()) {
              DecryptFile decryptFile = new DecryptFile();
-             byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+             byte[] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
              Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
              TimerSpecs storedTimerSpecs = decryptedSecrets.getTimerSpecs();
              TimerSpecs.setTimerSpecs(storedTimerSpecs);
@@ -45,8 +45,8 @@ import javax.crypto.spec.SecretKeySpec;
     public static String generateHmac(String cipherText, SecretKey key ) throws Exception {
         byte [] cipherBytes = cipherText.getBytes(StandardCharsets.UTF_8);
         String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
-        SecretKeySpec secretKeySpec = new SecretKeySpec(encodedKey.getBytes()," HMACSHA512");
-        Mac mac = Mac.getInstance("HMACSHA512");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(encodedKey.getBytes()," HMACSHA1");
+        Mac mac = Mac.getInstance("HMACSHA1");
         mac.init(secretKeySpec);
         mac.update(cipherBytes);
         byte[] digest = mac.doFinal(cipherBytes);
@@ -55,13 +55,12 @@ import javax.crypto.spec.SecretKeySpec;
     }
 
   public static boolean verifyHmac( String generatedHeader) {
-      byte [] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+      byte [] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
       Database dbSecrets = (Database) SerializedObject.readDB(input);
       NonSecrets nonSecrets= dbSecrets.getNonSecrets();
       String storedHeader = nonSecrets.getHeader();
       if (storedHeader.equals(generatedHeader))
       {
-          System.out.println("the header is :"+ storedHeader);
           return true;
       }
         return false;
@@ -119,7 +118,7 @@ import javax.crypto.spec.SecretKeySpec;
 
                      try {
                          Secrets.setMasterPassword(manualPwdField.getText().toCharArray(), responseField.getText().toCharArray());
-                         byte[] input = FileUtils.readAllBytes(Global.getPasswordFilePath());
+                         byte[] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
 
                          Database dbSecrets = (Database) SerializedObject.readDB(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();

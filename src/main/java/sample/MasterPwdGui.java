@@ -79,17 +79,17 @@ public class MasterPwdGui {
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 10, 0, 10));
 
-        manualPwdDField.setPromptText("Manual Password");
+        manualPwdDField.setPromptText("Enter Password...");
 
-        confirmPwdField.setPromptText("Confirm manual Password");
+        confirmPwdField.setPromptText("Confirm Password...");
 
-        responseField.setDisable(true); // Prevents the user from accidentally typing in the responseField
-        responseField.setPromptText("Hardware Key response");
+      //  responseField.setDisable(true); // Prevents the user from accidentally typing in the responseField
+      //  responseField.setPromptText("Hardware Key response");
 
-        grid.add(new Label("Manual Password:"), 0, 1);
+        grid.add(new Label("Enter Password:"), 0, 1);
         grid.add(manualPwdDField, 1, 1);
 
-        grid.add(new Label("Confirm manual Password:"), 0, 2);
+        grid.add(new Label("Confirm Password:"), 0, 2);
         grid.add(confirmPwdField, 1, 2);
 
         return grid;

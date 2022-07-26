@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import java.nio.file.Files;
+
 import java.nio.file.Paths;
 
 public class TimerHandler {
@@ -25,7 +25,7 @@ public class TimerHandler {
 
     public static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
 
-      if(!Files.exists(Paths.get(Global.getPasswordFilePath())))
+      if(!java.nio.file.Files.exists(Paths.get(Files.getPasswordFilePath())))
         {
             return;    }
 
@@ -105,7 +105,7 @@ public class TimerHandler {
         checkBox = new CheckBox("Seconds of inactivity database will be locked in: ");
         timerSpinner = (Spinner<Integer>) new Spinner(8, 999, 15);
 
-        if(Files.exists(Paths.get(Global.getPasswordFilePath()))) {
+        if(java.nio.file.Files.exists(Paths.get(Files.getPasswordFilePath()))) {
           TimerSpecs storedTimerSpecs =  TimerSpecs.getTimerSpecs() ;
             checkBox.setSelected(storedTimerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(storedTimerSpecs.getTimer());

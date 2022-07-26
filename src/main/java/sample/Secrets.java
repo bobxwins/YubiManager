@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Secrets implements Serializable {
     public Secrets(){}
    // private static final long serialVersionUID = 6529685098267757690L;
-    private static String CONFIGUREHWKPWD;
+    private static byte [] CONFIGUREHWKPWD;
     private static char[] CONCATENATEDPWDS;
     private static char[] MANUALPWD;
     private TimerSpecs timerSpecs;
@@ -25,11 +25,11 @@ public class Secrets implements Serializable {
         this.entry = new ArrayList<>(observableList);
     }
 
-    public static String getConfigureHwkPwd() {
+    public static byte [] getConfigureHwkPwd() {
         return CONFIGUREHWKPWD;
     }
 
-    public static void setConfigureHwPwd(String configureHwPwdString) {
+    public static void setConfigureHwPwd(byte [] configureHwPwdString) {
         Secrets.CONFIGUREHWKPWD = configureHwPwdString;
     }
 
