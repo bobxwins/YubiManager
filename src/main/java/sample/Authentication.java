@@ -32,8 +32,8 @@ import javax.crypto.spec.SecretKeySpec;
          // only if the database exists and if the user is authenticated
          if (FileHandler.dbExists()) {
              DecryptFile decryptFile = new DecryptFile();
-             byte[] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
-             Secrets decryptedSecrets = SerializedObject.readSecrets(decryptFile.Decryption(input));
+             byte[] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
+             Secrets decryptedSecrets = (Secrets) Serialization.readSerializedObj(decryptFile.Decryption(input));
              TimerSpecs storedTimerSpecs = decryptedSecrets.getTimerSpecs();
              TimerSpecs.setTimerSpecs(storedTimerSpecs);
              ObservableList<Entry> observableList = FXCollections.observableList(decryptedSecrets.getEntry());
@@ -54,12 +54,12 @@ import javax.crypto.spec.SecretKeySpec;
         return  encoded;
     }
 
-  public static boolean verifyHmac( String generatedHeader) {
-      byte [] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
-      Database dbSecrets = (Database) SerializedObject.readDB(input);
+  public static boolean verifyHmac( String generatedMacTag) {
+      byte [] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
+      Database dbSecrets = (Database) Serialization.readSerializedObj(input);
       NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-      String storedHeader = nonSecrets.getHeader();
-      if (storedHeader.equals(generatedHeader))
+      String storedMacTag = nonSecrets.getMacTag();
+      if (storedMacTag.equals(generatedMacTag))
       {
           return true;
       }
@@ -118,17 +118,16 @@ import javax.crypto.spec.SecretKeySpec;
 
                      try {
                          Secrets.setMasterPassword(manualPwdField.getText().toCharArray(), responseField.getText().toCharArray());
-                         byte[] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
+                         byte[] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
 
-                         Database dbSecrets = (Database) SerializedObject.readDB(input);
+                         Database dbSecrets = (Database) Serialization.readSerializedObj(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
                          DecryptFile.restoreKey();
 
-                         String generatedHeader = generateHmac(dbSecrets.getCipherText(),SymmetricKey.getSecretKey());
-                         nonSecrets.setHeader(generatedHeader);
+                         String generatedMacTag = generateHmac(nonSecrets.getCipherText(),SymmetricKey.getSecretKey());
+                         nonSecrets.setMacTag(generatedMacTag);
 
-
-                         if (!verifyHmac(generatedHeader))
+                         if (!verifyHmac(generatedMacTag))
                          {
                              Alert alert = new Alert(Alert.AlertType.ERROR);
                              alert.setTitle("Information Dialog");

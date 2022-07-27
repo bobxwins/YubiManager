@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 
-public class HardwareKeyHandler {
+public class HardwareKeyCmd {
 
     static String ykManPath  = "C:/Program Files/Yubico/YubiKey Manager";
     // Folder path to the application YubiKey Manager app
@@ -35,7 +35,7 @@ public class HardwareKeyHandler {
         return output;
     }
     static void setOutput ( String outputString) {
-       HardwareKeyHandler.output = outputString;
+       HardwareKeyCmd.output = outputString;
     }
     public static void cmdGenerateCR()  {
         // 	Programs a challenge-response credential
@@ -104,8 +104,8 @@ public class HardwareKeyHandler {
     {
         TextInputDialog textDialog = new TextInputDialog();
         textDialog.setTitle("Configuring Hardware key");
-        textDialog.setHeaderText("Configure the Hardware key challenge response");
-        textDialog.setContentText("Enter a string to configure the Hardware key challenge response:");
+        textDialog.setHeaderText("Configure the Hardware key's challenge-response");
+        textDialog.setContentText("Enter a string to configure the Hardware key's challenge-response:");
         Optional<String> result = textDialog.showAndWait();
         byte[] resultBytes = result.get().getBytes(StandardCharsets.UTF_8);
         Secrets.setConfigureHwPwd(resultBytes);

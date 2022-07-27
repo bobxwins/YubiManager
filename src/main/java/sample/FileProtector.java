@@ -33,63 +33,37 @@ public class FileProtector {
     static byte[] challenge = new byte[40];
     static SecureRandom secureRandom ;
 
-    public void encryption(ObservableList observableList, Object timerSpecs) {
-
-        try {
+    public void encryption(ObservableList entry, TimerSpecs timerSpecs) throws Exception {
             createKey();
             secureRandom.nextBytes(generatedIV);
             Cipher cipher = Cipher.getInstance(transformationAlgorithm, provider);
             cipher.init(Cipher.ENCRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(generatedIV));
-
             Secrets secrets = new Secrets();
-            byte[] inputSecrets = SerializedObject.serializeDB(databaseSecrets(secrets, observableList, timerSpecs));
-
-            byte[] outputSecrets;
-
-            Database database = new Database();
-
-            outputSecrets = cipher.doFinal(inputSecrets);
-            String encoded = Base64.getEncoder().encodeToString(outputSecrets);
-            database.setCipherText(encoded);
-            String header = Authentication.generateHmac(database.getCipherText(), SymmetricKey.getSecretKey());
+            secrets.setTimerSpecs(timerSpecs);
+            secrets.setEntry(entry);
+            byte[] plainText = Serialization.entrySerialize(secrets);
+            byte[] cipherText = cipher.doFinal(plainText);
+            String encodedCipherText = Base64.getEncoder().encodeToString(cipherText);
+            String MacTag = Authentication.generateHmac(encodedCipherText, SymmetricKey.getSecretKey());
+            String challengeString= Hex.toHexString(challenge);
             NonSecrets nonSecrets = new NonSecrets(generatedIV, salt, iterationCount, keyLength,
-                     header,new String(challenge));
-            nonSecrets.setChallenge(Hex.toHexString(challenge));
+                    MacTag,challengeString,encodedCipherText);
+            Database database = new Database();
             database.setNonSecrets(nonSecrets);
-            byte[] dbSerialized = SerializedObject.serializeDB(database);
-            FileUtils.write(Files.getPasswordFilePath(), dbSerialized);
-
-        } catch (Exception e) {
-
-        }
+            byte[] dbSerialized = Serialization.entrySerialize(database);// Both the secrets and non-secrets objects are stored in the same file
+            FileUtils.write(FilePath.getPasswordFilePath(), dbSerialized);
     }
 
 
     public static void createKey() throws Exception {
-
         secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
         secureRandom.nextBytes(challenge);
         secureRandom.nextBytes(salt);
-        HardwareKeyHandler.cmdResponse(Hex.toHexString(challenge));
-       // Thread.sleep(1900);
-        // the CMD process needs to be completed before the output can be used as a String
-        String response = Hex.toHexString(HardwareKeyHandler.output.getBytes(StandardCharsets.UTF_8));
-     //   String response = Hex.toHexString(Clipboard.getSystemClipboard().getString().getBytes(StandardCharsets.UTF_8));
+        HardwareKeyCmd.cmdResponse(Hex.toHexString(challenge));
+        String response = Hex.toHexString(HardwareKeyCmd.output.getBytes(StandardCharsets.UTF_8));
         Secrets.setMasterPassword(Secrets.getManualPassword(),response.toCharArray());
         SymmetricKey.setSecretKey(Secrets.getMasterPassword(), salt, iterationCount, keyLength,
                 secretKeyAlgorithm, provider);
     }
-
-    public Secrets databaseSecrets(Secrets secrets, ObservableList observableList, Object object) {
-
-        try {
-            secrets.setTimerSpecs((TimerSpecs) object);
-            secrets.setEntry(observableList);
-            return secrets;
-        } catch (Exception e) {
-        }
-        return null;
-    }
-
 
 }

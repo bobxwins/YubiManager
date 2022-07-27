@@ -4,37 +4,48 @@ import java.io.Serializable;
 
 
 public class NonSecrets implements Serializable {
-
+// Data that is not meant to concealed, but used to conceal other data sources
 
     byte[] generatedIV, salt;
     int iterationCount, keyLength;
-    String header,challenge;
+    String MacTag,challenge, cipherText;
 
     NonSecrets(byte[] IVBytes, byte[] saltByte, int iterationInt, int keyInt,
-               String headerString,String challengeString) {
+               String MacTagString,String challengeString, String cipherTextString) {
         this.generatedIV = IVBytes;
         this.salt = saltByte;
         this.iterationCount = iterationInt;
         this.keyLength = keyInt;
-        this.header=headerString;
+        this.MacTag =MacTagString;
         this.challenge=challengeString;
-
+        this.cipherText=cipherTextString;
     }
     NonSecrets() {
     }
 
-    public  String getHeader() {
-        return header;
+    public String getChallenge() {
+        return challenge;
     }
 
-    public void setHeader( String header) {
-        this.header = header;
-    }
-    public byte[] getStoredSalt() {
-        // used for decryption
-        return salt;
+    public void setChallenge( String challenge) {
+        this.challenge = challenge;
     }
 
+    public String getCipherText() {
+        return cipherText;
+    }
+
+    public byte[] getGeneratedIV() {
+        return generatedIV;
+    }
+
+    public  String getMacTag() {
+        return MacTag;
+    }
+
+    public void setMacTag(String macTag) {
+        this.MacTag = macTag;
+    }
     public int getIterationCount() {
 
         return iterationCount;
@@ -44,16 +55,11 @@ public class NonSecrets implements Serializable {
 
         return keyLength;
     }
-    public String getChallenge() {
-        return challenge;
+
+    public byte[] getStoredSalt() {
+        // used for decryption
+        return salt;
     }
 
-    public void setChallenge( String challenge) {
-        this.challenge = challenge;
-    }
-
-    public byte[] getGeneratedIV() {
-        return generatedIV;
-    }
 
 }

@@ -1,7 +1,6 @@
 
 package sample;
 
-import javafx.scene.control.PasswordField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -10,24 +9,19 @@ import java.security.SecureRandom;
 
 import static java.lang.Integer.parseInt;
 
-public   class PasswordUtils {
+public   class PasswordGenerator {
 
 
    private static char[] SYMBOLS = "+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
-
    private static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-    private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-
-  private  static char[] NUMBERS = "0123456789".toCharArray();
-   private static char[] ALL_CHARS ;
-  private  final static BigInteger GUESSAMOUNT = new BigInteger ("1000000000000"); // 10^12
- // private   static double BRUTEFORCETIMEGPU;
-  private  static double BRUTEFORCETIME;
-
-
+   private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+   private static char[] NUMBERS = "0123456789".toCharArray();
+   private static char[] ALL_CHARS;
+   private final static BigInteger GUESSAMOUNT = new BigInteger ("1000000000000"); // 10^12
+   private static double BRUTEFORCETIME;
    private static SecureRandom rand = new SecureRandom();
 
-    public static String generatePassword(int length) {
+   public static String generatePassword(int length) {
 // generates a random password
 
 
@@ -116,7 +110,7 @@ public   class PasswordUtils {
         return cardinality;
     }
 
-    public static void calcCrackingTime(Text textPwdQuality, Text textBruteForceTime,Text textCalcEntropy,String password)
+    public static void pwdBruteforceTime(Text textPwdQuality, Text textBruteForceTime, Text textCalcEntropy, String password)
     {
         double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
 
@@ -152,8 +146,6 @@ public   class PasswordUtils {
 
         }
 
-
-
         if (entropy>=128)
         {
             textPwdQuality.setFill(Color.GREEN);
@@ -175,10 +167,6 @@ public   class PasswordUtils {
                 "\nIn days: "+String.format(doubleFormat , BRUTEFORCETIME /3600/24)+" days"+
                 "\nIn years: "+String.format(doubleFormat , BRUTEFORCETIME /3600/24/365)+" years");
 
-    }
-    public void updateMasterPwd (PasswordField manualPwdDialog, PasswordField sKeyPwdDialog) throws  Exception {
-        Secrets.setManualPassword(manualPwdDialog.getText().toCharArray());
-        FileProtector.createKey();
     }
 
 }

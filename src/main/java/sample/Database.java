@@ -5,21 +5,14 @@ import java.io.Serializable;
 
 public class Database implements Serializable {
 
+    private static final long serialVersionUID = 42L;
+    // To ensure a consistent serialVersionUID value across different java compiler implementations,
+    // a serialVersionUID value is explicitly declared
     Database ( ) {
 
     }
     Secrets secrets;
-    String cipherText;
     NonSecrets nonSecrets;
-   // private static final long serialVersionUID = 6529685098267757690L;
-
-    public String getCipherText() {
-        return cipherText;
-    }
-
-    public void setCipherText(String cipherTextString) {
-        this.cipherText = cipherTextString;
-    }
 
     public Secrets getSecrets() {
         return secrets;

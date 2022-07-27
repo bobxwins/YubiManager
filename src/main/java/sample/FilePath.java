@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 
 
-public final class Files {
+public final class FilePath {
 
     private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
 
@@ -15,7 +15,7 @@ public final class Files {
     private static String RECENTFILESDIR;
 
     private  static Label labelRecentFile = new Label();
-    private Files(){}  // Private constructor to prevent instantiation
+    private FilePath(){}  // Private constructor to prevent instantiation
 
     public static String getPasswordFilePath() {
         return passwordFilePath;
@@ -23,14 +23,14 @@ public final class Files {
 
     public static void setPasswordFilePath(String passwordFilePath) {
 
-        Files.passwordFilePath = passwordFilePath;
+        FilePath.passwordFilePath = passwordFilePath;
         labelRecentFile.setText(passwordFilePath );
     }
     public static String getSelectedDirectoryPath() {
         return SELECTEDDIRECTORYPATH;
     }
     public static void setSelectedDirectoryPath(String selectedDirectoryPath) {
-        Files.SELECTEDDIRECTORYPATH = selectedDirectoryPath;
+        FilePath.SELECTEDDIRECTORYPATH = selectedDirectoryPath;
     }
 // save as
     public static ObservableList<String> getRecentFilesData() {

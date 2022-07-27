@@ -56,12 +56,12 @@ public class LoginController {
 
     @FXML
     void generateChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyHandler.cmdGenerateCR();
+        HardwareKeyCmd.cmdGenerateCR();
     }
 
     @FXML
     void configureChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyHandler.cmdConfigureCR();
+        HardwareKeyCmd.cmdConfigureCR();
     }
 
     @FXML
@@ -92,12 +92,12 @@ public class LoginController {
 
 
                 //updates the recentFile text file, after deleting the selected table item
-                File deleteFile = new File(Files.getPasswordFilePath()).getAbsoluteFile().getParentFile();
+                File deleteFile = new File(FilePath.getPasswordFilePath()).getAbsoluteFile().getParentFile();
                 FileHandler fileHandler = new FileHandler();
                 fileHandler.deleteDir(deleteFile);
 
-                Files.getRecentFilesData().remove(selectedItem);
-                SerializedObject.writeArrayList(Files.getRecentFilesData(), Paths.get(Files.getRecentFilesDir()));
+                FilePath.getRecentFilesData().remove(selectedItem);
+                Serialization.recentFilesSerialize(FilePath.getRecentFilesData(), Paths.get(FilePath.getRecentFilesDir()));
             }
         }
 
@@ -117,7 +117,7 @@ public class LoginController {
     @FXML
     private void initialize() throws Exception {
         recentFilesTable.setPlaceholder(new Label("0 databases available. Click the Create New database button to get started!"));
-        recentFilesTable.setItems(Files.getRecentFilesData());
+        recentFilesTable.setItems(FilePath.getRecentFilesData());
         recentFilesTable.getItems().clear();
        FileHandler.recentFileExists(recentFilesTable);
         recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
@@ -127,8 +127,8 @@ public class LoginController {
                         String selectedItem = recentFilesTable.getSelectionModel().getSelectedItem();
 
                         if (selectedItem != null) {
-                            Files.setPasswordFilePath(selectedItem);
-                            Files.setSelectedDirectoryPath(Paths.get(Files.getPasswordFilePath()).getParent() + "\\");
+                            FilePath.setPasswordFilePath(selectedItem);
+                            FilePath.setSelectedDirectoryPath(Paths.get(FilePath.getPasswordFilePath()).getParent() + "\\");
                             recentFilesTable.setOnMouseClicked((MouseEvent event) -> {
                                 if (selectedItem != null && event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                                     // Event that listens to if the mouse has been double clicked

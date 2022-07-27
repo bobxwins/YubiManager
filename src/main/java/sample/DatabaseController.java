@@ -35,7 +35,7 @@ import java.util.Optional;
 import static java.lang.Integer.parseInt;
 
 
-public class EntryController implements Serializable   {
+public class DatabaseController implements Serializable   {
     @FXML private AnchorPane anchorPane;
     @FXML private AnchorPane apBottomTable;
     @FXML private AnchorPane apEntryMenu;
@@ -78,20 +78,20 @@ public class EntryController implements Serializable   {
 
     static int pwdLength;
   //  private static final long serialVersionUID = 6529685098267757690L;
-    private ObservableList<Entry> entryData = FXCollections.observableArrayList();
+    private ObservableList<Entry> entryList = FXCollections.observableArrayList();
     VisibilityHandler visibilityHandler = new VisibilityHandler ();
     Slider sliderPwdGenerator = new Slider(4, 999, 1);
     Spinner<Integer> spinnerPwdGenerator;
     @FXML
     void generateChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyHandler.cmdGenerateCR();
+        HardwareKeyCmd.cmdGenerateCR();
         Thread.sleep(1900);
         save();
     }
 
     @FXML
     void configureChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyHandler.cmdConfigureCR();
+        HardwareKeyCmd.cmdConfigureCR();
         Thread.sleep(1900);
         save();
     }
@@ -145,7 +145,7 @@ public class EntryController implements Serializable   {
 
     @FXML
         void createEntry (ActionEvent event) throws Exception {
-            entryData.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+            entryList.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
             VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
             tfTitel.setText("");
             tfUsername.setText("");
@@ -173,7 +173,7 @@ public class EntryController implements Serializable   {
 
             btnEditOK.setOnAction(e -> {
                 try{
-                    entryData.set(entryData.indexOf(selectedItem),selectedItem);
+                    entryList.set(entryList.indexOf(selectedItem),selectedItem);
                     selectedItem.setTitle( tfTitel.getText());
                     selectedItem.setUsername( tfUsername.getText());
                     selectedItem.setURL( tfURL.getText());
@@ -202,11 +202,11 @@ public class EntryController implements Serializable   {
         alert.setContentText("Are you sure you want to proceed?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            entryData.remove(entryData);
-            File deleteFile = new File(Files.getPasswordFilePath()).getAbsoluteFile().getParentFile();
+            entryList.remove(entryList);
+            File deleteFile = new File(FilePath.getPasswordFilePath()).getAbsoluteFile().getParentFile();
             FileHandler fileHandler= new FileHandler();
             fileHandler.deleteDir(deleteFile);
-            SerializedObject.writeArrayList(Files.getRecentFilesData(), Paths.get(Files.getRecentFilesDir()));
+            Serialization.recentFilesSerialize(FilePath.getRecentFilesData(), Paths.get(FilePath.getRecentFilesDir()));
             SceneHandler.stageFullScreen(btnLockDB);
         }
 
@@ -215,7 +215,7 @@ public class EntryController implements Serializable   {
     void deleteEntry(ActionEvent event) throws  Exception {
         Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            entryData.remove(selectedItem);
+            entryList.remove(selectedItem);
             save();
         }
 
@@ -238,21 +238,21 @@ public class EntryController implements Serializable   {
         apPwdGenerate.getChildren().addAll(spinnerPwdGenerator, sliderPwdGenerator);
         Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            entryData.set(entryData.indexOf(selectedItem), selectedItem);
+            entryList.set(entryList.indexOf(selectedItem), selectedItem);
             generatedPWDfield.setText(selectedItem.getPassword());
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
             entryTable.getSelectionModel().clearSelection();
         }
         else {
-            generatedPWDfield.setText(PasswordUtils.generatePassword(spinnerPwdGenerator.getValue()));
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            generatedPWDfield.setText(PasswordGenerator.generatePassword(spinnerPwdGenerator.getValue()));
+            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
         }
 
     }
 
     @FXML void menuRandomPwd (ActionEvent event)
     {
-        pfPwdField.setText(PasswordUtils.generatePassword(32));
+        pfPwdField.setText(PasswordGenerator.generatePassword(32));
     }
 
     @FXML
@@ -270,8 +270,8 @@ public class EntryController implements Serializable   {
         {
             return;
         }
-        String pwdFPNewValue= Files.getPasswordFilePath();
-        String directoryNewValue =  Files.getSelectedDirectoryPath();
+        String pwdFPNewValue= FilePath.getPasswordFilePath();
+        String directoryNewValue =  FilePath.getSelectedDirectoryPath();
        //the new values of passwordFilePath and selectedDirectoryPath will be lost upon loading the FXML login "login.fxml"
         //so to keep the new values of both Strings,I create 2 new strings that store the values of the new paths,
         //load login.FXML, then set the values of the static path Strings to the new values.
@@ -286,8 +286,8 @@ public class EntryController implements Serializable   {
            stage.setScene(scene);
            stage.show();
 
-        Files.setPasswordFilePath( pwdFPNewValue);
-        Files.setSelectedDirectoryPath(  directoryNewValue);
+        FilePath.setPasswordFilePath( pwdFPNewValue);
+        FilePath.setSelectedDirectoryPath(  directoryNewValue);
     }
 
 
@@ -316,9 +316,9 @@ public class EntryController implements Serializable   {
    void save () throws Exception {
     FileProtector fileProtector = new FileProtector();
     Secrets secrets = new Secrets();
-    secrets.setEntry(entryData);
+    secrets.setEntry(entryList);
     secrets.setTimerSpecs(TimerSpecs.getTimerSpecs());
-    fileProtector.encryption(entryData,secrets.getTimerSpecs());
+    fileProtector.encryption(entryList,secrets.getTimerSpecs());
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
     visibilityHandler.setSelectedPassword(pfPwdField.getText());
@@ -357,14 +357,14 @@ public class EntryController implements Serializable   {
         spinnerPwdGenerator.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
         spinnerPwdGenerator.getEditor().setOnKeyReleased(e ->
             {
-                generatedPWDfield.setText(PasswordUtils.generatePassword(parseInt(newValue)));
+                generatedPWDfield.setText(PasswordGenerator.generatePassword(parseInt(newValue)));
 
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+                PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
             });
 
-            generatedPWDfield.setText(PasswordUtils.generatePassword(parseInt(newValue)));
+            generatedPWDfield.setText(PasswordGenerator.generatePassword(parseInt(newValue)));
 
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
+            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
             sliderPwdGenerator.setValue(parseInt(newValue));
 
         });
@@ -394,9 +394,9 @@ public class EntryController implements Serializable   {
             try {
                 pwdLength = spinnerPwdGenerator.getValue();
 
-                generatedPWDfield.setText(PasswordUtils.generatePassword(pwdLength));
+                generatedPWDfield.setText(PasswordGenerator.generatePassword(pwdLength));
 
-                PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+                PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
 
             } catch (Exception E) {
 
@@ -407,7 +407,7 @@ public class EntryController implements Serializable   {
     void textFieldPwdGenerator() {
         generatedPWDfield.textProperty().addListener((observable, oldValue, newValue) -> {
           //  System.out.println("textfield changed from " + oldValue + " to " + newValue);
-            PasswordUtils.calcCrackingTime(textGenePwdQuality, textBruteForceTime, textEntropy,  newValue);
+            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  newValue);
         });
     }
 
@@ -420,7 +420,7 @@ public class EntryController implements Serializable   {
     }
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
-   TimerHandler.timerDialog(entryData);
+   TimerHandler.timerDialog(entryList);
    TimerHandler.timerCountDown(btnLockDB,anchorPane);
     }
 
@@ -472,9 +472,9 @@ public class EntryController implements Serializable   {
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
             Authentication authentication = new Authentication();
-            entryData.addAll(authentication.authenticated());
+            entryList.addAll(authentication.authenticated());
             TimerHandler.timerCountDown(btnLockDB,anchorPane);
-            entryTable.setItems(entryData);
+            entryTable.setItems(entryList);
             searchFilter();
             btnEnterMenu.setOnAction(e -> {
                 try {

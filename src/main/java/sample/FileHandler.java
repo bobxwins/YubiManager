@@ -8,22 +8,25 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 public class FileHandler {
 
 
     public static void recentFileExists (TableView<String> recentFilesTable) throws Exception {
-        Path path = Paths.get(Files.getRecentFilesDir());
+        Path path = Paths.get(FilePath.getRecentFilesDir());
         if (java.nio.file.Files.exists(path)) {
-            Files.getRecentFilesData().addAll(SerializedObject.readFileObservableList(FileUtils.readAllBytes(Files.getRecentFilesDir())));
+           byte [] input= FileUtils.readAllBytes(FilePath.getRecentFilesDir());
+           Object serializedOBJ= Serialization.readSerializedObj(input);
+            FilePath.getRecentFilesData().addAll((Collection<? extends String>) serializedOBJ);
             // Adds the stored Serialized ArrayList to the TableView
             String defaultFile = recentFilesTable.getItems().get(0);
             // sets the default RecentFile to the first element
-            Files.setPasswordFilePath(defaultFile);
-            Files.setSelectedDirectoryPath(Paths.get(Files.getPasswordFilePath()).getParent() + "\\");
+            FilePath.setPasswordFilePath(defaultFile);
+            FilePath.setSelectedDirectoryPath(Paths.get(FilePath.getPasswordFilePath()).getParent() + "\\");
       //      return false;
         }
-      //  return true;
+
     }
 
     public static boolean dbExists() throws Exception {
@@ -31,9 +34,11 @@ public class FileHandler {
         // if the database doesn't exist, creates a new empty one then encrypts it with an empty ArayList
         // and the default TimerSpecs values
 
-        Path path = Paths.get(Files.getPasswordFilePath());
-        if (!java.nio.file.Files.exists(path)) {
-            FileUtils.write(Files.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
+        Path path = Paths.get(FilePath.getPasswordFilePath());
+        if (java.nio.file.Files.exists(path)) {
+        return true;
+        }
+            FileUtils.write(FilePath.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
             FileProtector fileProtector = new FileProtector();
             ObservableList<Entry> entryData = FXCollections.observableArrayList();
             entryData.add(new Entry("", "", "",
@@ -44,8 +49,8 @@ public class FileHandler {
             fileProtector.encryption(entryData, defaultTimer);
             return false;
         }
-        return true;
-    }
+
+
     void deleteDir(File file) {
         File[] contents = file.listFiles();
         if (contents != null) {

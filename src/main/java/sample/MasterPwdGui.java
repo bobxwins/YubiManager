@@ -3,13 +3,11 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
-import org.bouncycastle.util.encoders.Hex;
 
 public class MasterPwdGui {
 
@@ -32,7 +30,7 @@ public class MasterPwdGui {
     void updateMasterPwd() throws Exception {
         dialog.setTitle("Updating master password");
         dialog.getDialogPane().setContent(grid);
-        setMasterPwdGui();
+        newMasterPwd();
         final Button btnOk = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         btnOk.addEventFilter(
                 ActionEvent.ACTION,
@@ -53,8 +51,8 @@ public class MasterPwdGui {
         dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    PasswordUtils passwordUtils = new PasswordUtils();
-                    passwordUtils.updateMasterPwd(manualPwdDField, responseField);
+                    Secrets.setManualPassword(manualPwdDField.getText().toCharArray());
+                    FileProtector.createKey();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");
                     alert.setHeaderText(null);
@@ -71,7 +69,7 @@ public class MasterPwdGui {
         dialog.showAndWait();
 
     }
-        GridPane setMasterPwdGui() throws Exception {
+        GridPane newMasterPwd() throws Exception {
 
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
@@ -82,9 +80,6 @@ public class MasterPwdGui {
         manualPwdDField.setPromptText("Enter Password...");
 
         confirmPwdField.setPromptText("Confirm Password...");
-
-      //  responseField.setDisable(true); // Prevents the user from accidentally typing in the responseField
-      //  responseField.setPromptText("Hardware Key response");
 
         grid.add(new Label("Enter Password:"), 0, 1);
         grid.add(manualPwdDField, 1, 1);

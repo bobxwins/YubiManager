@@ -25,12 +25,12 @@ public class DecryptFile  {
     public byte[] Decryption(byte[] input) {
 
         try {
-            Database dbSecrets = (Database) SerializedObject.readDB(input);
-            byte[] base64decodedBytes = Base64.getDecoder().decode(dbSecrets.getCipherText());
+            Database dbSecrets = (Database) Serialization.readSerializedObj(input);
             NonSecrets nonSecrets= dbSecrets.getNonSecrets();
+            byte[] decodedCipher = Base64.getDecoder().decode(nonSecrets.getCipherText());
             Cipher cipher = Cipher.getInstance(transformationAlgorithm, provider);
             cipher.init(Cipher.DECRYPT_MODE, SymmetricKey.getSecretKey(), new IvParameterSpec(nonSecrets.getGeneratedIV()));
-            byte[] output = cipher.doFinal(base64decodedBytes);
+            byte[] output = cipher.doFinal(decodedCipher);
             return output;
 
         } catch (Exception e) {
@@ -40,8 +40,8 @@ public class DecryptFile  {
 
     }
     public static void restoreKey () throws Exception {
-        byte [] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
-        Database dbSecrets = (Database) SerializedObject.readDB(input);
+        byte [] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
+        Database dbSecrets = (Database) Serialization.readSerializedObj(input);
         NonSecrets nonSecrets= dbSecrets.getNonSecrets();
         SymmetricKey.setSecretKey(Secrets.getMasterPassword(),nonSecrets.getStoredSalt()
                 ,nonSecrets.getIterationCount(),nonSecrets.getKeyLength(),
@@ -50,12 +50,12 @@ public class DecryptFile  {
     }
 
      public static char [] recreateResponse () throws  Exception {
-         byte [] input = FileUtils.readAllBytes(Files.getPasswordFilePath());
-         Database dbSecrets = (Database) SerializedObject.readDB(input);
+         byte [] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
+         Database dbSecrets = (Database) Serialization.readSerializedObj(input);
          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-         HardwareKeyHandler.cmdResponse(nonSecrets.getChallenge());
-         System.out.println("the output IS " + HardwareKeyHandler.getOutput());
-         String response = Hex.toHexString(HardwareKeyHandler.output.getBytes(StandardCharsets.UTF_8));
+         HardwareKeyCmd.cmdResponse(nonSecrets.getChallenge());
+         System.out.println("the output IS " + HardwareKeyCmd.getOutput());
+         String response = Hex.toHexString(HardwareKeyCmd.output.getBytes(StandardCharsets.UTF_8));
          char [] responseCharArr = response.toCharArray();
          return responseCharArr;
      }

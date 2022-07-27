@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.collections.ObservableList;
-import javafx.scene.control.PasswordField;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +8,8 @@ import java.util.ArrayList;
 
 public class Secrets implements Serializable {
     public Secrets(){}
+    // Data that either gets encrypted or is used in an encryption process
+
    // private static final long serialVersionUID = 6529685098267757690L;
     private static byte [] CONFIGUREHWKPWD;
     private static char[] CONCATENATEDPWDS;
@@ -45,7 +45,6 @@ public class Secrets implements Serializable {
         return MANUALPWD;
     }
 
-
     public static void setMasterPassword(char[] manualPassword, char[] response) throws Exception{
 
         setManualPassword(manualPassword);
@@ -62,7 +61,5 @@ public class Secrets implements Serializable {
     public void setTimerSpecs(TimerSpecs timerSpecs) {
         this.timerSpecs = timerSpecs;
     }
-
-
 
 }

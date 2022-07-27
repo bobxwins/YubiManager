@@ -20,7 +20,7 @@ public class SceneHandler {
 
     void newDBdialog(Button btn) throws Exception {
 
-        masterPwdGui.setMasterPwdGui();
+        masterPwdGui.newMasterPwd();
         masterPwdGui.dialog.setTitle("Creating new database");
 
         masterPwdGui.dialog.getDialogPane().setContent(masterPwdGui.grid);
@@ -61,15 +61,15 @@ public class SceneHandler {
             try {
                 if (dialogButton == ButtonType.OK) {
                     Secrets.setManualPassword(masterPwdGui.manualPwdDField.getText().toCharArray());
-                    Files.setPasswordFilePath(fileNameField.getText());
-                    System.out.println(Files.getPasswordFilePath());
+                    FilePath.setPasswordFilePath(fileNameField.getText());
+                    System.out.println(FilePath.getPasswordFilePath());
                     newScene(btn);
 
-                    Files.getRecentFilesData().add(Files.getPasswordFilePath());
-                    if (Files.getRecentFilesData().get(0) != null) {
-                        FileUtils.write(Files.getRecentFilesDir(), "".getBytes(StandardCharsets.UTF_8));
+                    FilePath.getRecentFilesData().add(FilePath.getPasswordFilePath());
+                    if (FilePath.getRecentFilesData().get(0) != null) {
+                        FileUtils.write(FilePath.getRecentFilesDir(), "".getBytes(StandardCharsets.UTF_8));
                         // empties the file, or generates an empty file if it doesn't exist
-                        SerializedObject.writeArrayList(Files.getRecentFilesData(), Paths.get(Files.getRecentFilesDir()));
+                        Serialization.recentFilesSerialize(FilePath.getRecentFilesData(), Paths.get(FilePath.getRecentFilesDir()));
 
                     }
 
@@ -87,10 +87,10 @@ public class SceneHandler {
 
     boolean newScene(Button btnCreateDB) throws Exception {
 
-        Files.setSelectedDirectoryPath(Files.getDefaultDir() + "\\" + Files.getPasswordFilePath() + "\\");
+        FilePath.setSelectedDirectoryPath(FilePath.getDefaultDir() + "\\" + FilePath.getPasswordFilePath() + "\\");
 
-        new File(Files.getSelectedDirectoryPath()).mkdir();
-        Files.setPasswordFilePath(Files.getSelectedDirectoryPath() + Files.getPasswordFilePath() + ".txt");
+        new File(FilePath.getSelectedDirectoryPath()).mkdir();
+        FilePath.setPasswordFilePath(FilePath.getSelectedDirectoryPath() + FilePath.getPasswordFilePath() + ".txt");
 
         Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
 
@@ -117,16 +117,15 @@ public class SceneHandler {
         fileChooser.getExtensionFilters().add(extFilter);
 
         Stage anotherStage = new Stage();
-        fileChooser.setInitialDirectory(new File(Files.getDefaultDir()));
+        fileChooser.setInitialDirectory(new File(FilePath.getDefaultDir()));
         File file = fileChooser.showOpenDialog(anotherStage);
         if (file == null) {
 
             return false;
         }
         // button  set on action
-        Files.setPasswordFilePath(file.getAbsolutePath());
-
-        Files.setSelectedDirectoryPath(file.getAbsoluteFile().getParent() + "\\");
+        FilePath.setPasswordFilePath(file.getAbsolutePath());
+        FilePath.setSelectedDirectoryPath(file.getAbsoluteFile().getParent() + "\\");
 
         return true;
     }
