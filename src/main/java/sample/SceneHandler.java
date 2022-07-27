@@ -65,11 +65,11 @@ public class SceneHandler {
                     System.out.println(FilePath.getPasswordFilePath());
                     newScene(btn);
 
-                    FilePath.getRecentFilesData().add(FilePath.getPasswordFilePath());
-                    if (FilePath.getRecentFilesData().get(0) != null) {
-                        FileUtils.write(FilePath.getRecentFilesDir(), "".getBytes(StandardCharsets.UTF_8));
+                    FilePath.getRecentFilesDir().add(FilePath.getPasswordFilePath());
+                    if (FilePath.getRecentFilesDir().get(0) != null) {
+                        FileUtils.write(FilePath.getRecentFileDir(), "".getBytes(StandardCharsets.UTF_8));
                         // empties the file, or generates an empty file if it doesn't exist
-                        Serialization.recentFilesSerialize(FilePath.getRecentFilesData(), Paths.get(FilePath.getRecentFilesDir()));
+                        Serialization.recentFilesSerialize(FilePath.getRecentFilesDir(), Paths.get(FilePath.getRecentFileDir()));
 
                     }
 

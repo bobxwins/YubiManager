@@ -1,8 +1,10 @@
 package sample;
 
 import javafx.collections.ObservableList;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
@@ -10,8 +12,8 @@ public class Secrets implements Serializable {
     public Secrets(){}
     // Data that either gets encrypted or is used in an encryption process
 
-   // private static final long serialVersionUID = 6529685098267757690L;
-    private static byte [] CONFIGUREHWKPWD;
+    private static final long serialVersionUID = 42L;
+    private static String CONFIGUREHWKPWD;
     private static char[] CONCATENATEDPWDS;
     private static char[] MANUALPWD;
     private TimerSpecs timerSpecs;
@@ -25,12 +27,15 @@ public class Secrets implements Serializable {
         this.entry = new ArrayList<>(observableList);
     }
 
-    public static byte [] getConfigureHwkPwd() {
+    public static String getConfigureHwkPwd() {
         return CONFIGUREHWKPWD;
     }
 
-    public static void setConfigureHwPwd(byte [] configureHwPwdString) {
-        Secrets.CONFIGUREHWKPWD = configureHwPwdString;
+    public static void setConfigureHwkPwd(String configureHwkPwdString) {
+        Secrets.CONFIGUREHWKPWD = configureHwkPwdString;
+        byte []configurePwdBytes = CONFIGUREHWKPWD.getBytes(StandardCharsets.UTF_8);
+        String hexString = Hex.toHexString(configurePwdBytes);
+        Secrets.CONFIGUREHWKPWD = hexString;
     }
 
     public static char[] getMasterPassword() throws Exception{

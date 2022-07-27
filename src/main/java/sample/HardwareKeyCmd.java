@@ -1,10 +1,13 @@
 package sample;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
-import org.bouncycastle.util.encoders.Hex;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 
@@ -18,7 +21,7 @@ public class HardwareKeyCmd {
     public static void cmdProcess(String command) throws Exception  {
             Process proc =
                     Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + command );
-            //+ "&&" + "y"
+
      BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
@@ -57,36 +60,58 @@ public class HardwareKeyCmd {
 
 
 
-    public static void cmdConfigureCR()
+    public static void cmdConfigureCR() throws  Exception
     {
-        try {
-            dialogConfigureCR();
-            if (Secrets.getConfigureHwkPwd().length==0)
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText("Credentials are empty!");
-                alert.showAndWait();
-                return;
+            TextInputDialog textDialog = new TextInputDialog();
+            textDialog.setTitle("Configuring Hardware key");
+            textDialog.setHeaderText("Configure the Hardware key's challenge-response");
+            textDialog.setContentText("Enter a string to configure the Hardware key's challenge-response:");
+            final Button btnOk = (Button) textDialog.getDialogPane().lookupButton(ButtonType.OK);
+            btnOk.addEventFilter(
+                ActionEvent.ACTION,
+                event -> {
+                    try {
+                        Secrets.setConfigureHwkPwd(textDialog.getEditor().getText());
+                        if (Secrets.getConfigureHwkPwd().length() == 0) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Information Dialog");
+                            alert.setHeaderText(null);
+                            alert.setContentText("String is empty!");
+                            alert.showAndWait();
+                            event.consume();
+                            return;
+                        }
+
+                        String manualCommand = "ykman otp chalresp 1 " + Secrets.getConfigureHwkPwd() + " -f";
+                        System.out.println("the hex is:" + Secrets.getConfigureHwkPwd());
+
+                        Process proc =
+                                Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + manualCommand);
+
+                        // This command does not produce an output string in the cmd terminal, so a BufferReader cannot be used here
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText(textConfigureHwk);
+                        alert.showAndWait();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                });
+
+        textDialog.setResultConverter(loginButton -> {
+            try {
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            String hexString = Hex.toHexString(Secrets.getConfigureHwkPwd());
-            String manualCommand= "ykman otp chalresp 1 "+ hexString + " -f";
-            System.out.println("the hex is:"+hexString);
-            Process proc =
-                    Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + manualCommand );
-            // This command does not produce an output string in the cmd terminal, so a BufferReader cannot be used here
+            return null;
+        });
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText(textConfigureHwk);
-            alert.showAndWait();
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+       textDialog.showAndWait();
 
     }
     public static void cmdResponse(String challenge) throws  Exception  {
@@ -99,18 +124,6 @@ public class HardwareKeyCmd {
             e.printStackTrace();
         }
     }
-
-    public static void dialogConfigureCR()
-    {
-        TextInputDialog textDialog = new TextInputDialog();
-        textDialog.setTitle("Configuring Hardware key");
-        textDialog.setHeaderText("Configure the Hardware key's challenge-response");
-        textDialog.setContentText("Enter a string to configure the Hardware key's challenge-response:");
-        Optional<String> result = textDialog.showAndWait();
-        byte[] resultBytes = result.get().getBytes(StandardCharsets.UTF_8);
-        Secrets.setConfigureHwPwd(resultBytes);
-    }
-
 
 }
 

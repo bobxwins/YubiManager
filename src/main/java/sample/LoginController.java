@@ -96,8 +96,8 @@ public class LoginController {
                 FileHandler fileHandler = new FileHandler();
                 fileHandler.deleteDir(deleteFile);
 
-                FilePath.getRecentFilesData().remove(selectedItem);
-                Serialization.recentFilesSerialize(FilePath.getRecentFilesData(), Paths.get(FilePath.getRecentFilesDir()));
+                FilePath.getRecentFilesDir().remove(selectedItem);
+                Serialization.recentFilesSerialize(FilePath.getRecentFilesDir(), Paths.get(FilePath.getRecentFileDir()));
             }
         }
 
@@ -117,7 +117,7 @@ public class LoginController {
     @FXML
     private void initialize() throws Exception {
         recentFilesTable.setPlaceholder(new Label("0 databases available. Click the Create New database button to get started!"));
-        recentFilesTable.setItems(FilePath.getRecentFilesData());
+        recentFilesTable.setItems(FilePath.getRecentFilesDir());
         recentFilesTable.getItems().clear();
        FileHandler.recentFileExists(recentFilesTable);
         recent.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));

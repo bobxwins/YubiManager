@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 
 public final class FilePath {
 
-    private static ObservableList<String> recentFilesData = FXCollections.observableArrayList();
+    private static ObservableList<String> recentFilesDir = FXCollections.observableArrayList();
 
     private static String passwordFilePath;
     private static String SELECTEDDIRECTORYPATH;//=
@@ -33,12 +33,12 @@ public final class FilePath {
         FilePath.SELECTEDDIRECTORYPATH = selectedDirectoryPath;
     }
 // save as
-    public static ObservableList<String> getRecentFilesData() {
-        return recentFilesData;
+    public static ObservableList<String> getRecentFilesDir() {
+        return recentFilesDir;
     }
 
 
-    public static String getRecentFilesDir() throws Exception{
+    public static String getRecentFileDir() throws Exception{
         RECENTFILESDIR = getDefaultDir() +"/RecentFiles.txt";
         return RECENTFILESDIR;
     }

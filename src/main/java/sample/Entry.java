@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 public class Entry implements Serializable {
-
+    private static final long serialVersionUID = 42L;
     Entry(String titelString, String usernameString, String urlString, String passwordString, String noteString) {
         this.title = titelString;
         this.username = usernameString;

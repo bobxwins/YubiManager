@@ -3,7 +3,7 @@ package sample;
 import java.io.Serializable;
 
 public class TimerSpecs implements Serializable {
- //  private static final long serialVersionUID = 6529685098267757690L;
+    private static final long serialVersionUID = 42L;
     private static TimerSpecs timerSpecs;
         int timer;
        boolean selectedCheckBox ;

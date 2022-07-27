@@ -206,7 +206,7 @@ public class DatabaseController implements Serializable   {
             File deleteFile = new File(FilePath.getPasswordFilePath()).getAbsoluteFile().getParentFile();
             FileHandler fileHandler= new FileHandler();
             fileHandler.deleteDir(deleteFile);
-            Serialization.recentFilesSerialize(FilePath.getRecentFilesData(), Paths.get(FilePath.getRecentFilesDir()));
+            Serialization.recentFilesSerialize(FilePath.getRecentFilesDir(), Paths.get(FilePath.getRecentFileDir()));
             SceneHandler.stageFullScreen(btnLockDB);
         }
 

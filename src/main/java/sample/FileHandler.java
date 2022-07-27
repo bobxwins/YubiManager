@@ -14,20 +14,28 @@ public class FileHandler {
 
 
     public static void recentFileExists (TableView<String> recentFilesTable) throws Exception {
-        Path path = Paths.get(FilePath.getRecentFilesDir());
-        if (java.nio.file.Files.exists(path)) {
-           byte [] input= FileUtils.readAllBytes(FilePath.getRecentFilesDir());
+        Path path = Paths.get(FilePath.getRecentFileDir());
+        if (!java.nio.file.Files.exists(path)) {
+
+        return;
+        }
+           byte [] input= FileUtils.readAllBytes(FilePath.getRecentFileDir());
            Object serializedOBJ= Serialization.readSerializedObj(input);
-            FilePath.getRecentFilesData().addAll((Collection<? extends String>) serializedOBJ);
-            // Adds the stored Serialized ArrayList to the TableView
+
+            if (  ((Collection<?>) serializedOBJ).size() ==0 ) {
+                // only adds the stored ArrayList to the recentFilesDir ObservableList, if there are any elements in the ArrayList
+                return;
+            }
+
+            FilePath.getRecentFilesDir().addAll((Collection<? extends String>) serializedOBJ);
+            // Adds the stored Serialized ArrayList to the ObservableList, then adds the ObservableList to the TableView
             String defaultFile = recentFilesTable.getItems().get(0);
             // sets the default RecentFile to the first element
             FilePath.setPasswordFilePath(defaultFile);
             FilePath.setSelectedDirectoryPath(Paths.get(FilePath.getPasswordFilePath()).getParent() + "\\");
-      //      return false;
+
         }
 
-    }
 
     public static boolean dbExists() throws Exception {
 

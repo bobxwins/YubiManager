@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class NonSecrets implements Serializable {
 // Data that is not meant to concealed, but used to conceal other data sources
-
+private static final long serialVersionUID = 42L;
     byte[] generatedIV, salt;
     int iterationCount, keyLength;
     String MacTag,challenge, cipherText;

@@ -147,9 +147,9 @@ import javax.crypto.spec.SecretKeySpec;
                  }   );
 
 
-         loginGui.loginDialog.setResultConverter(dialogButton -> {
+         loginGui.loginDialog.setResultConverter(loginButton -> {
              try {
-                 if (dialogButton == ButtonType.OK) {
+                 if (loginButton == ButtonType.OK) {
 
                      Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
 

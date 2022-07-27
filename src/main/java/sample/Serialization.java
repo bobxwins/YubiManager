@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Serialization {
-   // private static final long serialVersionUID = 6529685098267757690L;
+
 
     public static void recentFilesSerialize(ObservableList  observableList, Path file) throws  Exception {
         try {
