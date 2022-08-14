@@ -10,16 +10,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-public class FileHandler {
+public class FileService {
 
 
-    public static void recentFileExists (TableView<String> recentFilesTable) throws Exception {
-        Path path = Paths.get(FilePath.getRecentFileDir());
+    public static void dbFilesListExists(TableView<String> recentFilesTable) throws Exception {
+        Path path = Paths.get(FilePath.getDBFilesListDir());
         if (!java.nio.file.Files.exists(path)) {
-
         return;
         }
-           byte [] input= FileUtils.readAllBytes(FilePath.getRecentFileDir());
+           byte [] input= FileUtils.readAllBytes(FilePath.getDBFilesListDir());
            Object serializedOBJ= Serialization.readSerializedObj(input);
 
             if (  ((Collection<?>) serializedOBJ).size() ==0 ) {
@@ -27,34 +26,32 @@ public class FileHandler {
                 return;
             }
 
-            FilePath.getRecentFilesDir().addAll((Collection<? extends String>) serializedOBJ);
+            FilePath.getDbFilesList().addAll((Collection<? extends String>) serializedOBJ);
             // Adds the stored Serialized ArrayList to the ObservableList, then adds the ObservableList to the TableView
             String defaultFile = recentFilesTable.getItems().get(0);
             // sets the default RecentFile to the first element
-            FilePath.setPasswordFilePath(defaultFile);
-            FilePath.setSelectedDirectoryPath(Paths.get(FilePath.getPasswordFilePath()).getParent() + "\\");
+            FilePath.setCurrentDBdir(defaultFile);
+            FilePath.setSelectedDir(Paths.get(FilePath.getCurrentDBdir()).getParent() + "\\");
 
         }
 
 
     public static boolean dbExists() throws Exception {
 
-        // if the database doesn't exist, creates a new empty one then encrypts it with an empty ArayList
-        // and the default TimerSpecs values
-
-        Path path = Paths.get(FilePath.getPasswordFilePath());
+        Path path = Paths.get(FilePath.getCurrentDBdir());
         if (java.nio.file.Files.exists(path)) {
+            // If the Database exists, return
         return true;
         }
-            FileUtils.write(FilePath.getPasswordFilePath(), "".getBytes(StandardCharsets.UTF_8));
+        // if the database doesn't exist,a new one is created with an empty ArrayList and default TimerSpecs value
+            FileUtils.write(FilePath.getCurrentDBdir(), "".getBytes(StandardCharsets.UTF_8));
             FileProtector fileProtector = new FileProtector();
-            ObservableList<Entry> entryData = FXCollections.observableArrayList();
-            entryData.add(new Entry("", "", "",
+            ObservableList<PasswordRecord> passwordRecordData = FXCollections.observableArrayList();
+            passwordRecordData.add(new PasswordRecord("", "", "",
                     "", ""));
-
             TimerSpecs defaultTimer = new TimerSpecs(8,false);
             TimerSpecs.setTimerSpecs(defaultTimer);
-            fileProtector.encryption(entryData, defaultTimer);
+            fileProtector.encryption(passwordRecordData, defaultTimer);
             return false;
         }
 

@@ -6,59 +6,27 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Optional;
 
 
-public class HardwareKeyCmd {
+public class HardwareKeyService {
 
     static String ykManPath  = "C:/Program Files/Yubico/YubiKey Manager";
     // Folder path to the application YubiKey Manager app
     static String textConfigureHwk = " YubiKey challenge response has been set successfully!";
-    // Using the command prompt, the command opens the YubiKey Manager, and generates a 38 character long random password, with the keyboard being the  US layout
-    static String output;
-    public static void cmdProcess(String command) throws Exception  {
-            Process proc =
-                    Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + command );
 
-     BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(proc.getInputStream()));
-
-          while ((!stdInput.ready())) {
-              output = stdInput.readLine();
-             if (stdInput.readLine()!=null) {
-                 setOutput(output);
-             }
-        }
-
-    }
-
-    static String getOutput () {
-        return output;
-    }
-    static void setOutput ( String outputString) {
-       HardwareKeyCmd.output = outputString;
-    }
-    public static void cmdGenerateCR()  {
+    public static void cmdGenerateCR() throws Exception  {
         // 	Programs a challenge-response credential
         String generatePwdCommand= "ykman otp chalresp 1 -g -f";
-        try {
-            String textRandomPwdHwk = "The challenge response mode has been set succesfully!";
-            cmdProcess(generatePwdCommand);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText(textRandomPwdHwk);
-            alert.showAndWait();
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        Process proc =
+                Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + generatePwdCommand );
+        String textRandomPwdHwk = "The challenge response mode has been set succesfully!";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(textRandomPwdHwk);
+        alert.showAndWait();
     }
-
-
 
     public static void cmdConfigureCR() throws  Exception
     {
@@ -83,19 +51,14 @@ public class HardwareKeyCmd {
                         }
 
                         String manualCommand = "ykman otp chalresp 1 " + Secrets.getConfigureHwkPwd() + " -f";
-                        System.out.println("the hex is:" + Secrets.getConfigureHwkPwd());
-
-                        Process proc =
-                                Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + manualCommand);
-
-                        // This command does not produce an output string in the cmd terminal, so a BufferReader cannot be used here
-
+                      Process proc =
+                          Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + manualCommand);
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
                         alert.setContentText(textConfigureHwk);
                         alert.showAndWait();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -115,13 +78,17 @@ public class HardwareKeyCmd {
 
     }
     public static void cmdResponse(String challenge) throws  Exception  {
-        // 	Programs a response
         String calculateResponse= "ykman otp calculate 1 "+ challenge;
-        try {
-            cmdProcess(calculateResponse);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        Process proc =
+                 Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath
+                         + "&&" + calculateResponse );
+        BufferedReader stdInput = new BufferedReader(new
+                InputStreamReader(proc.getInputStream()));
+        while ((!stdInput.ready())) {
+            String output = stdInput.readLine();
+            if (stdInput.readLine()!=null) {
+                Secrets.setResponse(output);
+            }
         }
     }
 

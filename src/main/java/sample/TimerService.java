@@ -13,7 +13,7 @@ import javafx.util.Pair;
 
 import java.nio.file.Paths;
 
-public class TimerHandler {
+public class TimerService {
     public  Dialog<Pair<String, String>> dialog = new Dialog<>();
     public  GridPane grid = new GridPane();
     public  CheckBox checkBox;
@@ -25,7 +25,7 @@ public class TimerHandler {
 
     public static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
 
-      if(!java.nio.file.Files.exists(Paths.get(FilePath.getPasswordFilePath())))
+      if(!java.nio.file.Files.exists(Paths.get(FilePath.getCurrentDBdir())))
         {
             return;    }
 
@@ -52,18 +52,18 @@ public class TimerHandler {
     }
 
     static void timerDialog(ObservableList observableList) {
-    TimerHandler timerHandler = new TimerHandler();
-        timerHandler.timerGrid();
-        timerHandler.dialog.setResultConverter(dialogButton -> {
+    TimerService timerService = new TimerService();
+        timerService.timerGrid();
+        timerService.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    if (!timerHandler.checkBox.isSelected()) {
+                    if (!timerService.checkBox.isSelected()) {
                         selectedCheckBox = false;
                         TRANSITION.stop();
-                        // timerHandler.checkBox is a local object, which can't be accessed outside the scope of
+                        // timerService.checkBox is a local object, which can't be accessed outside the scope of
                         //      timerDialog(), so the global boolean "selectedCheckBox" is set in timerDialog()
                         //     so it's state can be accessed in timerCountDown()
-                        TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                        TimerSpecs updateTimerSpecs = new TimerSpecs(timerService.timerSpinner.getValue(),selectedCheckBox);
                         TimerSpecs.setTimerSpecs(updateTimerSpecs);
 
 
@@ -73,7 +73,7 @@ public class TimerHandler {
                         return null;
                     }
                     selectedCheckBox = true;
-                    TimerSpecs updateTimerSpecs = new TimerSpecs(timerHandler.timerSpinner.getValue(),selectedCheckBox);
+                    TimerSpecs updateTimerSpecs = new TimerSpecs(timerService.timerSpinner.getValue(),selectedCheckBox);
                     TimerSpecs.setTimerSpecs(updateTimerSpecs);
 
                     FileProtector fileProtector = new FileProtector();
@@ -81,7 +81,7 @@ public class TimerHandler {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");
                     alert.setHeaderText(null);
-                    alert.setContentText("Timer set! Database will automatically be locked after " + timerHandler.timerSpinner.getValue() + " seconds of inactivity!");
+                    alert.setContentText("Timer set! Database will automatically be locked after " + timerService.timerSpinner.getValue() + " seconds of inactivity!");
                     alert.showAndWait();
                     return null;
                 }
@@ -91,7 +91,7 @@ public class TimerHandler {
 
             return null;
         });
-        timerHandler.dialog.showAndWait();
+        timerService.dialog.showAndWait();
     }
     void timerGrid () {
 
@@ -105,7 +105,7 @@ public class TimerHandler {
         checkBox = new CheckBox("Seconds of inactivity database will be locked in: ");
         timerSpinner = (Spinner<Integer>) new Spinner(8, 999, 15);
 
-        if(java.nio.file.Files.exists(Paths.get(FilePath.getPasswordFilePath()))) {
+        if(java.nio.file.Files.exists(Paths.get(FilePath.getCurrentDBdir()))) {
           TimerSpecs storedTimerSpecs =  TimerSpecs.getTimerSpecs() ;
             checkBox.setSelected(storedTimerSpecs.getSelectedCheckBox());
             timerSpinner.getValueFactory().setValue(storedTimerSpecs.getTimer());

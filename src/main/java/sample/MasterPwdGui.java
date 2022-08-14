@@ -52,7 +52,7 @@ public class MasterPwdGui {
             try {
                 if (dialogButton == ButtonType.OK) {
                     Secrets.setManualPassword(manualPwdDField.getText().toCharArray());
-                    FileProtector.createKey();
+                  //  KeyService.createKey();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Dialog");
                     alert.setHeaderText(null);

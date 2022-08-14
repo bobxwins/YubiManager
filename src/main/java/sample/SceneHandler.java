@@ -56,28 +56,19 @@ public class SceneHandler {
                     }
                 }
         );
-
         masterPwdGui.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
                     Secrets.setManualPassword(masterPwdGui.manualPwdDField.getText().toCharArray());
-                    FilePath.setPasswordFilePath(fileNameField.getText());
-                    System.out.println(FilePath.getPasswordFilePath());
+                    FilePath.setCurrentDBdir(fileNameField.getText());
                     newScene(btn);
-
-                    FilePath.getRecentFilesDir().add(FilePath.getPasswordFilePath());
-                    if (FilePath.getRecentFilesDir().get(0) != null) {
-                        FileUtils.write(FilePath.getRecentFileDir(), "".getBytes(StandardCharsets.UTF_8));
-                        // empties the file, or generates an empty file if it doesn't exist
-                        Serialization.recentFilesSerialize(FilePath.getRecentFilesDir(), Paths.get(FilePath.getRecentFileDir()));
-
-                    }
-
+                    FilePath.getDbFilesList().add(FilePath.getCurrentDBdir()); // Updates the Database FileList ObservableList
+                    FileUtils.write(FilePath.getDBFilesListDir(), "".getBytes(StandardCharsets.UTF_8)); // Creates a new file
+                    Serialization.dbFileListSerialize(FilePath.getDbFilesList(), Paths.get(FilePath.getDBFilesListDir()));
+                    //Casts ObservableList to ArrayList, Serializes ArrayList & stores the ArrayList
                 }
             } catch (Exception E) {
-
             }
-
             return null;
         });
 
@@ -87,10 +78,10 @@ public class SceneHandler {
 
     boolean newScene(Button btnCreateDB) throws Exception {
 
-        FilePath.setSelectedDirectoryPath(FilePath.getDefaultDir() + "\\" + FilePath.getPasswordFilePath() + "\\");
+        FilePath.setSelectedDir(FilePath.getDefaultDir() + "\\" + FilePath.getCurrentDBdir() + "\\");
 
-        new File(FilePath.getSelectedDirectoryPath()).mkdir();
-        FilePath.setPasswordFilePath(FilePath.getSelectedDirectoryPath() + FilePath.getPasswordFilePath() + ".txt");
+        new File(FilePath.getSelectedDir()).mkdir();
+        FilePath.setCurrentDBdir(FilePath.getSelectedDir() + FilePath.getCurrentDBdir() + ".txt");
 
         Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
 
@@ -124,8 +115,8 @@ public class SceneHandler {
             return false;
         }
         // button  set on action
-        FilePath.setPasswordFilePath(file.getAbsolutePath());
-        FilePath.setSelectedDirectoryPath(file.getAbsoluteFile().getParent() + "\\");
+        FilePath.setCurrentDBdir(file.getAbsolutePath());
+        FilePath.setSelectedDir(file.getAbsoluteFile().getParent() + "\\");
 
         return true;
     }

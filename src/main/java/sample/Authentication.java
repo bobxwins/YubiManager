@@ -18,7 +18,6 @@ import java.util.Base64;
 import java.util.regex.Pattern;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 
  public class Authentication  {
@@ -27,35 +26,33 @@ import javax.crypto.spec.SecretKeySpec;
      PasswordField manualPwdField = new PasswordField();
      PasswordField responseField = new PasswordField();
 
-     public ObservableList<Entry> authenticated() throws Exception {
+     public ObservableList<PasswordRecord> authenticated() throws Exception {
          // Restores the database, by decrypting it and storing it in memory,
          // only if the database exists and if the user is authenticated
-         if (FileHandler.dbExists()) {
+         if (FileService.dbExists()) {
              DecryptFile decryptFile = new DecryptFile();
-             byte[] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
+             byte[] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
              Secrets decryptedSecrets = (Secrets) Serialization.readSerializedObj(decryptFile.Decryption(input));
              TimerSpecs storedTimerSpecs = decryptedSecrets.getTimerSpecs();
              TimerSpecs.setTimerSpecs(storedTimerSpecs);
-             ObservableList<Entry> observableList = FXCollections.observableList(decryptedSecrets.getEntry());
+             ObservableList<PasswordRecord> observableList = FXCollections.observableList(decryptedSecrets.getPwdRecord());
              return observableList;
          }
          return FXCollections.emptyObservableList();
      }
 
-    public static String generateHmac(String cipherText, SecretKey key ) throws Exception {
+    public static String computeHMac(String cipherText, SecretKey key ) throws Exception {
         byte [] cipherBytes = cipherText.getBytes(StandardCharsets.UTF_8);
-        String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
-        SecretKeySpec secretKeySpec = new SecretKeySpec(encodedKey.getBytes()," HMACSHA1");
-        Mac mac = Mac.getInstance("HMACSHA1");
-        mac.init(secretKeySpec);
+        Mac mac = Mac.getInstance("HMACSHA1", "BC");
+        mac.init(key);
         mac.update(cipherBytes);
         byte[] digest = mac.doFinal(cipherBytes);
         String encoded = Base64.getEncoder().encodeToString(digest);
         return  encoded;
     }
 
-  public static boolean verifyHmac( String generatedMacTag) {
-      byte [] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
+  public static boolean verifyHMac(String generatedMacTag) {
+      byte [] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
       Database dbSecrets = (Database) Serialization.readSerializedObj(input);
       NonSecrets nonSecrets= dbSecrets.getNonSecrets();
       String storedMacTag = nonSecrets.getMacTag();
@@ -68,14 +65,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 
   public static boolean validateCredentials(String manualPwd, String confirmPwd)
-     {
-         // checks if the master password has valid criteria, when creating a new database or updating the master password
- ;
-         String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
-                 "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
-
-         Pattern.compile(regex).matcher(manualPwd).matches();
-
+     {// Verifies if the criteria for the manual password are met, when creating a new database or updating the master password
          if (manualPwd.length() < 6) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
@@ -94,6 +84,9 @@ import javax.crypto.spec.SecretKeySpec;
              return false;
          }
 
+         String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
+                 "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
+         Pattern.compile(regex).matcher(manualPwd).matches();
          if ( !Pattern.compile(regex).matcher(manualPwd).matches() ) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
@@ -115,19 +108,15 @@ import javax.crypto.spec.SecretKeySpec;
                  ActionEvent.ACTION,
                  event -> {
                      // Checks if conditions are fulfilled
-
                      try {
                          Secrets.setMasterPassword(manualPwdField.getText().toCharArray(), responseField.getText().toCharArray());
-                         byte[] input = FileUtils.readAllBytes(FilePath.getPasswordFilePath());
-
+                         byte[] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
                          Database dbSecrets = (Database) Serialization.readSerializedObj(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-                         DecryptFile.restoreKey();
-
-                         String generatedMacTag = generateHmac(nonSecrets.getCipherText(),SymmetricKey.getSecretKey());
+                         KeyService.restoreKey();
+                         String generatedMacTag = computeHMac(nonSecrets.getCipherText(), KeyService.getKey());
                          nonSecrets.setMacTag(generatedMacTag);
-
-                         if (!verifyHmac(generatedMacTag))
+                         if (!verifyHMac(generatedMacTag))
                          {
                              Alert alert = new Alert(Alert.AlertType.ERROR);
                              alert.setTitle("Information Dialog");
@@ -145,23 +134,15 @@ import javax.crypto.spec.SecretKeySpec;
                      }
 
                  }   );
-
-
          loginGui.loginDialog.setResultConverter(loginButton -> {
              try {
                  if (loginButton == ButtonType.OK) {
-
                      Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
-
                      Stage stage = (Stage) btnSignIn.getScene().getWindow();
                      stage.setScene(new Scene(root));
-
-
                  }
              } catch (Exception E) {
-
              }
-
              return null;
          });
 

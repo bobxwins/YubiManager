@@ -3,9 +3,9 @@ package sample;
 import java.io.Serializable;
 
 
-public class Entry implements Serializable {
+public class PasswordRecord implements Serializable {
     private static final long serialVersionUID = 42L;
-    Entry(String titelString, String usernameString, String urlString, String passwordString, String noteString) {
+    PasswordRecord(String titelString, String usernameString, String urlString, String passwordString, String noteString) {
         this.title = titelString;
         this.username = usernameString;
         this.url = urlString;
@@ -13,24 +13,32 @@ public class Entry implements Serializable {
         this.notes = noteString;
     }
 
-    Entry () {}
+    PasswordRecord() {}
 
     String title, username, url, password, notes;
 
 
     public String getTitle() {
+        return title;}
 
-        return title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getUsername() {
 
         return username;
     }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getUrl() {
 
         return url;
+    }
+    public void setURL(String url) {
+        this.url = url;
     }
 
     public String getPassword() {
@@ -44,17 +52,6 @@ public class Entry implements Serializable {
         return notes;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setURL(String url) {
-        this.url = url;
-    }
 
     public void setPassword(String password) {
         this.password = password;

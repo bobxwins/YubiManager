@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public class Serialization {
 
 
-    public static void recentFilesSerialize(ObservableList  observableList, Path file) throws  Exception {
+    public static void dbFileListSerialize(ObservableList  observableList, Path file) throws  Exception {
         try {
-           // ArrayList containing observableList gets serialized directly, without any encryption process
+           // ArrayList containing observableList gets serialized directly
 
             FileOutputStream fos = new FileOutputStream(String.valueOf(file));
             ObjectOutputStream oos = new ObjectOutputStream(fos);

@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-public class VisibilityHandler {
+public class VisibilityService {
     private   String selectedPassword;
 
     public static void editEntryVisibility (Button btnEditOK, Button btnCreate) {
@@ -30,7 +30,7 @@ public class VisibilityHandler {
         btnEdit.setVisible(false);
         apBottomTable.setVisible(false);
     }
-    public static void entrySpecs (AnchorPane apEntryMenu, TextField tfSearch, Button btnCreate, TableView<Entry> entryTable, AnchorPane apBottomTable) {
+    public static void entrySpecs (AnchorPane apEntryMenu, TextField tfSearch, Button btnCreate, TableView<PasswordRecord> entryTable, AnchorPane apBottomTable) {
         apEntryMenu.setVisible(true);
         apEntryMenu.setDisable(false);
         tfSearch.setDisable(true);
@@ -41,8 +41,8 @@ public class VisibilityHandler {
         apBottomTable.setDisable(true);
         apBottomTable.setVisible(false);
     }
-        public static void showTableView (AnchorPane entryPane,AnchorPane apEntryMenu,TextField tfSearch,TableView<Entry> entryTable,Button btnEditOK
-        ,AnchorPane  apBottomTable)
+        public static void showTableView (AnchorPane entryPane, AnchorPane apEntryMenu, TextField tfSearch, TableView<PasswordRecord> entryTable, Button btnEditOK
+        , AnchorPane  apBottomTable)
         {
                 entryPane.setVisible(true);
                 entryPane.setDisable(false);
@@ -76,7 +76,7 @@ public class VisibilityHandler {
     }
 
     public   void pwdVisibilityTable(Button toggleButton, ImageView imgPwdVisible, ImageView imgPwdNotVisible, Text textPassword,
-                                     String showPwd, String hidePwd, TableView<Entry> entryTable)
+                                     String showPwd, String hidePwd, TableView<PasswordRecord> entryTable)
     //Toggles the visibilty of the password shown in the tableview at the bottom of the application
     {
 
@@ -84,7 +84,7 @@ public class VisibilityHandler {
             if (!imgPwdVisible.isVisible() ) {
                 imgPwdVisible.setVisible(true);
                 imgPwdNotVisible.setVisible(false);
-                Entry selectedItem  = entryTable.getSelectionModel().getSelectedItem();
+                PasswordRecord selectedItem  = entryTable.getSelectionModel().getSelectedItem();
                 if (selectedItem != null && selectedPassword == null)
                 {
                     textPassword.setText(showPwd);

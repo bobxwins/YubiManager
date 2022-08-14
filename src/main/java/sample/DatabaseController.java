@@ -55,11 +55,11 @@ public class DatabaseController implements Serializable   {
     @FXML private ImageView imgVisible;
     @FXML private ImageView imgPwdNotVisible;
     @FXML private Hyperlink hyperLinkURL;
-    @FXML private TableView<Entry> entryTable;
-    @FXML private TableColumn<Entry, String> colTitel;
-    @FXML private TableColumn<Entry, String> colUsername;
-    @FXML private TableColumn<Entry, String> colURL;
-    @FXML private TableColumn<Entry, String> colNotes;
+    @FXML private TableView<PasswordRecord> entryTable;
+    @FXML private TableColumn<PasswordRecord, String> colTitel;
+    @FXML private TableColumn<PasswordRecord, String> colUsername;
+    @FXML private TableColumn<PasswordRecord, String> colURL;
+    @FXML private TableColumn<PasswordRecord, String> colNotes;
     @FXML private TextField tfSearch;
     @FXML private TextField tfTitel;
     @FXML private TextField tfUsername;
@@ -78,20 +78,20 @@ public class DatabaseController implements Serializable   {
 
     static int pwdLength;
   //  private static final long serialVersionUID = 6529685098267757690L;
-    private ObservableList<Entry> entryList = FXCollections.observableArrayList();
-    VisibilityHandler visibilityHandler = new VisibilityHandler ();
+    private ObservableList<PasswordRecord> passwordRecordList = FXCollections.observableArrayList();
+    VisibilityService visibilityService = new VisibilityService();
     Slider sliderPwdGenerator = new Slider(4, 999, 1);
     Spinner<Integer> spinnerPwdGenerator;
     @FXML
     void generateChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyCmd.cmdGenerateCR();
+        HardwareKeyService.cmdGenerateCR();
         Thread.sleep(1900);
         save();
     }
 
     @FXML
     void configureChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyCmd.cmdConfigureCR();
+        HardwareKeyService.cmdConfigureCR();
         Thread.sleep(1900);
         save();
     }
@@ -100,7 +100,7 @@ public class DatabaseController implements Serializable   {
     void copyPwd(ActionEvent event) throws Exception
     { final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        PasswordRecord selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             content.putString(selectedItem.getPassword());
             clipboard.setContent(content);
@@ -131,7 +131,7 @@ public class DatabaseController implements Serializable   {
     {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
-        Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        PasswordRecord selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             content.putString(selectedItem.getUsername());
             clipboard.setContent(content);
@@ -143,25 +143,26 @@ public class DatabaseController implements Serializable   {
         alert.showAndWait();
     }
 
-    @FXML
-        void createEntry (ActionEvent event) throws Exception {
-            entryList.add(new Entry(tfTitel.getText(), tfUsername.getText(), tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
-            VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
+    @FXML void createPwdRecord(ActionEvent event) throws Exception {
+            passwordRecordList.add(new PasswordRecord(tfTitel.getText(), tfUsername.getText(),
+                    tfURL.getText(), pfPwdField.getText(), tANotes.getText()));
+            VisibilityService.showTableView(entryPane, apEntryMenu,tfSearch,
+                    entryTable, btnEditOK,apBottomTable);
+            //Hides and disables the "Create PasswordRecord menu" + shows and enables,TableView Search bar etc
             tfTitel.setText("");
             tfUsername.setText("");
             tfURL.setText("");
             pfPwdField.setText("");
             tANotes.setText("");
             save();
-
         }
 
-    @FXML void editEntry (ActionEvent event) throws  Exception {
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+    @FXML void editPwdRecord(ActionEvent event) throws  Exception {
+        PasswordRecord selectedItem = entryTable.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
 
-            VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
+            VisibilityService.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
             tfTitel.setText(selectedItem.getTitle());
             tfUsername.setText(selectedItem.getUsername());
             tfURL.setText(selectedItem.getUrl());
@@ -169,11 +170,11 @@ public class DatabaseController implements Serializable   {
             tANotes.setText(selectedItem.getNotes());
             //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
             // otherwise the values in the fieds from the selected entry would be empty
-            VisibilityHandler.editEntryVisibility (btnEditOK,btnCreate);
+            VisibilityService.editEntryVisibility (btnEditOK,btnCreate);
 
             btnEditOK.setOnAction(e -> {
                 try{
-                    entryList.set(entryList.indexOf(selectedItem),selectedItem);
+                    passwordRecordList.set(passwordRecordList.indexOf(selectedItem),selectedItem);
                     selectedItem.setTitle( tfTitel.getText());
                     selectedItem.setUsername( tfUsername.getText());
                     selectedItem.setURL( tfURL.getText());
@@ -181,7 +182,7 @@ public class DatabaseController implements Serializable   {
                     selectedItem.setNotes(tANotes.getText());
                     // updates the value of both the tableview at the top and bottom of the page,
                     // with the newly added values, after clicking the OK button
-                    VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
+                    VisibilityService.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
                     save();
 
                 } catch (Exception E) {
@@ -202,55 +203,55 @@ public class DatabaseController implements Serializable   {
         alert.setContentText("Are you sure you want to proceed?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            entryList.remove(entryList);
-            File deleteFile = new File(FilePath.getPasswordFilePath()).getAbsoluteFile().getParentFile();
-            FileHandler fileHandler= new FileHandler();
-            fileHandler.deleteDir(deleteFile);
-            Serialization.recentFilesSerialize(FilePath.getRecentFilesDir(), Paths.get(FilePath.getRecentFileDir()));
+            passwordRecordList.remove(passwordRecordList);
+            File deleteFile = new File(FilePath.getCurrentDBdir()).getAbsoluteFile().getParentFile();
+            FileService fileService = new FileService();
+            fileService.deleteDir(deleteFile);
+            Serialization.dbFileListSerialize(FilePath.getDbFilesList(), Paths.get(FilePath.getDBFilesListDir()));
             SceneHandler.stageFullScreen(btnLockDB);
         }
 
     }
     @FXML
-    void deleteEntry(ActionEvent event) throws  Exception {
-        Entry  selectedItem = entryTable.getSelectionModel().getSelectedItem();
+    void deletePwdRecord(ActionEvent event) throws  Exception {
+        PasswordRecord selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            entryList.remove(selectedItem);
+            passwordRecordList.remove(selectedItem);
             save();
         }
 
     }
 
     @FXML
-    void entryMenu(ActionEvent event) throws Exception
+    void pwdRecordMenu(ActionEvent event) throws Exception
     {
-        VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
+        VisibilityService.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
     }
 
     @FXML
-    void generatePwd (ActionEvent event) throws Exception {
-        VisibilityHandler cVBH = new VisibilityHandler();
+    void recordRandomPwd(ActionEvent event) throws Exception {
+        VisibilityService cVBH = new VisibilityService();
         cVBH.showPwdGenerateMenu(apPwdGenerate,entryPane,btnEditOK,apBottomTable);
         spinnerPwdGenerator();
         sliderPwdGenerator();
         btnPwdGenerator();
         textFieldPwdGenerator();
         apPwdGenerate.getChildren().addAll(spinnerPwdGenerator, sliderPwdGenerator);
-        Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+        PasswordRecord selectedItem = entryTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            entryList.set(entryList.indexOf(selectedItem), selectedItem);
+            passwordRecordList.set(passwordRecordList.indexOf(selectedItem), selectedItem);
             generatedPWDfield.setText(selectedItem.getPassword());
-            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            PasswordGenerator.calcBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
             entryTable.getSelectionModel().clearSelection();
         }
         else {
             generatedPWDfield.setText(PasswordGenerator.generatePassword(spinnerPwdGenerator.getValue()));
-            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+            PasswordGenerator.calcBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
         }
 
     }
 
-    @FXML void menuRandomPwd (ActionEvent event)
+    @FXML void calcBruteForceMenu(ActionEvent event)
     {
         pfPwdField.setText(PasswordGenerator.generatePassword(32));
     }
@@ -270,8 +271,8 @@ public class DatabaseController implements Serializable   {
         {
             return;
         }
-        String pwdFPNewValue= FilePath.getPasswordFilePath();
-        String directoryNewValue =  FilePath.getSelectedDirectoryPath();
+        String pwdFPNewValue= FilePath.getCurrentDBdir();
+        String directoryNewValue =  FilePath.getSelectedDir();
        //the new values of passwordFilePath and selectedDirectoryPath will be lost upon loading the FXML login "login.fxml"
         //so to keep the new values of both Strings,I create 2 new strings that store the values of the new paths,
         //load login.FXML, then set the values of the static path Strings to the new values.
@@ -286,15 +287,15 @@ public class DatabaseController implements Serializable   {
            stage.setScene(scene);
            stage.show();
 
-        FilePath.setPasswordFilePath( pwdFPNewValue);
-        FilePath.setSelectedDirectoryPath(  directoryNewValue);
+        FilePath.setCurrentDBdir( pwdFPNewValue);
+        FilePath.setSelectedDir(  directoryNewValue);
     }
 
 
     @FXML
     void returnTableView(ActionEvent event) throws Exception
     {
-        VisibilityHandler.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
+        VisibilityService.showTableView(entryPane, apEntryMenu,tfSearch,entryTable, btnEditOK,apBottomTable);
         apPwdGenerate.setDisable(true);
         apPwdGenerate.setVisible(false);
         apPwdGenerate.getChildren().remove(sliderPwdGenerator);
@@ -316,13 +317,13 @@ public class DatabaseController implements Serializable   {
    void save () throws Exception {
     FileProtector fileProtector = new FileProtector();
     Secrets secrets = new Secrets();
-    secrets.setEntry(entryList);
+    secrets.setPwdRecord(passwordRecordList);
     secrets.setTimerSpecs(TimerSpecs.getTimerSpecs());
-    fileProtector.encryption(entryList,secrets.getTimerSpecs());
+    fileProtector.encryption(passwordRecordList,secrets.getTimerSpecs());
     textTitel.setText(tfTitel.getText());
     textUsername.setText(tfUsername.getText());
-    visibilityHandler.setSelectedPassword(pfPwdField.getText());
-  // sets the password of the selected Entry to be the same as the newly added or edited password
+    visibilityService.setSelectedPassword(pfPwdField.getText());
+  // sets the password of the selected PasswordRecord to be the same as the newly added or edited password
     imgVisible.setVisible(false);
     imgNotVisible.setVisible(true);
     imgPwdNotVisible.setVisible(true);
@@ -359,12 +360,12 @@ public class DatabaseController implements Serializable   {
             {
                 generatedPWDfield.setText(PasswordGenerator.generatePassword(parseInt(newValue)));
 
-                PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+                PasswordGenerator.calcBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
             });
 
             generatedPWDfield.setText(PasswordGenerator.generatePassword(parseInt(newValue)));
 
-            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
+            PasswordGenerator.calcBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy, generatedPWDfield.getText());
             sliderPwdGenerator.setValue(parseInt(newValue));
 
         });
@@ -396,7 +397,7 @@ public class DatabaseController implements Serializable   {
 
                 generatedPWDfield.setText(PasswordGenerator.generatePassword(pwdLength));
 
-                PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
+                PasswordGenerator.calcBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  generatedPWDfield.getText());
 
             } catch (Exception E) {
 
@@ -407,7 +408,7 @@ public class DatabaseController implements Serializable   {
     void textFieldPwdGenerator() {
         generatedPWDfield.textProperty().addListener((observable, oldValue, newValue) -> {
           //  System.out.println("textfield changed from " + oldValue + " to " + newValue);
-            PasswordGenerator.pwdBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  newValue);
+            PasswordGenerator.calcBruteforceTime(textGenePwdQuality, textBruteForceTime, textEntropy,  newValue);
         });
     }
 
@@ -420,8 +421,8 @@ public class DatabaseController implements Serializable   {
     }
 @FXML
     void timerDialog(ActionEvent event) throws Exception {
-   TimerHandler.timerDialog(entryList);
-   TimerHandler.timerCountDown(btnLockDB,anchorPane);
+   TimerService.timerDialog(passwordRecordList);
+   TimerService.timerCountDown(btnLockDB,anchorPane);
     }
 
    static String hidePwd = "";
@@ -442,7 +443,7 @@ public class DatabaseController implements Serializable   {
 
         String finalHidePwd = hidePwd;
         entryTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Entry selectedItem = entryTable.getSelectionModel().getSelectedItem();
+            PasswordRecord selectedItem = entryTable.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 textTitel.setText(selectedItem.getTitle());
                 textNotes.setText(selectedItem.getNotes());
@@ -458,27 +459,27 @@ public class DatabaseController implements Serializable   {
                     }
 
                 });
-                visibilityHandler = new VisibilityHandler ();
-                visibilityHandler.pwdVisibilityTable(  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
+                visibilityService = new VisibilityService();
+                visibilityService.pwdVisibilityTable(  toggleButton,   imgPwdVisible,  imgPwdNotVisible,   textPassword,
                         selectedItem.getPassword(),   finalHidePwd,entryTable);
                 textPassword.setText(finalHidePwd);
 
             }
         });
-        VisibilityHandler.pwdVisibilityMenu(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
+        VisibilityService.pwdVisibilityMenu(togBtnPwd,imgVisible,imgNotVisible,tfPwd,pfPwdField);
 
             colTitel.setCellValueFactory(new PropertyValueFactory<>("title"));
             colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             colURL.setCellValueFactory(new PropertyValueFactory<>("url"));
             colNotes.setCellValueFactory(new PropertyValueFactory<>("Notes"));
             Authentication authentication = new Authentication();
-            entryList.addAll(authentication.authenticated());
-            TimerHandler.timerCountDown(btnLockDB,anchorPane);
-            entryTable.setItems(entryList);
+            passwordRecordList.addAll(authentication.authenticated());
+            TimerService.timerCountDown(btnLockDB,anchorPane);
+            entryTable.setItems(passwordRecordList);
             searchFilter();
             btnEnterMenu.setOnAction(e -> {
                 try {
-                    VisibilityHandler.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
+                    VisibilityService.entrySpecs (  apEntryMenu,tfSearch,btnCreate,entryTable,apBottomTable);
                 } catch (Exception E) {
 
                 }
@@ -492,7 +493,7 @@ public class DatabaseController implements Serializable   {
     private void searchFilter()
     {
 
-        FilteredList<Entry> filteredData = new FilteredList<>(entryTable.getItems()
+        FilteredList<PasswordRecord> filteredData = new FilteredList<>(entryTable.getItems()
                 , p -> true);
 
         tfSearch.textProperty().addListener((observable, oldValue,    newValue) -> {
@@ -522,7 +523,7 @@ public class DatabaseController implements Serializable   {
 
             });
         });
-        SortedList<Entry> sortedData = new SortedList<>(filteredData);
+        SortedList<PasswordRecord> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(entryTable.comparatorProperty());
         entryTable.setItems(sortedData);
 

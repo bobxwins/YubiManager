@@ -10,45 +10,25 @@ import java.security.SecureRandom;
 import static java.lang.Integer.parseInt;
 
 public   class PasswordGenerator {
-
-
    private static char[] SYMBOLS = "+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray();
    private static char[] LOWERCASE = "abcdefghijklmnopqrstuvwxyz".toCharArray();
    private static char[] UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
    private static char[] NUMBERS = "0123456789".toCharArray();
-   private static char[] ALL_CHARS;
+   private static char[] ALL_CHARS ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+¤§$^$*.[]{}()?-\"!@#%&/\\,><':;|_~`".toCharArray() ;
    private final static BigInteger GUESSAMOUNT = new BigInteger ("1000000000000"); // 10^12
    private static double BRUTEFORCETIME;
    private static SecureRandom rand = new SecureRandom();
 
    public static String generatePassword(int length) {
-// generates a random password
-
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(SYMBOLS);
-        sb.append(LOWERCASE);
-        sb.append(UPPERCASE);
-        sb.append(NUMBERS);
-       ALL_CHARS = sb.toString().toCharArray();
-
         char[] password = new char[length];
-
-        //get the requirements out of the way
-
-        password[0] = LOWERCASE[rand.nextInt(LOWERCASE.length)];
-        password[1] = UPPERCASE[rand.nextInt(UPPERCASE.length)];
-        password[2] = NUMBERS[rand.nextInt(NUMBERS.length)];
-        password[3] = SYMBOLS[rand.nextInt(SYMBOLS.length)];
-
-        //populate rest of the password with random chars,until password array's length is equal to the specified length
-        for (int i = 4; i < length; i++) {
-            password[i] = ALL_CHARS[rand.nextInt(ALL_CHARS.length)];
-
-            // returns a random char from the ALL_CHARS char array
+        password[0] = ALL_CHARS[rand.nextInt(ALL_CHARS.length)];
+        for (int i = 1; i < length; i++) {
+            password[i] = ALL_CHARS[rand.nextInt(ALL_CHARS.length)];// returns a random char from the ALL_CHARS char array
+            System.out.println("the passwrd[i] is "+password[i]);
+            //populate rest of the password  array with the specified amount of random ALL_CHARS
         }
 
-        //shuffle it up
+        //shuffles up the array
         for (int i = 0; i < password.length; i++) {
             int randomPosition = rand.nextInt(password.length);
             // integer with a random value within the range of the password.
@@ -56,12 +36,9 @@ public   class PasswordGenerator {
             // The value of the temporary char is assigned to be of the current position of the password array
             password[i] = password[randomPosition];
             // replaces the value of a char from the current password array, with another random char
-
             password[randomPosition] = temp;
             // The generated temp char is put in a random position of the password array.
-
         }
-
         return new String(password);
     }
 
@@ -73,10 +50,7 @@ public   class PasswordGenerator {
 
         if (atleastOneLower)
         {
-
             cardinality=cardinality+LOWERCASE.length;
-
-
         }
         boolean atleastOneUpper = password.matches(".*[ABCDEFGHIJKLMNOPQRSTUVWXYZ]+.*");
 
@@ -110,7 +84,7 @@ public   class PasswordGenerator {
         return cardinality;
     }
 
-    public static void pwdBruteforceTime(Text textPwdQuality, Text textBruteForceTime, Text textCalcEntropy, String password)
+    public static void calcBruteforceTime(Text textPwdQuality, Text textBruteForceTime, Text textCalcEntropy, String password)
     {
         double entropy =  Math.log10(Math.pow(cardinality(  password),password.length()))/Math.log10(2);
 
@@ -133,10 +107,10 @@ public   class PasswordGenerator {
 
             textPwdQuality.setFill(Color.INDIANRED);
         }
-        if(entropy >= 80  )
+        if(entropy >= 78  )
         {
-            quality= "Fair";
-            textPwdQuality.setFill(Color.DARKGOLDENROD);
+            quality= "Good";
+            textPwdQuality.setFill(Color.DARKGREEN);
         }
         if(entropy >= 112  )
         {

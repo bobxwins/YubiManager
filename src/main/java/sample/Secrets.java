@@ -11,31 +11,31 @@ import java.util.ArrayList;
 public class Secrets implements Serializable {
     public Secrets(){}
     // Data that either gets encrypted or is used in an encryption process
-
+    private static String RESPONSE;
     private static final long serialVersionUID = 42L;
     private static String CONFIGUREHWKPWD;
     private static char[] CONCATENATEDPWDS;
     private static char[] MANUALPWD;
     private TimerSpecs timerSpecs;
-    private ArrayList<Entry> entry;
+    private ArrayList<PasswordRecord> passwordRecord;
 
-    public ArrayList<Entry> getEntry() {
-        return entry;
+    public ArrayList<PasswordRecord> getPwdRecord() {
+        return passwordRecord;
     }
 
-    public void setEntry(ObservableList<Entry> observableList) {
-        this.entry = new ArrayList<>(observableList);
+    public void setPwdRecord(ObservableList<PasswordRecord> observableList) {
+        this.passwordRecord = new ArrayList<>(observableList);
     }
 
-    public static String getConfigureHwkPwd() {
+    public static String  getConfigureHwkPwd() {
+        byte[] configureBytes =  Secrets.CONFIGUREHWKPWD.getBytes(StandardCharsets.UTF_8);
+        String hexString = Hex.toHexString(configureBytes);
+        Secrets.CONFIGUREHWKPWD = hexString;
         return CONFIGUREHWKPWD;
     }
 
-    public static void setConfigureHwkPwd(String configureHwkPwdString) {
-        Secrets.CONFIGUREHWKPWD = configureHwkPwdString;
-        byte []configurePwdBytes = CONFIGUREHWKPWD.getBytes(StandardCharsets.UTF_8);
-        String hexString = Hex.toHexString(configurePwdBytes);
-        Secrets.CONFIGUREHWKPWD = hexString;
+    public static void setConfigureHwkPwd(String  configurePwd) {
+        Secrets.CONFIGUREHWKPWD = configurePwd;
     }
 
     public static char[] getMasterPassword() throws Exception{
@@ -58,7 +58,12 @@ public class Secrets implements Serializable {
         sb.append(response);
         CONCATENATEDPWDS = sb.toString().toCharArray();
     }
-
+    public static String getResponse() {
+        return Secrets.RESPONSE;
+    }
+    public static void setResponse(String bufferReaderOutput) {
+        Secrets.RESPONSE = bufferReaderOutput;
+    }
     public TimerSpecs getTimerSpecs() {
         return timerSpecs;
     }
