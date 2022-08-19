@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.DatabaseController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.PasswordRecordController">
                <children>
                   <MenuBar prefHeight="39.0" prefWidth="1135.0">
                      <menus>
@@ -22,9 +22,9 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Entries">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#editPwdRecord" text="Edit Entry..." />
-                              <MenuItem mnemonicParsing="false" onAction="#pwdRecordMenu" text="New Entry..." />
-                              <MenuItem fx:id="ctxmenuDeleteEntry" mnemonicParsing="false" onAction="#deletePwdRecord" text="Delete Entry..." />
+                              <MenuItem mnemonicParsing="false" onAction="#editPwdEntry" text="Edit Entry..." />
+                              <MenuItem mnemonicParsing="false" onAction="#pwdEntryPage" text="New Entry..." />
+                              <MenuItem fx:id="ctxmenuDeleteEntry" mnemonicParsing="false" onAction="#deletePwdEntry" text="Delete Entry..." />
                               <SeparatorMenuItem mnemonicParsing="false" />
                               <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
                   <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password" />
@@ -39,7 +39,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="menuItemTimer" mnemonicParsing="false" onAction="#timerDialog" text="Set Timer" />
                               <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" onAction="#recordRandomPwd" text="Calculate Password strength" />
+                <MenuItem mnemonicParsing="false" onAction="#bruteForceTimePage" text="Calculate Password strength" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#lockDB" text="Lock database" />
               </items>
@@ -53,7 +53,7 @@
                   </MenuBar>
                   <ToolBar layoutY="39.0" prefHeight="63.0" prefWidth="1148.0">
                      <items>
-            <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#pwdRecordMenu" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Entry Button">
+            <Button fx:id="btnEnterMenu" contentDisplay="GRAPHIC_ONLY" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#pwdEntryPage" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Add Entry Button">
                <graphic>
                   <ImageView fx:id="imgAdd" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -62,7 +62,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnDeleteEntry" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deletePwdRecord" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Delete Entry Button">
+            <Button fx:id="btnDeleteEntry" contentDisplay="GRAPHIC_ONLY" layoutX="89.0" layoutY="10.0" mnemonicParsing="false" onAction="#deletePwdEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Delete Entry Button">
                <graphic>
                   <ImageView fx:id="imgEdit2" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -71,7 +71,7 @@
                   </ImageView>
                </graphic>
             </Button>
-                        <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editPwdRecord" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Edit Entr yButton">
+                        <Button fx:id="btnEditEntry" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#editPwdEntry" prefHeight="49.0" prefWidth="31.0" style="-fx-background-color: transparent;" text="Edit Entr yButton">
                            <graphic>
                               <ImageView fx:id="imgEdit" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -89,7 +89,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-            <Button fx:id="btnGenerateMenu" contentDisplay="GRAPHIC_ONLY" layoutX="372.0" layoutY="10.0" mnemonicParsing="false" onAction="#recordRandomPwd" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Password Generator">
+            <Button fx:id="btnGenerateMenu" contentDisplay="GRAPHIC_ONLY" layoutX="372.0" layoutY="10.0" mnemonicParsing="false" onAction="#bruteForceTimePage" prefHeight="49.0" prefWidth="38.0" style="-fx-background-color: transparent;" text="Password Generator">
                <graphic>
                   <ImageView fx:id="imgRandomPwd" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -124,7 +124,7 @@
                   </ImageView>
                </graphic>
             </Button>
-                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="339.0" promptText="Search..." style="-fx-background-image: url(authenticated/magnifying-glass.png);" />
+                        <TextField fx:id="tfSearch" opacity="0.59" prefHeight="31.0" prefWidth="339.0" promptText="Search..." style="-fx-background-image: url(Entry-Management/magnifying-glass.png);" />
                      </items>
                      <opaqueInsets>
                         <Insets />
@@ -134,7 +134,7 @@
                      <children>
                         <HBox layoutY="50.0" prefHeight="24.0" prefWidth="659.0">
                            <children>
-                              <TextField fx:id="generatedPWDfield" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
+                              <TextField fx:id="bruteForceTextField" prefHeight="31.0" prefWidth="590.0" promptText="Generated password..." />
                               <Button fx:id="btnPwdGenerator" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="0.0" prefWidth="46.0">
                                  <graphic>
                                     <ImageView fx:id="copyIMG" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
@@ -144,7 +144,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="btnCopy" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyGeneratedPWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
+                              <Button fx:id="btnCopy" contentDisplay="GRAPHIC_ONLY" layoutX="606.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyBruteForcePWD" prefHeight="0.0" prefWidth="46.0" text="copy Entry">
                                  <graphic>
                                     <ImageView fx:id="copyIMG1" fitHeight="65.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -176,7 +176,7 @@
                   <AnchorPane fx:id="entryPane" layoutX="-135.0" layoutY="93.0" prefHeight="582.0" prefWidth="966.0">
                      <children>
             <AnchorPane fx:id="selectedRowPane" disable="true" layoutX="169.0" layoutY="500.0" prefHeight="219.0" prefWidth="1162.0" />
-                        <TableView fx:id="entryTable" editable="true" layoutX="135.0" layoutY="32.0" prefHeight="183.0" prefWidth="825.0">
+                        <TableView fx:id="passwordRecordTableView" editable="true" layoutX="135.0" layoutY="32.0" prefHeight="183.0" prefWidth="825.0">
 
                           <columns>
                             <TableColumn id="colTitel" fx:id="colTitel" prefWidth="165.0" text="Titel" />
@@ -187,11 +187,11 @@
                            <contextMenu>
                               <ContextMenu fx:id="ctxTableMenu">
                                 <items>
-                                  <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editPwdRecord" text="Edit Entry..." />
-                                    <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deletePwdRecord" text="Delete Entry..." />
-                                    <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#pwdRecordMenu" text="New Entry..." />
+                                  <MenuItem fx:id="ctxEdit" mnemonicParsing="false" onAction="#editPwdEntry" text="Edit Entry..." />
+                                    <MenuItem fx:id="ctxDelete" mnemonicParsing="false" onAction="#deletePwdEntry" text="Delete Entry..." />
+                                    <MenuItem fx:id="ctxNew" mnemonicParsing="false" onAction="#pwdEntryPage" text="New Entry..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#recordRandomPwd" text="Calculate Password strength..." />
+                                    <MenuItem fx:id="menuPwdStrength" mnemonicParsing="false" onAction="#bruteForceTimePage" text="Calculate Password strength..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
                         <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username..." />
@@ -199,7 +199,7 @@
                               </ContextMenu>
                            </contextMenu>
                         </TableView>
-            <AnchorPane fx:id="apEntryMenu" disable="true" layoutX="250.0" layoutY="40.0" visible="false">
+            <AnchorPane fx:id="apEntryPage" disable="true" layoutX="250.0" layoutY="40.0" visible="false">
                <children>
                               <BorderPane fx:id="bpEntryMenu" prefHeight="421.0" prefWidth="653.0">
                                  <left>
@@ -223,7 +223,7 @@
                                  <children>
                                      <TextField fx:id="tfPwd" minWidth="643.0" />
                                      <PasswordField fx:id="pfPwdField" minWidth="643.0" />
-                                    <Button fx:id="btnRandomPwd" contentDisplay="GRAPHIC_ONLY" layoutX="570.0" layoutY="-12.0" mnemonicParsing="false" onAction="#calcBruteForceMenu" prefHeight="49.0" prefWidth="38.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" style="-fx-background-color: transparent;" text="Password Generator">
+                                    <Button fx:id="btnRandomPwd" contentDisplay="GRAPHIC_ONLY" layoutX="570.0" layoutY="-12.0" mnemonicParsing="false" onAction="#generatePwd" prefHeight="49.0" prefWidth="38.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" style="-fx-background-color: transparent;" text="Password Generator">
                                        <graphic>
                                           <ImageView fx:id="imgRandom" fitHeight="39.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -260,7 +260,7 @@
                                     <AnchorPane prefHeight="39.0" prefWidth="680.0" BorderPane.alignment="CENTER">
                                        <children>
                                           <Button fx:id="btnCancel" layoutX="500.0" mnemonicParsing="false" onAction="#returnTableView" prefHeight="31.0" prefWidth="158.0" text="Cancel" />
-                                          <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createPwdRecord" prefHeight="31.0" prefWidth="66.0" text="OK" />
+                                          <Button fx:id="btnCreate" layoutX="65.0" mnemonicParsing="false" onAction="#createPwdEntry" prefHeight="31.0" prefWidth="66.0" text="OK" />
                                           <Button fx:id="btnEditOK" disable="true" layoutX="65.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="66.0" text="OK" visible="false" />
                                        </children>
                                     </AnchorPane>
@@ -281,10 +281,10 @@
                                 <items>
                                     <MenuItem mnemonicParsing="false" onAction="#copyUsername" text="Copy Username" />
                                     <MenuItem mnemonicParsing="false" onAction="#copyPwd" text="Copy Password..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#recordRandomPwd" text="Calculate Password strength" />
-                                    <MenuItem mnemonicParsing="false" onAction="#pwdRecordMenu" text="New Entry..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#deletePwdRecord" text="Delete Entry..." />
-                                    <MenuItem mnemonicParsing="false" onAction="#editPwdRecord" text="Edit Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#bruteForceTimePage" text="Calculate Password strength" />
+                                    <MenuItem mnemonicParsing="false" onAction="#pwdEntryPage" text="New Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#deletePwdEntry" text="Delete Entry..." />
+                                    <MenuItem mnemonicParsing="false" onAction="#editPwdEntry" text="Edit Entry..." />
                                 </items>
                               </ContextMenu>
                            </contextMenu>

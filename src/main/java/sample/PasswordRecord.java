@@ -13,10 +13,8 @@ public class PasswordRecord implements Serializable {
         this.notes = noteString;
     }
 
-    PasswordRecord() {}
-
     String title, username, url, password, notes;
-
+    PasswordRecord() {}
 
     public String getTitle() {
         return title;}

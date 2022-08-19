@@ -137,7 +137,7 @@ import javax.crypto.SecretKey;
          loginGui.loginDialog.setResultConverter(loginButton -> {
              try {
                  if (loginButton == ButtonType.OK) {
-                     Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
+                     Parent root = FXMLLoader.load(Main.class.getResource("Entry-Management/Entry-Management.fxml"));
                      Stage stage = (Stage) btnSignIn.getScene().getWindow();
                      stage.setScene(new Scene(root));
                  }

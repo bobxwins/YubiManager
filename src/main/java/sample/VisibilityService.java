@@ -77,7 +77,7 @@ public class VisibilityService {
 
     public   void pwdVisibilityTable(Button toggleButton, ImageView imgPwdVisible, ImageView imgPwdNotVisible, Text textPassword,
                                      String showPwd, String hidePwd, TableView<PasswordRecord> entryTable)
-    //Toggles the visibilty of the password shown in the tableview at the bottom of the application
+    //Toggles the visibility of the password shown in the tableview at the bottom of the application
     {
 
         toggleButton.setOnAction(e -> {

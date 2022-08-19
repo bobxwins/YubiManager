@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 
 import java.io.File;
@@ -29,8 +28,7 @@ public class LoginController {
     private ImageView imgLocked;
     @FXML
     private ImageView imgUnLocked;
-    @FXML
-    private AnchorPane anchorPane;
+
     @FXML
     private TableColumn<String, String> recent;
 
@@ -49,18 +47,17 @@ public class LoginController {
 
     @FXML
     void newDB(ActionEvent event) throws Exception {
-
         SceneHandler sceneHandler = new SceneHandler();
         sceneHandler.newDBdialog(btnCreateDB);
     }
 
     @FXML
-    void generateChallengeResponse(ActionEvent event) throws Exception {
+    void generateCRKey(ActionEvent event) throws Exception {
         HardwareKeyService.cmdGenerateCR();
     }
 
     @FXML
-    void configureChallengeResponse(ActionEvent event) throws Exception {
+    void configureCRKey(ActionEvent event) throws Exception {
         HardwareKeyService.cmdConfigureCR();
     }
 

@@ -83,7 +83,7 @@ public class SceneHandler {
         new File(FilePath.getSelectedDir()).mkdir();
         FilePath.setCurrentDBdir(FilePath.getSelectedDir() + FilePath.getCurrentDBdir() + ".txt");
 
-        Parent root = FXMLLoader.load(Main.class.getResource("authenticated/authenticated.fxml"));
+        Parent root = FXMLLoader.load(Main.class.getResource("Entry-Management/Entry-Management.fxml"));
 
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
 
