@@ -27,7 +27,7 @@ public class DecryptFile  {
             NonSecrets nonSecrets= dbSecrets.getNonSecrets();
             byte[] decodedCipher = Base64.getDecoder().decode(nonSecrets.getCipherText());
             Cipher cipher = Cipher.getInstance(transformationAlgorithm, provider);
-            cipher.init(Cipher.DECRYPT_MODE, KeyService.getKey(), new IvParameterSpec(nonSecrets.getGeneratedIV()));
+            cipher.init(Cipher.DECRYPT_MODE, AESKey.getAESKey(), new IvParameterSpec(nonSecrets.getGeneratedIV()));
             byte[] output = cipher.doFinal(decodedCipher);
             return output;
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class DecryptFile  {
          byte [] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
          Database dbSecrets = (Database) Serialization.readSerializedObj(input);
          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-         HardwareKeyService.cmdResponse(nonSecrets.getChallenge());
+         SecurityTokenService.responseMacTag(nonSecrets.getChallenge());
          System.out.println("the output IS " + Secrets.getResponse());
          String response = Hex.toHexString(Secrets.getResponse().getBytes(StandardCharsets.UTF_8));
          char [] responseCharArr = response.toCharArray();

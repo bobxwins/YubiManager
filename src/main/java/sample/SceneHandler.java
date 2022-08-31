@@ -38,8 +38,8 @@ public class SceneHandler {
                 event -> {
                     // Checks if conditions are fulfilled
 
-                    if (fileNameField.getText().length() == 0 || masterPwdGui.manualPwdDField.getText().length() == 0
-                            || masterPwdGui.confirmPwdField.getText().length() == 0 ) {
+                    if (fileNameField.getText().length() == 0 || masterPwdGui.userCredential.getText().length() == 0
+                            || masterPwdGui.confirmUserCredential.getText().length() == 0 ) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
@@ -48,7 +48,7 @@ public class SceneHandler {
                         event.consume();
                         return ;
                     }
-                    if (!Authentication.validateCredentials(masterPwdGui.manualPwdDField.getText(), masterPwdGui.confirmPwdField.getText())) {
+                    if (!Authentication.validateUserCredentials(masterPwdGui.userCredential.getText(), masterPwdGui.confirmUserCredential.getText())) {
                         // If the conditions are not fulfilled, the event is consumed
                         // to prevent the dialog from closing when clicking OK
                         event.consume();
@@ -59,7 +59,7 @@ public class SceneHandler {
         masterPwdGui.dialog.setResultConverter(dialogButton -> {
             try {
                 if (dialogButton == ButtonType.OK) {
-                    Secrets.setManualPassword(masterPwdGui.manualPwdDField.getText().toCharArray());
+                    Secrets.setUserCredential(masterPwdGui.userCredential.getText().toCharArray());
                     FilePath.setCurrentDBdir(fileNameField.getText());
                     newScene(btn);
                     FilePath.getDbFilesList().add(FilePath.getCurrentDBdir()); // Updates the Database FileList ObservableList
@@ -83,7 +83,7 @@ public class SceneHandler {
         new File(FilePath.getSelectedDir()).mkdir();
         FilePath.setCurrentDBdir(FilePath.getSelectedDir() + FilePath.getCurrentDBdir() + ".txt");
 
-        Parent root = FXMLLoader.load(Main.class.getResource("Entry-Management/Entry-Management.fxml"));
+        Parent root = FXMLLoader.load(Main.class.getResource("Main-Operations/MainOperations.fxml"));
 
         Stage entryWindow = (Stage) btnCreateDB.getScene().getWindow();
 
@@ -93,8 +93,7 @@ public class SceneHandler {
     }
 
 
-    static void stageFullScreen(Button btnSignOut) throws Exception {
-
+    static void stageLockDB(Button btnSignOut) throws Exception {
         Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
         Stage stage = (Stage) btnSignOut.getScene().getWindow();
         stage.setScene(new Scene(root));

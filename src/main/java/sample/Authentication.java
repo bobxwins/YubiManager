@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.regex.Pattern;
@@ -23,7 +22,7 @@ import javax.crypto.SecretKey;
  public class Authentication  {
 
      LoginGUI loginGui = new LoginGUI();
-     PasswordField manualPwdField = new PasswordField();
+     PasswordField userCredentialField = new PasswordField();
      PasswordField responseField = new PasswordField();
 
      public ObservableList<PasswordRecord> authenticated() throws Exception {
@@ -41,22 +40,22 @@ import javax.crypto.SecretKey;
          return FXCollections.emptyObservableList();
      }
 
-    public static String computeHMac(String cipherText, SecretKey key ) throws Exception {
-        byte [] cipherBytes = cipherText.getBytes(StandardCharsets.UTF_8);
-        Mac mac = Mac.getInstance("HMACSHA1", "BC");
-        mac.init(key);
-        mac.update(cipherBytes);
-        byte[] digest = mac.doFinal(cipherBytes);
-        String encoded = Base64.getEncoder().encodeToString(digest);
-        return  encoded;
-    }
+     public static String computeAuthMacTag(String cipherText, SecretKey key ) throws Exception {
+         byte [] cipherBytes = cipherText.getBytes(StandardCharsets.UTF_8);
+         Mac mac = Mac.getInstance("HMACSHA256", "BC");
+         mac.init(key);
+         mac.update(cipherBytes);
+         byte[] digest = mac.doFinal(cipherBytes);
+         String encodedDigest = Base64.getEncoder().encodeToString(digest);
+         return  encodedDigest;
+     }
 
-  public static boolean verifyHMac(String generatedMacTag) {
+  public static boolean verifyAuthMacTag(String generatedAuthMacTag) {
       byte [] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
       Database dbSecrets = (Database) Serialization.readSerializedObj(input);
       NonSecrets nonSecrets= dbSecrets.getNonSecrets();
       String storedMacTag = nonSecrets.getMacTag();
-      if (storedMacTag.equals(generatedMacTag))
+      if (storedMacTag.equals(generatedAuthMacTag))
       {
           return true;
       }
@@ -64,18 +63,18 @@ import javax.crypto.SecretKey;
   }
 
 
-  public static boolean validateCredentials(String manualPwd, String confirmPwd)
-     {// Verifies if the criteria for the manual password are met, when creating a new database or updating the master password
-         if (manualPwd.length() < 6) {
+  public static boolean validateUserCredentials(String userCred, String confirmUserCred)
+     {// Verifies if the criteria for the user credential are met, when creating a new database or updating the master password
+         if (userCred.length() < 6) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
              alert.setHeaderText(null);
-             alert.setContentText("The manual password must be at least 6 characters long!");
+             alert.setContentText("The user credential must be at least 6 characters long!");
              alert.showAndWait();
              return false;
          }
 
-         if (!manualPwd.equals(confirmPwd)) {
+         if (!userCred.equals(confirmUserCred)) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
              alert.setHeaderText(null);
@@ -86,8 +85,8 @@ import javax.crypto.SecretKey;
 
          String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
                  "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
-         Pattern.compile(regex).matcher(manualPwd).matches();
-         if ( !Pattern.compile(regex).matcher(manualPwd).matches() ) {
+         Pattern.compile(regex).matcher(userCred).matches();
+         if ( !Pattern.compile(regex).matcher(userCred).matches() ) {
              Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Information Dialog");
              alert.setHeaderText(null);
@@ -100,23 +99,23 @@ import javax.crypto.SecretKey;
      }
 
      boolean loginAuthentication(Button btnSignIn) throws Exception {
-         responseField.setText(new String(DecryptFile.recreateResponse()));
-         loginGui.dialog(manualPwdField, responseField);
-         Platform.runLater(() -> manualPwdField.requestFocus());
+         userCredentialField.setText(new String(DecryptFile.recreateResponse()));
+         loginGui.dialog(userCredentialField);
+         Platform.runLater(() -> userCredentialField.requestFocus());
          final  Button btnOk = (Button) loginGui.loginDialog.getDialogPane().lookupButton(ButtonType.OK);
          btnOk.addEventFilter(
                  ActionEvent.ACTION,
                  event -> {
                      // Checks if conditions are fulfilled
                      try {
-                         Secrets.setMasterPassword(manualPwdField.getText().toCharArray(), responseField.getText().toCharArray());
+                         Secrets.setMasterPassword(userCredentialField.getText().toCharArray(), responseField.getText().toCharArray());
                          byte[] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
                          Database dbSecrets = (Database) Serialization.readSerializedObj(input);
                          NonSecrets nonSecrets= dbSecrets.getNonSecrets();
-                         KeyService.restoreKey();
-                         String generatedMacTag = computeHMac(nonSecrets.getCipherText(), KeyService.getKey());
+                         AESKey.restoreAESKey();
+                         String generatedMacTag = computeAuthMacTag(nonSecrets.getCipherText(), AESKey.getAESKey());
                          nonSecrets.setMacTag(generatedMacTag);
-                         if (!verifyHMac(generatedMacTag))
+                         if (!verifyAuthMacTag(generatedMacTag))
                          {
                              Alert alert = new Alert(Alert.AlertType.ERROR);
                              alert.setTitle("Information Dialog");
@@ -137,7 +136,7 @@ import javax.crypto.SecretKey;
          loginGui.loginDialog.setResultConverter(loginButton -> {
              try {
                  if (loginButton == ButtonType.OK) {
-                     Parent root = FXMLLoader.load(Main.class.getResource("Entry-Management/Entry-Management.fxml"));
+                     Parent root = FXMLLoader.load(Main.class.getResource("Main-Operations/MainOperations.fxml"));
                      Stage stage = (Stage) btnSignIn.getScene().getWindow();
                      stage.setScene(new Scene(root));
                  }

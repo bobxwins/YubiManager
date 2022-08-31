@@ -11,9 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.Security;
 
-public class KeyService {
-
-
+public class AESKey {
 
 static {
     Security.removeProvider("BC");
@@ -22,25 +20,25 @@ static {
 }
   static SecretKey secretKey;
 
-    public static SecretKey getKey() {
+    public static SecretKey getAESKey() {
         return secretKey;
     }
 
-    public static  void setKey(byte[] saltBytes,byte [] challlengeBytes, int iterationInt, int keyLengthInt) throws Exception
+    public static  void setAESKey(byte[] saltBytes, byte [] challlengeBytes, int iterationInt, int keyLengthInt) throws Exception
     {
         SecureRandom secureRandom = SecureRandom.getInstance("DEFAULT");
         secureRandom.nextBytes(saltBytes);
         secureRandom.nextBytes(challlengeBytes);
-        HardwareKeyService.cmdResponse(Hex.toHexString(challlengeBytes));
+        SecurityTokenService.responseMacTag(Hex.toHexString(challlengeBytes));
         String response = Hex.toHexString(Secrets.getResponse().getBytes(StandardCharsets.UTF_8));
-        Secrets.setMasterPassword(Secrets.getManualPassword(),response.toCharArray());
+        Secrets.setMasterPassword(Secrets.getUserCredential(),response.toCharArray());
         PBEKeySpec keySpec = new PBEKeySpec(Secrets.getMasterPassword(), saltBytes, iterationInt, keyLengthInt);
         SecretKeyFactory factory =
                 SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256", "BC");
         secretKey = factory.generateSecret(keySpec);
     }
 
-    public static void restoreKey () throws Exception {
+    public static void restoreAESKey() throws Exception {
         byte [] input = FileUtils.readAllBytes(FilePath.getCurrentDBdir());
         Database dbSecrets = (Database) Serialization.readSerializedObj(input);
         NonSecrets nonSecrets= dbSecrets.getNonSecrets();

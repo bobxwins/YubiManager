@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -35,7 +36,7 @@ import java.util.Optional;
 import static java.lang.Integer.parseInt;
 
 
-public class PasswordRecordController implements Serializable   {
+public class MainOperationsController implements Serializable   {
     @FXML private AnchorPane anchorPane;
     @FXML private AnchorPane apBottomTable;
     @FXML private AnchorPane apEntryPage;
@@ -84,18 +85,18 @@ public class PasswordRecordController implements Serializable   {
     Spinner<Integer> spinnerPwdGenerator;
     @FXML
     void generateChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyService.cmdGenerateCR();
+        SecurityTokenService.generateTokenKey();
         save();
     }
 
     @FXML
     void configureChallengeResponse(ActionEvent event) throws Exception {
-        HardwareKeyService.cmdConfigureCR();
+        SecurityTokenService.setTokenKey();
         save();
     }
 
     @FXML
-    void copyPwd(ActionEvent event) throws Exception
+    void copyPwd(ActionEvent event)
     { final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
         PasswordRecord selectedItem = passwordRecordTableView.getSelectionModel().getSelectedItem();
@@ -111,7 +112,7 @@ public class PasswordRecordController implements Serializable   {
     }
 
     @FXML
-    void copyBruteForcePWD(ActionEvent event) throws Exception
+    void copyBruteForcePWD(ActionEvent event)
     {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
@@ -125,7 +126,7 @@ public class PasswordRecordController implements Serializable   {
     }
 
     @FXML
-    void copyUsername(ActionEvent event) throws Exception
+    void copyUsername(ActionEvent event)
     {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
@@ -150,7 +151,7 @@ public class PasswordRecordController implements Serializable   {
             save();
         }
 
-    @FXML void editPwdEntry(ActionEvent event) throws  Exception {
+    @FXML void editPwdEntry(ActionEvent event)  {
         PasswordRecord selectedItem = passwordRecordTableView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             VisibilityService.entrySpecs (apEntryPage,tfSearch,btnCreate, passwordRecordTableView,apBottomTable);
@@ -162,7 +163,6 @@ public class PasswordRecordController implements Serializable   {
             //the values inside the fields from the selected row is set to be the values stored inside the EntryTable
             // otherwise the values in the fieds from the selected entry would be empty
             VisibilityService.editEntryVisibility (btnEditOK,btnCreate);
-
             btnEditOK.setOnAction(e -> {
                 try{
                     passwordRecordList.set(passwordRecordList.indexOf(selectedItem),selectedItem);
@@ -199,9 +199,10 @@ public class PasswordRecordController implements Serializable   {
             FileService fileService = new FileService();
             fileService.deleteDir(deleteFile);
             Serialization.dbFileListSerialize(FilePath.getDbFilesList(), Paths.get(FilePath.getDBFilesListDir()));
-            SceneHandler.stageFullScreen(btnLockDB);
+            Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
+            Stage stage = (Stage) btnLockDB.getScene().getWindow();
+            stage.setScene(new Scene(root));
         }
-
     }
     @FXML
     void deletePwdEntry(ActionEvent event) throws  Exception {
@@ -214,7 +215,7 @@ public class PasswordRecordController implements Serializable   {
     }
 
     @FXML
-    void pwdEntryPage(ActionEvent event) throws Exception
+    void pwdEntryPage(ActionEvent event)
     {
         VisibilityService.entrySpecs (apEntryPage,tfSearch,btnCreate, passwordRecordTableView,apBottomTable);
         // Shows the page for managing a password entry
@@ -237,7 +238,7 @@ public class PasswordRecordController implements Serializable   {
     void openDB(ActionEvent event) throws Exception {
 
       SceneHandler sceneHandler = new SceneHandler();
-       if (!sceneHandler.openDB()==true)
+       if (!sceneHandler.openDB())
         {
             return;
         }
@@ -249,10 +250,8 @@ public class PasswordRecordController implements Serializable   {
 
            FXMLLoader fxmlLoader = new FXMLLoader();
            fxmlLoader.setLocation(getClass().getResource("login/login.fxml"));
-
            Scene scene = new Scene(fxmlLoader.load());
            Stage stage = new Stage();
-
            stage.setTitle("New Window");
            stage.setScene(scene);
            stage.show();
@@ -263,7 +262,7 @@ public class PasswordRecordController implements Serializable   {
 
 
     @FXML
-    void returnTableView(ActionEvent event) throws Exception
+    void returnTableView(ActionEvent event)
     {
         VisibilityService.showTableView(entryPane, apEntryPage,tfSearch, passwordRecordTableView, btnEditOK,apBottomTable);
         apPwdGenerate.setDisable(true);
@@ -281,7 +280,9 @@ public class PasswordRecordController implements Serializable   {
 
     @FXML
     void lockDB(ActionEvent event) throws Exception {
-        SceneHandler.stageFullScreen(btnLockDB);
+        Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
+        Stage stage = (Stage) btnLockDB.getScene().getWindow();
+        stage.setScene(new Scene(root));
     }
 
    void save () throws Exception {
@@ -415,7 +416,7 @@ public class PasswordRecordController implements Serializable   {
         anchorPane.setOnContextMenuRequested(e ->
                 ctxTableMenu.show(anchorPane, e.getScreenX(), e.getScreenY()));
 
-        String image = Main.class.getResource("Entry-Management/magnifying-glass.png").toExternalForm();
+        String image = Main.class.getResource("Main-Operations/magnifying-glass.png").toExternalForm();
         tfSearch.setStyle("-fx-background-image: url('" + image + "'); " +
                 " -fx-background-repeat: no-repeat; -fx-background-position: right; -fx-background-size: 38 24;");
 

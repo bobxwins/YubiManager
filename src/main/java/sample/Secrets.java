@@ -13,9 +13,9 @@ public class Secrets implements Serializable {
     // Data that either gets encrypted or is used in an encryption process
     private static String RESPONSE;
     private static final long serialVersionUID = 42L;
-    private static String CONFIGUREHWKPWD;
-    private static char[] CONCATENATEDPWDS;
-    private static char[] MANUALPWD;
+    private static String CONFIGURETOKENKEY;
+    private static char[] MASTERPASSWORD;
+    private static char[] USERCREDENTIAL;
     private TimerSpecs timerSpecs;
     private ArrayList<PasswordRecord> passwordRecord;
 
@@ -27,36 +27,36 @@ public class Secrets implements Serializable {
         this.passwordRecord = new ArrayList<>(observableList);
     }
 
-    public static String  getConfigureHwkPwd() {
-        byte[] configureBytes =  Secrets.CONFIGUREHWKPWD.getBytes(StandardCharsets.UTF_8);
+    public static String getTokenKeyConfiguration() {
+        byte[] configureBytes =  Secrets.CONFIGURETOKENKEY.getBytes(StandardCharsets.UTF_8);
         String hexString = Hex.toHexString(configureBytes);
-        Secrets.CONFIGUREHWKPWD = hexString;
-        return CONFIGUREHWKPWD;
+        Secrets.CONFIGURETOKENKEY = hexString;
+        return CONFIGURETOKENKEY;
     }
 
-    public static void setConfigureHwkPwd(String  configurePwd) {
-        Secrets.CONFIGUREHWKPWD = configurePwd;
+    public static void setTokenKeyConfiguration(String  configurePwd) {
+        Secrets.CONFIGURETOKENKEY = configurePwd;
     }
 
     public static char[] getMasterPassword() throws Exception{
-        return CONCATENATEDPWDS;
+        return MASTERPASSWORD;
     }
 
-    public static void setManualPassword(char[] manualPassword) {
-        Secrets.MANUALPWD = manualPassword;
+    public static void setUserCredential(char[] userCredential) {
+        Secrets.USERCREDENTIAL = userCredential;
     }
 
-    public static char[] getManualPassword() throws Exception{
-        return MANUALPWD;
+    public static char[] getUserCredential() throws Exception{
+        return USERCREDENTIAL;
     }
 
-    public static void setMasterPassword(char[] manualPassword, char[] response) throws Exception{
+    public static void setMasterPassword(char[] userCredential, char[] response) throws Exception{
 
-        setManualPassword(manualPassword);
+        setUserCredential(userCredential);
         StringBuilder sb = new StringBuilder(856);
-        sb.append(manualPassword);
+        sb.append(userCredential);
         sb.append(response);
-        CONCATENATEDPWDS = sb.toString().toCharArray();
+        MASTERPASSWORD = sb.toString().toCharArray();
     }
     public static String getResponse() {
         return Secrets.RESPONSE;

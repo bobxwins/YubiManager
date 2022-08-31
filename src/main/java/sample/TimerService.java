@@ -3,11 +3,15 @@ package sample;
 import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.InputEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -21,9 +25,9 @@ public class TimerService {
    public static  TimerSpecs timerSpecs;
     private static  boolean selectedCheckBox;
    public static PauseTransition TRANSITION  = new PauseTransition();
-   static final EventHandler<InputEvent> filter = event -> TRANSITION.playFromStart();
+   static final EventHandler<InputEvent> RESTART = event -> TRANSITION.playFromStart();
 
-    public static void timerCountDown(Button btnSignOut, AnchorPane anchorPane)  {
+    public static void timerCountDown(Button btnLockDB, AnchorPane anchorPane)  {
 
       if(!java.nio.file.Files.exists(Paths.get(FilePath.getCurrentDBdir())))
         {
@@ -31,13 +35,15 @@ public class TimerService {
         timerSpecs = TimerSpecs.getTimerSpecs();
         if (!timerSpecs.getSelectedCheckBox())
         {
-            anchorPane.removeEventFilter(InputEvent.ANY, filter);
+            anchorPane.removeEventFilter(InputEvent.ANY, RESTART);
             return;    }
          TRANSITION.setDuration(Duration.seconds(timerSpecs.getTimer()));
-         anchorPane.addEventFilter(InputEvent.ANY, filter);
+         anchorPane.addEventFilter(InputEvent.ANY, RESTART);
          TRANSITION.setOnFinished(evt -> {
             try {
-                SceneHandler.stageFullScreen(btnSignOut);
+                Parent root = FXMLLoader.load(Main.class.getResource("login/login.fxml"));
+                Stage stage = (Stage) btnLockDB.getScene().getWindow();
+                stage.setScene(new Scene(root));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Inactivity");
                 alert.setHeaderText("Connection closed due to inactivity!");

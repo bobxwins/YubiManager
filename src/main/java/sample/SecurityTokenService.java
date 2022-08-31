@@ -9,18 +9,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 
-public class HardwareKeyService {
+public class SecurityTokenService {
 
     static String ykManPath  = "C:/Program Files/Yubico/YubiKey Manager";
     // Folder path to the application YubiKey Manager app
-    static String textConfigureHwk = " YubiKey challenge response has been set successfully!";
 
-    public static void cmdGenerateCR() throws Exception  {
-        // 	Programs a challenge-response credential
-        String generatePwdCommand= "ykman otp chalresp 1 -g -f";
+    public static void generateTokenKey() throws Exception  {
+        // 	Programs a random secret key
+        String generateSecretKey= "ykman otp chalresp 1 -g -f";
         Process proc =
-                Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + generatePwdCommand );
-        String textRandomPwdHwk = "The challenge response mode has been set succesfully!";
+                Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + generateSecretKey );
+        String textRandomPwdHwk = "A security token key has been generated succesfully!";
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);
@@ -28,19 +27,19 @@ public class HardwareKeyService {
         alert.showAndWait();
     }
 
-    public static void cmdConfigureCR() throws  Exception
+    public static void setTokenKey() throws  Exception
     {
             TextInputDialog textDialog = new TextInputDialog();
-            textDialog.setTitle("Configuring Hardware key");
-            textDialog.setHeaderText("Configure the Hardware key's challenge-response");
-            textDialog.setContentText("Enter a string to configure the Hardware key's challenge-response:");
+            textDialog.setTitle("Configuration");
+           textDialog.setHeaderText("");
+            textDialog.setContentText("Enter a string to set the Token Key");
             final Button btnOk = (Button) textDialog.getDialogPane().lookupButton(ButtonType.OK);
             btnOk.addEventFilter(
                 ActionEvent.ACTION,
                 event -> {
                     try {
-                        Secrets.setConfigureHwkPwd(textDialog.getEditor().getText());
-                        if (Secrets.getConfigureHwkPwd().length() == 0) {
+                        Secrets.setTokenKeyConfiguration(textDialog.getEditor().getText());
+                        if (Secrets.getTokenKeyConfiguration().length() == 0) {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Information Dialog");
                             alert.setHeaderText(null);
@@ -50,13 +49,13 @@ public class HardwareKeyService {
                             return;
                         }
 
-                        String manualCommand = "ykman otp chalresp 1 " + Secrets.getConfigureHwkPwd() + " -f";
+                        String manualCommand = "ykman otp chalresp 1 " + Secrets.getTokenKeyConfiguration() + " -f";
                       Process proc =
                           Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath + "&&" + manualCommand);
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Information Dialog");
                         alert.setHeaderText(null);
-                        alert.setContentText(textConfigureHwk);
+                        alert.setContentText("The security token has been set successfully!");
                         alert.showAndWait();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -77,7 +76,7 @@ public class HardwareKeyService {
        textDialog.showAndWait();
 
     }
-    public static void cmdResponse(String challenge) throws  Exception  {
+    public static void responseMacTag(String challenge) throws  Exception  {
         String calculateResponse= "ykman otp calculate 1 "+ challenge;
         Process proc =
                  Runtime.getRuntime().exec("cmd /c cmd.exe /K \"" + "cd " + ykManPath

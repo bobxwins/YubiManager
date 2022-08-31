@@ -53,12 +53,12 @@ public class LoginController {
 
     @FXML
     void generateCRKey(ActionEvent event) throws Exception {
-        HardwareKeyService.cmdGenerateCR();
+        SecurityTokenService.generateTokenKey();
     }
 
     @FXML
     void configureCRKey(ActionEvent event) throws Exception {
-        HardwareKeyService.cmdConfigureCR();
+        SecurityTokenService.setTokenKey();
     }
 
     @FXML
